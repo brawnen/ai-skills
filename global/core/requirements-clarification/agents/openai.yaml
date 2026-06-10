@@ -1,0 +1,4 @@
+interface:
+  display_name: "需求澄清"
+  short_description: "逐题澄清需求、方案和边界，并沉淀 spec。"
+  default_prompt: "Use $requirements-clarification to clarify the request one question at a time, compare approaches, and write the agreed spec."

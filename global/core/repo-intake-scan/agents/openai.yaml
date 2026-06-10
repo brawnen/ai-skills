@@ -1,0 +1,7 @@
+interface:
+  display_name: "Repo Intake Scan"
+  short_description: "接手仓库时快速识别根目录和验证入口"
+  brand_color: "#7C3AED"
+  default_prompt: "Use $repo-intake-scan to inspect this repository, identify the real project root, environment requirements, and first verification steps."
+policy:
+  allow_implicit_invocation: true

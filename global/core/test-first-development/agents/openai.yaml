@@ -1,0 +1,4 @@
+interface:
+  display_name: "测试优先开发"
+  short_description: "用行为测试驱动功能、修复和关键变更。"
+  default_prompt: "Use $test-first-development to define behavior, write a failing test, implement the smallest fix, and verify red-green."

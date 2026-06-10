@@ -1,0 +1,4 @@
+interface:
+  display_name: "CodeGraph 辅助导航"
+  short_description: "用 CodeGraph 快速定位代码结构候选，再用源码和验证收敛结论。"
+  default_prompt: "先用 CodeGraph 梳理符号、调用链或影响面候选，再回读源码确认关键结论。"

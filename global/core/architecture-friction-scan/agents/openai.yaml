@@ -1,0 +1,4 @@
+interface:
+  display_name: "架构摩擦扫描"
+  short_description: "只读扫描架构摩擦，输出候选、证据和验证边界。"
+  default_prompt: "Use $architecture-friction-scan to inspect architecture friction read-only and rank evidence-backed improvement candidates."
