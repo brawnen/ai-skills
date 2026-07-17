@@ -18,6 +18,9 @@ description: 适用于需求澄清、方案拷问、P0/边界确认、接口或�
 ## Default Mode
 
 - 默认先澄清，再落盘 spec。
+- 正式需求 spec / 设计方案默认使用 `formal-html-docs` 生成自包含 HTML。
+- 如果 spec 后续需要长期维护，同时保留 Markdown 源稿和 HTML 交付稿。
+- README、AGENTS、轻量 ADR、开发说明仍使用 Markdown。
 - 用户明确说“只分析 / 先不要改 / 先聊 / 不落盘”时，不写文件，只输出 spec 草案。
 - 不默认 `git commit`，除非用户明确要求。
 - 不默认进入实现；实现前应转入 `task-todolist-execution`、`safe-editing`、`test-first-development` 或相关专项 skill。
@@ -42,8 +45,11 @@ description: 适用于需求澄清、方案拷问、P0/边界确认、接口或�
 6. 形成 spec 草案，先让用户确认关键章节。
 7. 用户确认后落盘 spec：
    - 优先使用项目已有 spec/docs 约定。
-   - 若无约定，写入 `docs/specs/YYYY-MM-DD-<topic>-spec.md`。
-   - 如果是 P0/事故方案，也可以写入 `docs/runbooks/`，但需说明原因。
+   - README、AGENTS、轻量 ADR、开发说明使用 Markdown。
+   - 正式需求 spec / 设计方案默认配合 `formal-html-docs` 生成 HTML。
+   - 若需要长期维护，同时保存 `docs/specs/YYYY-MM-DD-<topic>.md` 和 `docs/specs/YYYY-MM-DD-<topic>.html`。
+   - 若只需要交付阅读，允许只生成 `docs/specs/YYYY-MM-DD-<topic>.html`。
+   - 如果是 P0/事故方案，也可以写入 `docs/runbooks/YYYY-MM-DD-<topic>.html`，但需说明原因。
 8. 落盘后做自检：占位符、矛盾、范围蔓延、未确认项、验证口径是否清楚。
 9. 输出下一步：实现、测试、发布核对、排障、或继续澄清。
 
@@ -51,6 +57,8 @@ description: 适用于需求澄清、方案拷问、P0/边界确认、接口或�
 
 ```markdown
 # <标题>
+
+> 这是内容结构模板；正式落盘为 HTML 时，用 `formal-html-docs` 选择对应文档类型模板和样式外壳。
 
 ## 背景
 - 问题/目标：
@@ -98,6 +106,7 @@ description: 适用于需求澄清、方案拷问、P0/边界确认、接口或�
 
 ## Coordination
 
+- 正式 spec / 设计文档落 HTML：配合 `formal-html-docs`。
 - 需要正式代码证据文档：配合 `code-evidence-docs`。
 - 后续进入实现：配合 `task-todolist-execution` 和 `safe-editing`。
 - 后续涉及测试优先：配合 `test-first-development`。

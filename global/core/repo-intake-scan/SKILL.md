@@ -13,7 +13,7 @@ description: 适用于接手新仓库、旧项目复活、工作区盘点或 /in
 
 ## Coordinate with existing skills
 
-- 发现 legacy 项目后，后续改动同时遵守 `safe-editing` 或 `legacy-safe-mode`。
+- 发现 legacy 项目后，后续改动至少遵守 `safe-editing`，并按兼容性优先、最小改动的方式处理。
 - 发现 DB 写入路径后，后续变更用 `db-change-safety`。
 - 只做只读盘点时不要改文件；用户要求落盘时再用 `code-evidence-docs`。
 

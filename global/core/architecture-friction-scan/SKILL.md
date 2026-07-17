@@ -1,6 +1,6 @@
 ---
 name: architecture-friction-scan
-description: 适用于只读扫描代码库架构摩擦、浅模块、耦合泄漏、测试困难、AI 难导航区域和潜在重构候选；当用户要求“看看架构问题”“找重构机会”“为什么这块难维护”“帮我做架构体检”“扫描老系统摩擦点”时使用。默认只输出候选、证据、推荐优先级和验证边界，不改代码、不写 repo 文件、不生成 HTML，除非用户明确要求。
+description: 适用于只读扫描代码库架构摩擦、浅模块、耦合泄漏、测试困难、AI 难导航区域和潜在重构候选；当用户要求“看看架构问题”“找重构机会”“为什么这块难维护”“帮我做架构体检”“扫描老系统摩擦点”时使用。默认只输出候选、证据、推荐优先级和验证边界；用户要求正式报告时配合 formal-html-docs 生成自包含 HTML。
 ---
 
 # Architecture Friction Scan
@@ -26,7 +26,7 @@ description: 适用于只读扫描代码库架构摩擦、浅模块、耦合泄�
 
 - 默认只读：不改代码、不写 repo 文件、不生成报告文件、不打开浏览器。
 - 默认输出候选清单和证据分层。
-- 用户明确要求正式文档时，转 `code-evidence-docs`。
+- 用户明确要求正式架构报告时，配合 `formal-html-docs` 生成自包含 HTML；如需代码证据长文档，再转 `code-evidence-docs`。
 - 用户选中某个候选继续设计时，转 `requirements-clarification`。
 - 用户明确授权实现时，必须再转 `safe-editing`、`task-todolist-execution`、`test-first-development`。
 
@@ -52,6 +52,7 @@ description: 适用于只读扫描代码库架构摩擦、浅模块、耦合泄�
 7. 给出候选，不直接给大改实现。每个候选必须包含证据、收益、风险和验证方式。
 8. 排序推荐：Strong / Worth exploring / Speculative。
 9. 输出最优下一步：继续澄清、写 spec、补测试缝、局部实现，或跳过。
+10. 用户要求正式报告时，使用 `formal-html-docs` 的“架构扫描报告”模板输出 HTML；不要默认生成 HTML。
 
 ## Output Pattern
 
@@ -92,7 +93,7 @@ description: 适用于只读扫描代码库架构摩擦、浅模块、耦合泄�
 ## Guardrails
 
 - 不把“看起来不优雅”当作重构理由。
-- 不默认写代码，不默认创建 HTML，不默认改 `CONTEXT.md` 或 ADR。
+- 不默认写代码，不默认创建 HTML，不默认改 `CONTEXT.md` 或 ADR；只有用户明确要求正式报告时才生成 HTML。
 - 不输出只有观点没有文件/调用链/测试证据的架构结论。
 - 不因为 CodeGraph `impact` 大就直接认定必须重构。
 - 不建议大重构作为普通 bugfix 的默认路径。
@@ -102,7 +103,8 @@ description: 适用于只读扫描代码库架构摩擦、浅模块、耦合泄�
 ## Coordination
 
 - 需要结构化调用链：配合 `codegraph-assisted-navigation`。
-- 需要把扫描结果落正式文档：配合 `code-evidence-docs`。
+- 需要把扫描结果落正式 HTML 报告：配合 `formal-html-docs`。
+- 需要把扫描结果落代码证据长文档：配合 `code-evidence-docs`。
 - 需要把候选转成 spec：配合 `requirements-clarification`。
 - 需要进入实现：配合 `safe-editing`、`task-todolist-execution`、`test-first-development`。
 - 来源于生产事故：配合 `production-incident-hotfix`，先止血和验证根因，再谈架构候选。

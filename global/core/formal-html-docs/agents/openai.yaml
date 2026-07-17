@@ -1,0 +1,4 @@
+interface:
+  display_name: "正式 HTML 文档"
+  short_description: "生成统一视觉风格的正式自包含 HTML 文档。"
+  default_prompt: "Use $formal-html-docs to produce a formal self-contained HTML document with the right template for its purpose."
