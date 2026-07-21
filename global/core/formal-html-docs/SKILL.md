@@ -1,15 +1,15 @@
 ---
 name: formal-html-docs
-description: 内部 HTML 文档外壳与章节模板 helper。通常不应作为默认顶层全局 skill 常驻安装；优先由 code-evidence-docs、requirements-clarification、architecture-friction-scan 等文档型 skill 间接使用。
+description: 内部 HTML 文档外壳与章节模板 helper。全局安装以保证正式 HTML 的统一视觉，但只由正式文档路由按需触发；优先由 code-evidence-docs、requirements-clarification 等文档型 skill 间接使用。
 ---
 
 # Formal HTML Docs
 
 ## Positioning
 
-这个 skill 主要提供“正式 HTML 文档外壳和模板约定”，不是高频用户意图入口。
+这个 skill 主要提供“正式 HTML 文档外壳和模板约定”，不是普通任务的高频用户意图入口。
 
-- 默认不建议作为顶层全局 skill 常驻安装。
+- 可以全局安装以提供稳定模板，但不应因主题泛泛相关而自动触发。
 - 更推荐由 `code-evidence-docs`、`requirements-clarification`、`architecture-friction-scan` 等上层文档型 skill 间接引用。
 - README、AGENTS、轻量开发说明仍优先 Markdown，不要为了“统一”而强行转 HTML。
 
@@ -68,6 +68,16 @@ description: 内部 HTML 文档外壳与章节模板 helper。通常不应作为
 - 风险
 - 验证计划
 - 迁移 / 回滚
+
+### 培训讲义 / 教材
+
+- 适用对象与前置知识
+- 学习目标
+- 课程地图 / 阅读路径
+- 核心概念与方法
+- 示例、现场演示或练习
+- 关键结论 / 常见误区
+- 课后行动或延伸阅读
 
 ### 架构扫描报告
 
@@ -132,6 +142,7 @@ description: 内部 HTML 文档外壳与章节模板 helper。通常不应作为
 - 先判断文档用途，再选模板；不要把所有模板章节混在一起。
 - 只保留对读者决策有帮助的章节，避免为了完整而填空。
 - 用户或项目已有文档结构优先。
+- 培训讲义和教材优先采用“学习目标 -> 内容路径 -> 示例/练习 -> 关键结论”的结构；可使用讲师提示、现场演示、学员练习等 callout，但不要伪装成风险或证据状态。
 - 需要长期维护时，可以同时保留 Markdown 源稿和 HTML 交付稿。
 - README、AGENTS、轻量 ADR、开发说明默认仍用 Markdown。
 
@@ -150,6 +161,7 @@ description: 内部 HTML 文档外壳与章节模板 helper。通常不应作为
 
 每个 HTML 文档至少包含这些样式能力：
 
+- 视觉应服从文档用途：spec、runbook、架构报告保持克制的技术出版物感；培训讲义可更强调课程层次和阅读节奏，但不做营销页。
 - 稳定的标题区和元信息区。默认使用明亮、低饱和的浅蓝到青蓝渐变，配深海军蓝文字；避免厚重的深蓝实底或深蓝渐变。
 - 多级目录较长时，桌面端优先作为正文左侧的阅读索引，而不是大面积内容卡片；窄屏必须回落为正文前的普通目录。
 - 自动或手写目录区。

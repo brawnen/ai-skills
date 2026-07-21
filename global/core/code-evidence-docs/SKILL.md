@@ -11,15 +11,15 @@ description: 适用于把代码梳理、依赖清单、设计方案、发布流�
 - 需要从真实代码、配置、脚本、数据库表或前端调用生成可维护文档。
 - 需要把设计讨论转成正式 proposal、guide、checklist 或 repo contributor guide。
 
+## Do not use when
+
+- 培训讲义、课程、概念说明等不以仓库事实为主要来源的正式文档；直接使用 `formal-html-docs`，不要强行套入代码证据分层。
+
 ## Workflow
 
-1. 先确认文档目的和格式：README/AGENTS/轻量开发说明用 Markdown；正式代码证据文档、依赖清单、设计方案、排障 runbook、架构说明可调用 `formal-html-docs` 作为内部 HTML 外壳输出。
+1. 先确认文档目的和格式：README/AGENTS/轻量开发说明用 Markdown；以仓库事实为主要来源的正式代码证据文档、依赖清单、设计方案、排障 runbook、架构说明可调用 `formal-html-docs` 作为内部 HTML 外壳输出。
 2. 读取真实文件，不凭记忆写架构；优先找入口、调用方、配置、数据表和验证命令。
-3. 如果项目存在 `.codegraph/` 或用户要求使用 CodeGraph，先用它生成结构化候选证据：
-   - `codegraph query <symbol>` 查入口、类、接口、测试。
-   - `codegraph callers/callees <symbol>` 查调用方向。
-   - `codegraph impact <symbol>` 查候选影响面。
-   - 文档中要把 CodeGraph 结果归入“根据调用关系推断”，除非已经回读源码/配置并验证。
+3. 只有满足全局 `AGENTS.md` 的 CodeGraph 前置条件时，才用它生成结构化候选证据；结果默认归入“根据调用关系推断”，除非已经回读源码/配置并验证。
 4. 建立证据分层：
    - 代码中已确认
    - 根据调用关系推断
@@ -27,7 +27,7 @@ description: 适用于把代码梳理、依赖清单、设计方案、发布流�
    - 待产品/运维/DBA/业务确认
 5. 如果用户要求依赖清单，优先表格化：前置条件、触发入口、核心实现、外部依赖、失败行为、验证方式。
 6. 如果用户要求设计方案，必须包含：范围、非范围、核心流程、数据/接口影响、幂等/补偿/回滚、验收标准。
-7. 如果输出 HTML，使用 `formal-html-docs` 的 Common Shell、证据 badge、callout、表格和打印样式；它是内部 helper，不要求额外作为顶层全局 skill 常驻安装。章节结构按文档用途选择，不强行统一。
+7. 如果输出 HTML，使用 `formal-html-docs` 的 Common Shell、证据 badge、callout、表格和打印样式。章节结构按文档用途选择，不强行统一。
 8. 如果文档需要长期维护，优先同时保留 Markdown 源稿和 HTML 交付稿。
 9. 如果用户要求仓库说明或 AGENTS，保持短、密、命令可执行，引用的脚本和目录必须来自当前仓库事实，并使用 Markdown。
 10. 修改 docs 导航时只补必要链接，不重排无关文档。
@@ -59,7 +59,7 @@ description: 适用于把代码梳理、依赖清单、设计方案、发布流�
 
 ### Formal HTML
 
-正式 HTML 文档必须配合 `formal-html-docs`：
+基于代码事实的正式 HTML 文档必须配合 `formal-html-docs`：
 
 - 统一视觉外壳：标题、更新时间、摘要、目录、主体、风险/未确认项、下一步。
 - 证据状态使用 badge：已确认、推断、未验证、待确认。

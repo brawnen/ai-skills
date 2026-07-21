@@ -21,10 +21,7 @@ description: 适用于接手新仓库、旧项目复活、工作区盘点或 /in
 
 1. 确认当前目录、Git 根和是否为多项目 workspace。
 2. 识别主项目候选：README、package/pom/pyproject、入口文件、最近改动、用户目标相关目录。
-3. 如果项目存在 `.codegraph/` 或用户要求使用 CodeGraph，先把它当作可选索引源：
-   - `codegraph status --json` 查看索引是否新鲜。
-   - 用 `codegraph query` 快速定位主入口、关键服务、测试和配置符号。
-   - CodeGraph 结果只作为第一轮候选，项目根、环境要求和验证命令仍要回读真实文件确认。
+3. 只有满足全局 `AGENTS.md` 的 CodeGraph 前置条件时，才把它作为可选索引源生成候选；项目根、环境要求和验证命令仍要回读真实文件确认。
 4. 读取环境要求：Node/Python/JDK/Maven/Poetry/venv、依赖安装状态、脚本命令。
 5. 区分环境问题与业务代码问题；保留原始报错。
 6. 找到最小验证入口：
