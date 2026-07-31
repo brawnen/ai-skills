@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{TITLE}}</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #eef3f8;
+      --paper: #ffffff;
+      --text: #24384e;
+      --muted: #5f7185;
+      --border: #d5e0eb;
+      --accent: #1e5ab6;
+      --hero-start: #edf5ff;
+      --hero-end: #e6f3f4;
+      --hero-text: #15375f;
+      --hero-muted: #3d5e7d;
+      --code-bg: #f4f7fa;
+      --ok: #047857;
+      --warn: #b45309;
+      --risk: #b91c1c;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--canvas); }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.75;
+    }
+    .document-shell {
+      max-width: 1320px;
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: 32px 56px 88px;
+      display: grid;
+      grid-template-columns: minmax(200px, 240px) minmax(0, 820px);
+      column-gap: 76px;
+      align-items: start;
+      background: var(--paper);
+    }
+    .document-header {
+      grid-column: 1 / -1;
+      margin-bottom: 52px;
+      padding: 52px 56px 46px;
+      color: var(--hero-text);
+      background: linear-gradient(115deg, var(--hero-start), #f9fbff 62%, var(--hero-end));
+      border: 1px solid #cbdff4;
+      border-left: 5px solid var(--accent);
+      border-radius: 8px;
+    }
+    .document-header h1 {
+      margin: 0 0 18px;
+      color: var(--hero-text);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      letter-spacing: -0.035em;
+      line-height: 1.18;
+      overflow-wrap: anywhere;
+    }
+    .document-header .meta {
+      margin: 0;
+      padding-top: 16px;
+      color: var(--hero-muted);
+      border-top: 1px solid rgba(61, 94, 125, 0.2);
+      font-size: 14px;
+    }
+    .document-toc {
+      grid-column: 1;
+      position: sticky;
+      top: 32px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .document-toc::before {
+      content: "目录";
+      display: block;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      color: var(--hero-text);
+      border-bottom: 2px solid var(--accent);
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .document-toc ul { margin: 0; padding: 0; list-style: none; }
+    .document-toc ul ul { margin: 5px 0 8px; padding-left: 14px; }
+    .document-toc li { margin: 5px 0; }
+    .document-toc a { color: #3a536e; text-decoration: none; }
+    .document-toc a:hover { color: var(--accent); text-decoration: underline; }
+    .document-content { grid-column: 2; min-width: 0; }
+    h1, h2, h3 { color: var(--text); line-height: 1.35; }
+    h2 { margin: 64px 0 22px; padding-bottom: 13px; color: #1c3f6b; border-bottom: 1px solid var(--border); font-size: 1.55rem; }
+    h3 { margin: 34px 0 12px; color: #244f80; font-size: 1.12rem; }
+    h4 { color: #315e8d; }
+    p, li { max-width: 76ch; }
+    a { color: var(--accent); text-underline-offset: 3px; }
+    blockquote, .callout { margin: 24px 0; padding: 16px 20px; color: #36516c; background: #f3f7fb; border-left: 3px solid #75a7dd; }
+    .callout.success { border-left-color: var(--ok); }
+    .callout.warning { border-left-color: var(--warn); }
+    .callout.risk { border-left-color: var(--risk); }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+    pre { padding: 16px 18px; background: var(--code-bg); border: 1px solid var(--border); border-left: 3px solid #8fb7e1; border-radius: 8px; overflow: auto; }
+    :not(pre) > code { padding: 2px 5px; color: #244f80; background: #edf3f8; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.94rem; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: #244f80; background: #eef5fc; border-top: 2px solid #8fb7e1; text-align: left; }
+    .badge { display: inline-block; padding: 2px 8px; border: 1px solid var(--border); border-radius: 999px; font-size: 12px; }
+    @media (max-width: 1080px) {
+      .document-shell { display: block; padding: 28px 32px 64px; }
+      .document-header { margin-bottom: 38px; padding: 42px 40px 36px; }
+      .document-toc { position: static; margin-bottom: 46px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    }
+    @media (max-width: 640px) {
+      .document-shell { padding: 0 20px 48px; }
+      .document-header { margin: 0 -20px 32px; padding: 36px 24px 30px; border-radius: 0; }
+      .document-header h1 { font-size: clamp(1.72rem, 8vw, 2rem); word-break: break-word; }
+      table { display: block; overflow-x: auto; }
+    }
+    @media print {
+      html, body { background: #fff; }
+      .document-shell { display: block; min-height: 0; margin: 0; padding: 0; max-width: none; }
+      .document-header { margin: 0 0 24px; padding: 0 0 14px; background: #fff; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
+      .document-toc { position: static; margin: 0 0 24px; padding: 0; break-after: page; }
+      h2, h3, h4, tr, pre, blockquote, .callout { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main class="document-shell">
+    <header class="document-header">
+      <h1>{{TITLE}}</h1>
+      <p class="meta">更新时间：{{UPDATED_AT}} · {{METADATA}}</p>
+    </header>
+    <nav class="document-toc" aria-label="文档目录">
+      {{TOC}}
+    </nav>
+    <article class="document-content">
+      <section>
+        <h2>摘要</h2>
+        {{SUMMARY}}
+      </section>
+      {{CONTENT}}
+    </article>
+  </main>
+</body>
+</html>

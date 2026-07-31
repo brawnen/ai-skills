@@ -2,3 +2,5 @@ interface:
   display_name: "Frontend Project Flow"
   short_description: "End-to-end frontend design and delivery workflow"
   default_prompt: "Use $frontend-project-flow to turn this product requirement into a designed, implemented, audited frontend flow."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Release Scope Check"
+  short_description: "核对多模块或高风险发布的制品范围、顺序、验证、阻塞和回滚路径"
+  brand_color: "#2563EB"
+  default_prompt: "Use $project-release-scope-check to check which modules must be released, conditionally released, or skipped."
+policy:
+  allow_implicit_invocation: true

@@ -1,5 +1,7 @@
 # Codex 执行文档：本地 AI Skills 体系搭建与落盘方案
 
+> 历史实施基线：本文保留最初落盘方案及当时路径。当前运行目录已经收敛为 `global/workflows/`、`global/specialists/` 和 `global/helpers/`，实际安装集合与路径以 `README.md`、`scripts/install-links.sh` 为准。
+
 ## 0. 文档目标
 
 这是一份给 Codex 直接执行的实施文档。目标不是安装尽可能多的 skills，而是搭建一套 **少而精、可维护、分层清晰** 的本地 skills 体系，服务于以下场景：
@@ -585,4 +587,3 @@ description: 适用于数据库相关改动，包括 DDL、索引、SQL、迁移
 4. 中文内容优先
 5. 文件结构清晰、命名稳定
 6. 第一阶段只创建必要骨架，不做过度设计
-

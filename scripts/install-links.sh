@@ -7,38 +7,52 @@ SOURCE_DIR="${ROOT_DIR}/global"
 DEFAULT_TARGET_DIR="${HOME}/.codex/skills"
 EXTERNAL_SYSTEMATIC_DEBUGGING_DIR="${SYSTEMATIC_DEBUGGING_DIR:-${HOME}/.skillshub/superpower/skills/systematic-debugging}"
 
-core_execution_skills=(
-  "core/safe-editing"
+workflow_core_skills=(
   "workflows/task-todolist-execution"
-  "core/task-report"
 )
 
-core_gate_skills=(
-  "core/repo-intake-scan"
-  "core/requirements-clarification"
-  "core/test-first-development"
-  "workflows/db-change-safety"
+global_specialist_skills=(
+  "specialists/repo-intake-scan"
+  "specialists/requirements-clarification"
+  "specialists/safe-editing"
+  "specialists/test-first-development"
+  "specialists/db-change-safety"
+  "specialists/code-evidence-docs"
+  "specialists/production-incident-hotfix"
+  "specialists/project-release-scope-check"
+)
+
+global_helper_skills=(
+  "helpers/formal-html-docs"
 )
 
 core_skills=(
-  "${core_execution_skills[@]}"
-  "${core_gate_skills[@]}"
+  "${workflow_core_skills[@]}"
+  "${global_specialist_skills[@]}"
+  "${global_helper_skills[@]}"
 )
 
-specialist_frontend=(
+optional_frontend_workflows=(
   "workflows/frontend-project-flow"
 )
 
-specialist_docs=(
-  "core/code-evidence-docs"
-  "core/formal-html-docs"
+optional_architecture_skills=(
+  "specialists/architecture-friction-scan"
+  "helpers/codegraph-assisted-navigation"
 )
 
-specialist_incident=(
-  "core/production-incident-hotfix"
-  "core/project-release-scope-check"
-  "core/codegraph-assisted-navigation"
-  "core/architecture-friction-scan"
+optional_tool_helpers=(
+  "helpers/doc-converter"
+)
+
+compat_docs=(
+  "specialists/code-evidence-docs"
+  "helpers/formal-html-docs"
+)
+
+compat_incident=(
+  "specialists/production-incident-hotfix"
+  "specialists/project-release-scope-check"
 )
 
 managed_skill_names=(
@@ -46,6 +60,7 @@ managed_skill_names=(
   "code-evidence-docs"
   "codegraph-assisted-navigation"
   "db-change-safety"
+  "doc-converter"
   "frontend-project-flow"
   "formal-html-docs"
   "production-incident-hotfix"
@@ -53,12 +68,15 @@ managed_skill_names=(
   "repo-intake-scan"
   "requirements-clarification"
   "safe-editing"
-  "task-report"
   "task-todolist-execution"
   "test-first-development"
 )
 
 retired_skill_names=(
+  "code-review"
+  "pdf"
+  "taste-skill"
+  "task-report"
   "validation-required"
   "verification-before-completion"
 )
@@ -71,11 +89,13 @@ fi
 print_bundle_list() {
   cat <<'EOF'
 可用 bundles:
-  core        仓库内托管的默认 core（执行层 + 场景闸门层）
-  frontend    前端交付流专项 skill
-  docs        文档沉淀专项 skill（含 formal-html-docs）
-  incident    生产事故 / 发布 / CodeGraph / 架构扫描专项 skill
-  all         安装 core + 全部 specialist
+  core          默认全局集合（通用流程 + 自动触发专项 + 内部 helper）
+  frontend      可选的完整前端交付流程
+  architecture  可选的架构扫描与 CodeGraph 辅助
+  tools         可选的本机文档转换 helper
+  docs          兼容别名：代码证据文档 + formal-html-docs（已包含在 core）
+  incident      兼容别名：生产事故 + 发布核对（已包含在 core）
+  all           安装 core + 全部可选能力
 EOF
 }
 
@@ -120,20 +140,26 @@ append_bundle() {
       selected_skills+=("${core_skills[@]}")
       ;;
     frontend)
-      selected_skills+=("${specialist_frontend[@]}")
+      selected_skills+=("${optional_frontend_workflows[@]}")
+      ;;
+    architecture)
+      selected_skills+=("${optional_architecture_skills[@]}")
+      ;;
+    tools)
+      selected_skills+=("${optional_tool_helpers[@]}")
       ;;
     docs)
-      selected_skills+=("${specialist_docs[@]}")
+      selected_skills+=("${compat_docs[@]}")
       ;;
     incident)
-      selected_skills+=("${specialist_incident[@]}")
+      selected_skills+=("${compat_incident[@]}")
       ;;
     all)
       selected_skills+=(
         "${core_skills[@]}"
-        "${specialist_frontend[@]}"
-        "${specialist_docs[@]}"
-        "${specialist_incident[@]}"
+        "${optional_frontend_workflows[@]}"
+        "${optional_architecture_skills[@]}"
+        "${optional_tool_helpers[@]}"
       )
       ;;
     *)

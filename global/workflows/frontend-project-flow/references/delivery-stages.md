@@ -25,7 +25,7 @@
 没有明确视觉目标时，不要直接开写代码。
 
 - 产品型页面：先给简短方向，确认信息层级和状态设计
-- 品牌型页面：先给方向，再决定要不要 taste pass
+- 品牌型页面：先给方向，使用 Impeccable brand register 约束视觉表达
 
 ## 4. Implementation Plan
 
@@ -37,7 +37,7 @@
 - 交互与状态
 - 资源与验证
 
-跨文件或较大任务进入 `task-todolist-execution`。
+存在多个依赖阶段、交接或高风险验证时进入 `task-todolist-execution`；不要只按文件数量触发。
 
 ## 5. Build
 
@@ -66,7 +66,7 @@
 
 ## 7. Handoff
 
-最后统一通过 `task-report` 输出：
+最后按实际复杂度简洁输出：
 
 - 改了什么
 - 做了什么验证

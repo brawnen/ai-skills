@@ -4,9 +4,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-CODEX_RULE_SOURCE="${CODEX_RULE_SOURCE:-${HOME}/.codex/AGENTS.md}"
+GLOBAL_RULE_SOURCE="${GLOBAL_RULE_SOURCE:-${CODEX_RULE_SOURCE:-${ROOT_DIR}/rules/AGENTS.md}}"
+CODEX_RULE_TARGET="${CODEX_RULE_TARGET:-${HOME}/.codex/AGENTS.md}"
 CLAUDE_RULE_TARGET="${CLAUDE_RULE_TARGET:-${HOME}/.claude/CLAUDE.md}"
 GEMINI_RULE_TARGET="${GEMINI_RULE_TARGET:-${HOME}/.gemini/GEMINI.md}"
+RULE_BACKUP_TIMESTAMP="$(date '+%Y%m%d-%H%M%S')"
 
 CODEX_SKILLS_DIR="${CODEX_SKILLS_DIR:-${HOME}/.codex/skills}"
 CLAUDE_SKILLS_DIR="${CLAUDE_SKILLS_DIR:-${HOME}/.claude/skills}"
@@ -15,16 +17,15 @@ ANTIGRAVITY_SKILLS_DIR="${ANTIGRAVITY_SKILLS_DIR:-${HOME}/.gemini/config/skills}
 ANTIGRAVITY_IDE_SKILLS_DIR="${ANTIGRAVITY_IDE_SKILLS_DIR:-${HOME}/.gemini/antigravity-ide/skills}"
 
 SYSTEMATIC_DEBUGGING_SOURCE="${SYSTEMATIC_DEBUGGING_DIR:-${HOME}/.skillshub/superpower/skills/systematic-debugging}"
-CODE_REVIEW_SOURCE="${CODE_REVIEW_DIR:-${HOME}/.skillshub/code-review}"
-PDF_SOURCE="${PDF_SKILL_DIR:-${CODEX_SKILLS_DIR}/pdf}"
-TASTE_SKILL_SOURCE="${TASTE_SKILL_DIR:-${CODEX_SKILLS_DIR}/taste-skill}"
+IMPECCABLE_SOURCE="${IMPECCABLE_DIR:-${HOME}/.agents/skills/impeccable}"
 
-DOC_BUNDLES=(core docs)
+SYNC_BUNDLES=(core)
+CODEX_EXTERNAL_SKILLS=(
+  "impeccable:${IMPECCABLE_SOURCE}"
+)
 EXTERNAL_SKILLS=(
   "systematic-debugging:${SYSTEMATIC_DEBUGGING_SOURCE}"
-  "code-review:${CODE_REVIEW_SOURCE}"
-  "pdf:${PDF_SOURCE}"
-  "taste-skill:${TASTE_SKILL_SOURCE}"
+  "impeccable:${IMPECCABLE_SOURCE}"
 )
 
 usage() {
@@ -35,17 +36,15 @@ usage() {
   ./scripts/sync-global-platforms.sh --deep-check
 
 行为:
-  1. 以 ~/.codex/AGENTS.md 为事实源，同步到 ~/.claude/CLAUDE.md 和 ~/.gemini/GEMINI.md
-  2. 用 install-links.sh 把仓库托管的 core+docs skills 同步到:
+  1. 以仓库 rules/AGENTS.md 为事实源，同步到 Codex、Claude 和 Gemini 的用户级规则文件
+  2. 用 install-links.sh 更新 Codex 的默认 core skills，并同步到:
      - ~/.claude/skills
      - ~/.gemini/skills
      - ~/.gemini/config/skills
      - ~/.gemini/antigravity-ide/skills
   3. 补齐外部 skills:
      - systematic-debugging
-     - code-review
-     - pdf
-     - taste-skill
+     - impeccable（默认设计 skill）
 
 检查模式:
   --check 只做一致性检查,不写任何文件或目录。
@@ -61,6 +60,24 @@ require_file() {
   fi
 }
 
+validate_rule_file() {
+  local path="$1"
+  require_file "${path}"
+
+  if [[ ! -s "${path}" ]]; then
+    echo "规则文件为空: ${path}" >&2
+    exit 1
+  fi
+
+  local marker=""
+  for marker in "# User Core Rules" "SKILL_ROUTING_START" "DOC_FORMAT_START" "CODEGRAPH_START"; do
+    if ! grep -Fq "${marker}" "${path}"; then
+      echo "规则文件缺少必要标记 '${marker}': ${path}" >&2
+      exit 1
+    fi
+  done
+}
+
 require_dir() {
   local path="$1"
   if [[ ! -d "${path}" ]]; then
@@ -72,14 +89,41 @@ require_dir() {
 copy_rule_file() {
   local source_file="$1"
   local target_file="$2"
-  mkdir -p "$(dirname "${target_file}")"
-  cp "${source_file}" "${target_file}"
+  local target_dir
+  local backup_dir
+  local temp_file
+
+  validate_rule_file "${source_file}"
+  target_dir="$(dirname "${target_file}")"
+  backup_dir="${target_dir}/rule-backups"
+  temp_file="${target_file}.tmp.$$"
+
+  mkdir -p "${target_dir}"
+  if [[ -s "${target_file}" ]] && ! cmp -s "${source_file}" "${target_file}"; then
+    mkdir -p "${backup_dir}"
+    cp "${target_file}" "${backup_dir}/$(basename "${target_file}").${RULE_BACKUP_TIMESTAMP}.bak"
+    echo "backed up $(basename "${target_file}") -> ${backup_dir}"
+  fi
+
+  cp "${source_file}" "${temp_file}"
+  if ! cmp -s "${source_file}" "${temp_file}"; then
+    rm -f "${temp_file}"
+    echo "规则文件临时副本校验失败: ${target_file}" >&2
+    exit 1
+  fi
+
+  mv -f "${temp_file}" "${target_file}"
+  validate_rule_file "${target_file}"
+  if ! cmp -s "${source_file}" "${target_file}"; then
+    echo "规则文件写后校验失败: ${target_file}" >&2
+    exit 1
+  fi
   echo "copied $(basename "${source_file}") -> ${target_file}"
 }
 
 sync_managed_skills() {
   local target_dir="$1"
-  "${SCRIPT_DIR}/install-links.sh" "${target_dir}" "${DOC_BUNDLES[@]}"
+  "${SCRIPT_DIR}/install-links.sh" "${target_dir}" "${SYNC_BUNDLES[@]}"
 }
 
 link_external_skills() {
@@ -96,6 +140,17 @@ link_external_skills() {
   done
 }
 
+link_codex_external_skills() {
+  local entry
+  for entry in "${CODEX_EXTERNAL_SKILLS[@]}"; do
+    local skill_name="${entry%%:*}"
+    local source_dir="${entry#*:}"
+    require_dir "${source_dir}"
+    ln -sfn "${source_dir}" "${CODEX_SKILLS_DIR}/${skill_name}"
+    echo "linked codex external ${skill_name} -> ${source_dir}"
+  done
+}
+
 verify_target_matches_codex() {
   local target_dir="$1"
   if ! diff -u <(ls -1 "${CODEX_SKILLS_DIR}" | sort) <(ls -1 "${target_dir}" | sort) >/dev/null; then
@@ -106,14 +161,15 @@ verify_target_matches_codex() {
   echo "verified skill set matches codex: ${target_dir}"
 }
 
-verify_rule_file_matches_codex() {
+verify_rule_file_matches_source() {
   local target_file="$1"
-  if ! cmp -s "${CODEX_RULE_SOURCE}" "${target_file}"; then
+  validate_rule_file "${target_file}"
+  if ! cmp -s "${GLOBAL_RULE_SOURCE}" "${target_file}"; then
     echo "规则文件不一致: ${target_file}" >&2
-    diff -u "${CODEX_RULE_SOURCE}" "${target_file}" || true
+    diff -u "${GLOBAL_RULE_SOURCE}" "${target_file}" || true
     exit 1
   fi
-  echo "verified rule file matches codex: ${target_file}"
+  echo "verified rule file matches source: ${target_file}"
 }
 
 resolve_dir_path() {
@@ -162,11 +218,12 @@ verify_target_deep_matches_codex() {
 
 run_check_mode() {
   local deep_mode="${1:-0}"
-  require_file "${CLAUDE_RULE_TARGET}"
-  require_file "${GEMINI_RULE_TARGET}"
+  validate_rule_file "${GLOBAL_RULE_SOURCE}"
 
-  verify_rule_file_matches_codex "${CLAUDE_RULE_TARGET}"
-  verify_rule_file_matches_codex "${GEMINI_RULE_TARGET}"
+  local rule_target=""
+  for rule_target in "${rule_targets[@]}"; do
+    verify_rule_file_matches_source "${rule_target}"
+  done
 
   local target_dir=""
   for target_dir in "${targets[@]}"; do
@@ -190,8 +247,14 @@ if [[ "${1:-}" == "--help" ]]; then
   exit 0
 fi
 
-require_file "${CODEX_RULE_SOURCE}"
+validate_rule_file "${GLOBAL_RULE_SOURCE}"
 require_dir "${CODEX_SKILLS_DIR}"
+
+rule_targets=(
+  "${CODEX_RULE_TARGET}"
+  "${CLAUDE_RULE_TARGET}"
+  "${GEMINI_RULE_TARGET}"
+)
 
 targets=(
   "${CLAUDE_SKILLS_DIR}"
@@ -210,8 +273,13 @@ if [[ "${1:-}" == "--deep-check" ]]; then
   exit 0
 fi
 
-copy_rule_file "${CODEX_RULE_SOURCE}" "${CLAUDE_RULE_TARGET}"
-copy_rule_file "${CODEX_RULE_SOURCE}" "${GEMINI_RULE_TARGET}"
+rule_target=""
+for rule_target in "${rule_targets[@]}"; do
+  copy_rule_file "${GLOBAL_RULE_SOURCE}" "${rule_target}"
+done
+
+sync_managed_skills "${CODEX_SKILLS_DIR}"
+link_codex_external_skills
 
 target_dir=""
 for target_dir in "${targets[@]}"; do

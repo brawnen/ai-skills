@@ -1,0 +1,6 @@
+interface:
+  display_name: "CodeGraph 辅助导航"
+  short_description: "用 CodeGraph 快速定位代码结构候选，再用源码和验证收敛结论。"
+  default_prompt: "Use $codegraph-assisted-navigation to map symbol, call-chain, or impact candidates, then confirm key conclusions from source code."
+policy:
+  allow_implicit_invocation: true

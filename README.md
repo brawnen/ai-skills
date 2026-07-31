@@ -4,7 +4,10 @@
 
 ## 目录边界
 
-- `global/`：跨项目通用 skills 的事实源。
+- `global/workflows/`：跨阶段编排和执行状态管理。
+- `global/specialists/`：可按用户意图直接触发的领域专项能力。
+- `global/helpers/`：由流程或专项间接调用的产物和工具 helper。
+- `rules/AGENTS.md`：Codex、Claude Code、Gemini 和 Antigravity 用户级规则的唯一事实源。
 - `templates/project-local/`：项目模板，只存占位模板，不是最终运行目录。
 - `vendor/`：外部社区包参考区，不直接替换主干 skills。
 - `adapters/`：面向不同 CLI / agent 的适配骨架。
@@ -12,40 +15,41 @@
 
 ## 当前管理模型
 
-### 1. Core
+公开能力按“流程 + 专项”设计，物理目录与逻辑分类保持一致；helper 和工具适配器不作为顶层用户意图入口：
 
-90 天业务会话统计表明，当前 core 不需要再收缩，但需要分层表达：
+- **流程 skill**：跨阶段编排、维护状态并决定何时交给哪个专项 skill；不重复专项规则。
+- **专项 skill**：只对一个问题领域、风险或产物负责；即使内部有步骤，也不接管完整任务生命周期。
+- **内部 helper / 工具适配器**：被流程或专项 skill 间接调用；只有明确需要对应产物或工具时才加载。
 
-#### 1.1 默认执行层
+### 1. 默认全局集合
 
-这层是默认常驻、最通用的工程执行骨架：
+#### 1.1 通用流程
 
-- `safe-editing`
-- `task-todolist-execution`
-- `task-report`
+- `task-todolist-execution`：只用于多阶段、有依赖、长时间或高风险实施任务；普通短任务由 agent 直接完成。
 
-对应的是“范围控制 / 执行节奏 / 交付汇报”三道基础闸门。
+#### 1.2 自动触发专项
 
-#### 1.2 场景闸门层
+| skill | 唯一职责 | 不负责 |
+| --- | --- | --- |
+| `repo-intake-scan` | 陌生仓库的根目录、技术栈和验证入口 | 架构体检、正式文档 |
+| `requirements-clarification` | 收敛未确认的目标、方案和验收边界 | 记录已确定的代码事实 |
+| `safe-editing` | 兼容性敏感或影响面不明的现有代码改动 | 普通低风险修改、执行计划 |
+| `test-first-development` | 对已明确行为建立 red-green 证据 | 未知根因诊断、事故止损 |
+| `db-change-safety` | DDL、迁移、回填和生产写入风险 | 纯只读查询、通用任务状态 |
+| `code-evidence-docs` | 基于现有代码事实沉淀可维护文档 | 推动需求决策、HTML 视觉外壳 |
+| `production-incident-hotfix` | 生产事件边界、止损、恢复和交接 | 系统化根因诊断方法 |
+| `project-release-scope-check` | 上线前制品范围、顺序、验证和回滚决策 | 实施结果汇报 |
 
-这层仍属于 core，但按任务意图触发，不要求每次都命中：
+#### 1.3 全局内部 helper
 
-- `repo-intake-scan`
-- `requirements-clarification`
-- `test-first-development`
-- `db-change-safety`
+- `formal-html-docs`：提供统一正式 HTML 外壳，由文档专项间接调用。
 
-对应的是“新仓库接手 / 需求前置沟通 / 行为变更证明 / 数据库高风险控制”。
+#### 1.4 外部常驻补充
 
-#### 1.3 外部常驻补充
+- `systematic-debugging`：未知故障的证据驱动根因诊断。
+- `impeccable`：默认 UI 设计、审查和优化能力。
 
-以下 skill 从使用频次上看也属于 core，但事实源不在本仓库主干内，因此保留为外部驻留补充：
-
-- `systematic-debugging`
-
-它是高频核心排障闸门，建议常驻，但不由本仓库默认 bundle 直接托管。
-
-#### 1.4 90 天验证事实
+#### 1.5 90 天验证事实
 
 以下统计窗口为 `2026-04-05` 至 `2026-07-04`，口径为“业务会话中命中 skill 正文特征”的高置信代理统计：
 
@@ -53,66 +57,45 @@
 | --- | ---: |
 | `task-todolist-execution` | 18 |
 | `systematic-debugging` | 16 |
-| `task-report` | 12 |
+| `task-report`（历史，现已退役） | 12 |
 | `repo-intake-scan` | 11 |
 | `safe-editing` | 10 |
 | `db-change-safety` | 8 |
 | `requirements-clarification` | 4 |
 | `test-first-development` | 3 |
 
-这组 skill 覆盖大多数“接手仓库 / 需求澄清 / 小中型改动 / 排障 / TDD / 数据库风险 / 最终汇报”的日常工作。
+这组统计用于判断是否值得保留，不用名称出现次数扩大触发范围。`task-report` 的历史命中主要来自统一收尾路由，不代表独立用户意图；其验证纪律已收口到全局规则和宿主 Agent 原生汇报。低频但高风险的 TDD、数据库、事故和发布专项仍应全局可用，依靠精确 description 自动触发。
 
-### 2. Specialist
+### 2. 可选流程与专项
 
-按需安装，不默认常驻：
+默认不同步，明确进入对应长流程或工具环境时再安装：
 
-- `frontend`：
-  - `frontend-project-flow`
-- `docs`：
-  - `code-evidence-docs`
-  - `formal-html-docs`
-- `incident`：
-  - `production-incident-hotfix`
-  - `project-release-scope-check`
-  - `codegraph-assisted-navigation`
-  - `architecture-friction-scan`
+| bundle | skills | 原因 |
+| --- | --- | --- |
+| `frontend` | `frontend-project-flow` | 完整前端交付才需要；单页设计或实现直接用专项能力 |
+| `architecture` | `architecture-friction-scan`、`codegraph-assisted-navigation` | 架构体检低频；CodeGraph 还依赖项目索引和宿主工具 |
+| `tools` | `doc-converter` | 依赖本机 macOS、Word 和转换 CLI |
 
-原则：只有当用户意图明显命中该领域，或者当前会话会长期停留在该领域时，才值得挂上。
-
-### 3. Internal Helpers
-
-这些内容继续保留在仓库里，但不作为默认顶层全局 skill 安装：
-
-- `doc-converter`
-
-它们更像被其它 skill 间接调用的模板 / 输出壳 / 工具说明，而不是用户会直接表达的任务意图。
-
-`formal-html-docs` 是例外：虽然定位仍是 helper，不是高频用户意图入口，但为了统一正式 HTML 文档样式，建议作为 `docs` bundle 的全局可用能力安装。
-
-### 4. External / Unmanaged
-
-不在本仓库主干里统一管理的 skill，例如：
-
-- `pdf`
-- `taste-skill`
-- 第三方 `code-review`
-- 其它来自 `.skillshub` 或社区来源的 skill
-
-这些可以继续存在于用户本机，但不应反向主导本仓库的主干结构。
+`docs`、`incident` bundle 保留为兼容别名；其中能力已经包含在默认 `core` 中。
 
 ## 生命周期原则
 
-1. 先判断它是不是“用户意图级 skill”。
-2. 如果只是输出模板、格式壳子或内部工具说明，降级为 helper，不默认安装。
-3. 如果核心规则已经被别的 skill 吸收，就下线重复 skill。
-4. 如果 skill 只适合窄场景且正文很重，移出 core，改为 specialist。
+1. 只有跨阶段编排才定义为流程 skill；不能因为正文有步骤就归为流程。
+2. 专项 skill 必须声明唯一职责、明确不负责什么，以及上下游交接对象。
+3. 流程 skill 不复制专项规则，只维护阶段、状态和路由。
+4. helper 可以全局存在以保证统一产物，但 description 必须阻止其抢占顶层用户意图。
+5. 依赖特定项目索引、平台或本机工具的能力不进入默认全局集合。
 
 当前已执行的收缩原则：
 
-- 验证纪律统一收口到 `task-report`，不再依赖单独的 `verification-before-completion`。
-- `formal-html-docs` 仍作为 helper 保留，但为了统一正式 HTML 文档样式，建议随 `docs` bundle 全局可用安装。
-- `frontend-project-flow` 保留，但作为 specialist，只在前端交付流里按需启用。
+- `task-report` 与宿主 Agent 原生收尾及全局验证纪律重复，已退役；实施结束按实际复杂度简洁说明改动、验证、未验证项和风险。
+- 通用代码审查使用 Codex 等 Agent 的原生审查能力；项目特殊检查写入项目级规则，不再同步外部 `code-review-excellence`。
+- `formal-html-docs` 作为全局 helper 保留，由正式文档专项间接使用。
+- `frontend-project-flow` 保留为可选领域流程，只在完整前端交付流里按需启用。
+- `taste-skill` 已退役；设计任务统一使用外部驻留的 `impeccable`，避免多套设计规则重叠。
+- Codex Product Design 保持插件级按需能力，仅用于视觉探索、参考克隆、流程审查和原型分享，不参与跨平台全局 skill 同步。
 - `systematic-debugging` 继续视为高频核心能力，但按外部驻留处理，不反向污染本仓库主干边界。
+- PDF 文件处理不再由本仓库托管全局 skill；Codex 使用官方 `pdf@openai-primary-runtime` 插件，避免重复路由。
 
 ## 安装方式
 
@@ -127,8 +110,9 @@
 安装指定 bundles：
 
 ```bash
-./scripts/install-links.sh ~/.codex/skills core docs
-./scripts/install-links.sh ~/.codex/skills core frontend incident
+./scripts/install-links.sh ~/.codex/skills core
+./scripts/install-links.sh ~/.codex/skills core frontend
+./scripts/install-links.sh ~/.codex/skills core architecture tools
 ```
 
 查看可用 bundles：
@@ -157,33 +141,36 @@
 
 `core` bundle 当前托管的是：
 
-- `safe-editing`
 - `task-todolist-execution`
-- `task-report`
 - `repo-intake-scan`
 - `requirements-clarification`
+- `safe-editing`
 - `test-first-development`
 - `db-change-safety`
+- `code-evidence-docs`
+- `production-incident-hotfix`
+- `project-release-scope-check`
+- `formal-html-docs`
 
 外部驻留的 `systematic-debugging` 不由本仓库直接安装；如果本机已有来源，安装脚本和巡检脚本会给出提示。
 
-`docs` bundle 当前托管的是：
+`frontend` bundle 当前托管的是：
 
-- `code-evidence-docs`
-- `formal-html-docs`
+- `frontend-project-flow`
 
-其中 `formal-html-docs` 的定位仍是 helper，但正式 HTML 交付默认应走它，避免不同任务各自产生不一致的 HTML 样式。
+`architecture` bundle 托管 `architecture-friction-scan` 和 `codegraph-assisted-navigation`；`tools` bundle 托管 `doc-converter`。
+
+视觉设计统一由外部驻留的 `impeccable` 负责：品牌页面使用 brand register，后台、dashboard、工具和产品界面使用 product register。
 
 `sync-global-platforms.sh` 的同步口径是：
 
-- 以 `~/.codex/AGENTS.md` 为全局规则事实源
+- 以仓库内 `rules/AGENTS.md` 为全局规则事实源，并同步到 Codex、Claude Code、Gemini
+- 同步前强制检查规则文件非空及关键区块；覆盖非空旧文件前写入各平台 `rule-backups/`
 - 以 `~/.codex/skills` 当前集合为目标集合
-- 仓库托管 skills 通过 `install-links.sh core docs` 安装
+- 仓库托管 skills 通过 `install-links.sh core` 安装
 - 外部 skills 额外补齐：
   - `systematic-debugging`
-  - `code-review`
-  - `pdf`
-  - `taste-skill`
+  - `impeccable`
 
 当前已验证的目标目录包括：
 
