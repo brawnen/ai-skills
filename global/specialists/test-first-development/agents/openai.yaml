@@ -1,6 +1,6 @@
 interface:
-  display_name: "测试优先开发"
-  short_description: "用行为测试为明确的新功能、缺陷修复、行为变更和重构保护建立证据"
-  default_prompt: "Use $test-first-development to define behavior, write a failing test, implement the smallest fix, and verify red-green."
+  display_name: "Test First Development"
+  short_description: "以行为测试执行 RED-GREEN-REFACTOR，并由 Codex 完成外层验证"
+  default_prompt: "Use $test-first-development to implement this testable behavior one RED-GREEN-REFACTOR slice at a time, then run the appropriate outer verification."
 policy:
   allow_implicit_invocation: true

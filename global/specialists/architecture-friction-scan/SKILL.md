@@ -1,6 +1,6 @@
 ---
 name: architecture-friction-scan
-description: 适用于用户明确要求只读架构体检、维护性分析或重构候选评估；基于代码证据识别浅模块、耦合泄漏、测试困难和局部性问题，输出候选与优先级。普通仓库接手使用 repo-intake-scan，具体改动影响分析不触发本 skill。
+description: 适用于用户明确要求只读架构体检、维护性分析或重构候选评估；基于代码证据识别浅模块、耦合泄漏、测试困难和局部性问题，输出候选与优先级。普通仓库接手或具体改动影响分析不触发本 skill。
 ---
 
 # Architecture Friction Scan
@@ -26,9 +26,8 @@ description: 适用于用户明确要求只读架构体检、维护性分析或�
 
 - 默认只读：不改代码、不写 repo 文件、不生成报告文件、不打开浏览器。
 - 默认输出候选清单和证据分层。
-- 用户明确要求正式架构报告时，配合 `formal-html-docs` 生成自包含 HTML；如需代码证据长文档，再转 `code-evidence-docs`。
-- 用户选中某个候选继续设计时，转 `requirements-clarification`。
-- 用户明确授权实现时，必须再转 `safe-editing`、`task-todolist-execution`、`test-first-development`。
+- 用户明确要求正式架构报告时，可配合 `formal-html-docs` 生成自包含 HTML。
+- 用户选中某个候选继续设计或实现时，交回宿主 Agent 原生澄清、计划、编辑和验证流程。
 
 ## Workflow
 
@@ -98,13 +97,12 @@ description: 适用于用户明确要求只读架构体检、维护性分析或�
 - 不因为 CodeGraph `impact` 大就直接认定必须重构。
 - 不建议大重构作为普通 bugfix 的默认路径。
 - 不为只有一个适配器的场景引入抽象缝；一个适配器通常是假缝。
-- 不和 `safe-editing` 冲突：真正实现前必须重新评估改动范围和回滚方式。
+- 真正实现前必须重新评估改动范围、验证方式和回滚路径；扫描结论本身不构成修改授权。
 
 ## Coordination
 
 - 需要结构化调用链：配合 `codegraph-assisted-navigation`。
 - 需要把扫描结果落正式 HTML 报告：配合 `formal-html-docs`。
-- 需要把扫描结果落代码证据长文档：配合 `code-evidence-docs`。
-- 需要把候选转成 spec：配合 `requirements-clarification`。
-- 需要进入实现：配合 `safe-editing`、`task-todolist-execution`、`test-first-development`。
-- 来源于生产事故：配合 `production-incident-hotfix`，先止血和验证根因，再谈架构候选。
+- 需要把候选转成 spec 或进入实现：交回宿主 Agent 原生工作流。
+- 来源于生产故障：先使用 `systematic-debugging` 控制仍在扩大的影响并验证根因，再谈架构候选。
+- 术语或 bounded context 本身混乱：使用 `domain-modeling`；具体跨栈变更实施前审查使用 `review-cross-stack-change`。

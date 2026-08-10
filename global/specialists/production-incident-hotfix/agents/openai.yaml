@@ -1,7 +1,0 @@
-interface:
-  display_name: "Production Incident Hotfix"
-  short_description: "处理持续影响用户的生产故障，明确止损、恢复、沟通和后续交接"
-  brand_color: "#DC2626"
-  default_prompt: "Use $production-incident-hotfix to triage this production incident, propose temporary mitigation, and separate long-term fixes."
-policy:
-  allow_implicit_invocation: true

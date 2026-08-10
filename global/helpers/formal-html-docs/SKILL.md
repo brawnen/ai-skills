@@ -1,6 +1,6 @@
 ---
 name: formal-html-docs
-description: 内部 HTML 文档外壳与章节模板 helper。全局安装以保证正式 HTML 的统一视觉，但只由正式文档路由按需触发；优先由 code-evidence-docs、requirements-clarification 等文档型 skill 间接使用。
+description: 可选的正式 HTML 文档外壳与章节模板 helper。仅在用户明确需要自包含、可打印的 HTML 正式文档时使用；README、AGENTS、普通分析和宿主已支持的 Word/PDF 文档不触发。
 ---
 
 # Formal HTML Docs

@@ -1,7 +1,0 @@
-interface:
-  display_name: "Code Evidence Docs"
-  short_description: "基于代码、配置和运行证据生成分层清晰、可维护且可验证的工程文档"
-  brand_color: "#059669"
-  default_prompt: "Use $code-evidence-docs to turn this code investigation into a document with confirmed facts, inferred links, and unverified items."
-policy:
-  allow_implicit_invocation: true

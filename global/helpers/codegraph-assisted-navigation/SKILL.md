@@ -58,7 +58,6 @@ description: CodeGraph 工具适配 helper，仅在项目存在可用 .codegraph
 
 ## Coordination
 
-- 生产故障、攻击、第三方失败传播：配合 `production-incident-hotfix`，日志和复现优先级高于 CodeGraph。
-- 发布范围核对：配合 `project-release-scope-check`，`impact` 只是候选输入。
-- 新仓库盘点：配合 `repo-intake-scan`，CodeGraph 不替代 README、构建脚本和环境确认。
-- 文档沉淀：配合 `code-evidence-docs`，CodeGraph 输出默认归入“根据调用关系推断”。
+- 疑难或生产故障：配合 `systematic-debugging`，日志、反馈循环和运行证据优先级高于 CodeGraph。
+- 新仓库盘点：CodeGraph 不替代 README、构建脚本和环境确认。
+- 文档沉淀：CodeGraph 输出默认属于候选或推断，关键结论必须回读源码确认。

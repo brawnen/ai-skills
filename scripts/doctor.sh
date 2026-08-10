@@ -3,29 +3,19 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-EXTERNAL_SYSTEMATIC_DEBUGGING_FILE="${SYSTEMATIC_DEBUGGING_DIR:-${HOME}/.skillshub/superpower/skills/systematic-debugging}/SKILL.md"
-EXTERNAL_IMPECCABLE_FILE="${IMPECCABLE_DIR:-${HOME}/.agents/skills/impeccable}/SKILL.md"
-
 required_paths=(
   "README.md"
   "rules/AGENTS.md"
   "global/specialists/architecture-friction-scan/SKILL.md"
-  "global/specialists/code-evidence-docs/SKILL.md"
   "global/specialists/db-change-safety/SKILL.md"
-  "global/specialists/production-incident-hotfix/SKILL.md"
-  "global/specialists/project-release-scope-check/SKILL.md"
-  "global/specialists/repo-intake-scan/SKILL.md"
+  "global/specialists/domain-modeling/SKILL.md"
+  "global/specialists/domain-modeling/references/context-format.md"
+  "global/specialists/domain-modeling/references/adr-format.md"
   "global/specialists/requirements-clarification/SKILL.md"
-  "global/specialists/safe-editing/SKILL.md"
+  "global/specialists/review-cross-stack-change/SKILL.md"
+  "global/specialists/systematic-debugging/SKILL.md"
   "global/specialists/test-first-development/SKILL.md"
-  "global/workflows/frontend-project-flow/SKILL.md"
-  "global/workflows/frontend-project-flow/references/delivery-stages.md"
-  "global/workflows/frontend-project-flow/references/quality-gates.md"
-  "global/workflows/frontend-project-flow/references/routing.md"
-  "global/workflows/task-todolist-execution/SKILL.md"
   "global/helpers/codegraph-assisted-navigation/SKILL.md"
-  "global/helpers/doc-converter/SKILL.md"
-  "global/helpers/doc-converter/references/local-toolchain.md"
   "global/helpers/formal-html-docs/SKILL.md"
   "global/helpers/formal-html-docs/references/document-types.md"
   "global/helpers/formal-html-docs/assets/formal-document-shell.html"
@@ -35,6 +25,12 @@ required_paths=(
   "templates/project-local/.ai-skills/project-constraints/SKILL.md"
   "templates/project-local/.ai-skills/release-guardrails/SKILL.md"
   "templates/project-local/.ai-skills/sql-risk-zones/SKILL.md"
+  "templates/project-local/.agents/skills/design-product-ui/SKILL.md"
+  "templates/project-local/.agents/skills/design-product-ui/agents/openai.yaml"
+  "templates/project-local/.agents/skills/design-product-ui/references/craft-principles.md"
+  "templates/project-local/.agents/skills/design-product-ui/references/platform-checks.md"
+  "templates/project-local/.agents/skills/design-product-ui/references/review-rubric.md"
+  "templates/project-local/.agents/skills/design-product-ui/assets/DESIGN.template.md"
   "vendor/superpowers/README.md"
   "vendor/gstack/README.md"
   "adapters/gemini/commands/fix-safe.toml"
@@ -58,7 +54,7 @@ for relative_path in "${required_paths[@]}"; do
   fi
 done
 
-for marker in "# User Core Rules" "SKILL_ROUTING_START" "DOC_FORMAT_START" "CODEGRAPH_START"; do
+for marker in "# User Preferences" "## 沟通" "## 专项 Skill 路由" "## 文档偏好"; do
   if ! grep -Fq "${marker}" "${ROOT_DIR}/rules/AGENTS.md"; then
     echo "MISS rules/AGENTS.md (缺少必要标记 ${marker})"
     missing=1
@@ -102,19 +98,10 @@ while IFS= read -r skill_file; do
   fi
 
   echo "OK   ${metadata_file#${ROOT_DIR}/}"
-done < <(find "${ROOT_DIR}/global" -name SKILL.md -type f | sort)
-
-if [[ -f "${EXTERNAL_SYSTEMATIC_DEBUGGING_FILE}" ]]; then
-  echo "OK   external/systematic-debugging"
-else
-  echo "WARN external/systematic-debugging (未检测到外部 core 补充 skill)"
-fi
-
-if [[ -f "${EXTERNAL_IMPECCABLE_FILE}" ]]; then
-  echo "OK   external/impeccable"
-else
-  echo "WARN external/impeccable (未检测到默认设计 skill)"
-fi
+done < <(find \
+  "${ROOT_DIR}/global" \
+  "${ROOT_DIR}/templates/project-local/.agents/skills" \
+  -name SKILL.md -type f | sort)
 
 if [[ "${missing}" -ne 0 ]]; then
   echo "结构检查失败：存在缺失文件。" >&2

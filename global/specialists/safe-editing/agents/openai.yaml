@@ -1,6 +1,0 @@
-interface:
-  display_name: "安全修改现有代码"
-  short_description: "限制兼容性敏感或测试薄弱代码的改动边界，保护既有行为并避免无关重构"
-  default_prompt: "Use $safe-editing to make this compatibility-sensitive change with a narrow scope, explicit protections, and focused verification."
-policy:
-  allow_implicit_invocation: true

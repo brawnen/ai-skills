@@ -1,0 +1,6 @@
+interface:
+  display_name: "Cross-Stack Change Review"
+  short_description: "实施前审查跨客户端、网页、服务端和数据库变更的系统边界风险"
+  default_prompt: "Use $review-cross-stack-change to review this cross-stack design before implementation."
+policy:
+  allow_implicit_invocation: true

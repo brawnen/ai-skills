@@ -1,6 +1,6 @@
 interface:
-  display_name: "需求澄清"
-  short_description: "逐题澄清目标、范围、方案、接口和验收边界，并沉淀已确认 spec"
-  default_prompt: "Use $requirements-clarification to clarify the request one question at a time, compare approaches, and write the agreed spec."
+  display_name: "Requirements Clarification"
+  short_description: "通过逐题访谈和方案取舍，将模糊需求收敛为可验收的确认 spec"
+  default_prompt: "Use $requirements-clarification to interview me one decision at a time and turn the result into a confirmed, testable spec."
 policy:
   allow_implicit_invocation: true
