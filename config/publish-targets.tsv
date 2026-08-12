@@ -1,0 +1,6 @@
+# platform|scope|skills_target|rule_target
+codex|global|$HOME/.codex/skills|$HOME/.codex/AGENTS.md
+claude|global|$HOME/.claude/skills|$HOME/.claude/CLAUDE.md
+gemini|global|$HOME/.gemini/skills|$HOME/.gemini/GEMINI.md
+antigravity|global|$HOME/.gemini/config/skills|$HOME/.gemini/GEMINI.md
+agents|project|.agents/skills|-

@@ -40,15 +40,19 @@
 
 ### 项目级 UI/UX skill
 
-`templates/project-local/.agents/skills/design-product-ui` 是按项目引入的 UI/UX
-设计能力，不属于任何全局 bundle，也不会被全局同步脚本安装。只在项目包含页面、
-Web 或客户端设计工作时，把整个目录复制到目标仓库：
+`project/specialists/design-product-ui` 是 UI/UX skill 的唯一源码目录。它不属于
+任何全局 bundle，也不直接存放在本仓库的 `.agents/skills` 下。只在某个项目
+需要页面、Web 或客户端设计能力时，发布一条指向该源码的项目级符号链接：
 
 ```bash
-mkdir -p <project>/.agents/skills
-cp -R templates/project-local/.agents/skills/design-product-ui \
-  <project>/.agents/skills/design-product-ui
+./scripts/publish-skills.sh project \
+  --project /absolute/path/to/project \
+  --skills design-product-ui
 ```
+
+默认落点是 `<project>/.agents/skills/design-product-ui`。发布脚本不复制 skill，
+不覆盖已有实体目录或其他来源的符号链接；可以用相同参数加 `--check`
+验证当前发布结果。
 
 该 skill 负责从用户任务、现有设计系统和平台约束收敛设计方向，按复杂度处理局部
 调整、页面/流程、新设计系统和只读评审，并在需要跨页面复用时维护项目根目录
@@ -83,42 +87,46 @@ cp -R templates/project-local/.agents/skills/design-product-ui \
 - 正式 HTML 与普通 Markdown 的产物偏好。
 - 剩余领域 skills 的触发边界。
 
-不要在这里重复 Codex 已经负责的计划、工具选择、编辑安全、测试、Git、提交权限或通用验证规则。项目根目录中的 `AGENTS.md` 应只记录该项目的真实命令、目录边界、兼容要求和高风险区域；模板位于 `templates/project-local/`。
+不要在这里重复 Codex 已经负责的计划、工具选择、编辑安全、测试、Git、提交权限或通用验证规则。项目根目录中的 `AGENTS.md` 应由模型基于真实仓库生成和维护，只记录该项目的真实命令、目录边界、兼容要求和高风险区域。本仓库不维护静态项目规则模板。
 
-## 安装
+## 配置与发布
 
-查看 bundles：
+`config/skills.tsv` 是 skill catalog，统一声明名称、作用域、源码路径、
+bundle 和退役状态。`config/publish-targets.tsv` 声明 Codex、Claude、Gemini、
+Antigravity 以及项目级 `.agents/skills` 的发布落点。脚本不再维护另一份
+硬编码 skill 列表。
 
-```bash
-./scripts/install-links.sh --list
-```
-
-默认只安装 `core`：
-
-```bash
-./scripts/install-links.sh
-```
-
-按需安装：
+查看 catalog：
 
 ```bash
-./scripts/install-links.sh ~/.codex/skills core architecture
-./scripts/install-links.sh ~/.codex/skills core docs
+./scripts/publish-skills.sh list
 ```
 
-安装脚本只删除由本仓库创建的旧符号链接，不删除其他来源的 skills。
-
-跨平台同步（默认只同步 Codex 与 Antigravity 的 `core`）：
+默认将全局 `core` 发布到 Codex 和 Antigravity，并同步全局规则：
 
 ```bash
-./scripts/sync-global-platforms.sh
-./scripts/sync-global-platforms.sh --platforms codex,antigravity --bundles all
-./scripts/sync-global-platforms.sh --deep-check --platforms codex,antigravity --bundles all
+./scripts/publish-skills.sh global
 ```
 
-Antigravity 的官方全局目录是 `~/.gemini/config/skills`，全局规则入口是
-`~/.gemini/GEMINI.md`。后者也会被 Gemini CLI 读取；同步 Antigravity 时不会改动
-Gemini CLI 独立的 `~/.gemini/skills`。
+按需发布全局 bundle：
+
+```bash
+./scripts/publish-skills.sh global \
+  --platforms codex,antigravity \
+  --bundles core,architecture,docs
+```
+
+只发布到指定全局目录，不同步规则：
+
+```bash
+./scripts/publish-skills.sh global \
+  --target ~/.codex/skills \
+  --bundles core,architecture
+```
+
+旧的 `install-links.sh` 和 `sync-global-platforms.sh` 保留为兼容入口，实际都转交给
+`publish-skills.sh`。发布器只清理指向本仓库的过期符号链接，不删除其他来源的
+skills。Antigravity 的全局目录仍为 `~/.gemini/config/skills`。
 
 结构和元数据检查：
 
@@ -128,10 +136,12 @@ Gemini CLI 独立的 `~/.gemini/skills`。
 
 ## 目录边界
 
+- `AGENTS.md`：本仓库自身的项目事实、修改约束和验证要求，不参与全局发布。
 - `global/specialists/`：可由用户意图直接触发的领域专项。
 - `global/helpers/`：专用工具或产物 helper。
+- `project/specialists/`：按需发布到具体项目的 skill 源码，不是宿主安装目录。
+- `config/`：skill catalog 与发布目标的声明式配置。
 - `rules/AGENTS.md`：用户级偏好和剩余 skill 路由。
-- `templates/project-local/`：项目事实、约束模板和按项目复制的 `.agents/skills`，不参与全局安装。
 - `vendor/`：外部社区包参考，不混入默认集合。
 - `adapters/`：非 Codex 平台的适配骨架。
 - `scripts/`：安装、同步和巡检脚本。
