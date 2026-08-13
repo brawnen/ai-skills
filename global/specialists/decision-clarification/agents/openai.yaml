@@ -1,0 +1,6 @@
+interface:
+  display_name: "Clarify & Grill"
+  short_description: "通过依赖感知的分轮访谈，压力测试决策或收敛可验收需求"
+  default_prompt: "Use $decision-clarification to pressure-test my idea or turn it into a confirmed, testable specification."
+policy:
+  allow_implicit_invocation: true

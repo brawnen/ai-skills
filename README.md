@@ -26,7 +26,7 @@
 
 | skill | 保留原因 | 不负责 |
 | --- | --- | --- |
-| `requirements-clarification` | 正式需求访谈、设计分支收敛和可验收 spec | 普通实施中的局部歧义 |
+| `decision-clarification` | 依赖感知的分轮访谈；支持想法/计划压力测试、需求收敛及二者组合 | 普通实施中的局部歧义、需求和验收已经明确的任务 |
 | `systematic-debugging` | 疑难故障的反馈循环、根因验证，以及生产影响扩大时的止损分支 | 根因明确的普通 bugfix、组织级事故管理 |
 | `test-first-development` | 可测试行为的 RED-GREEN-REFACTOR、公共测试缝和 vertical slice | 全量测试、构建、E2E、视觉与发布验证 |
 | `db-change-safety` | DDL、迁移、回填、生产写入的锁、事务、幂等、分批和回滚风险 | 纯只读查询、普通代码验证 |
@@ -78,6 +78,9 @@
 | `production-incident-hotfix` | 止损只是疑难调试在生产影响扩大时的入口分支，独立维护会重复诊断与回归流程 | `systematic-debugging` Operational Gate |
 
 历史上已经退役的 `task-report`、`validation-required`、`verification-before-completion`、`code-review`、`pdf` 和 `taste-skill` 继续由安装脚本清理旧链接。
+
+`requirements-clarification` 已合并到 `decision-clarification`：后者保留需求
+访谈与可验收 spec，同时增加适用于软件及非软件场景的 grill 压力测试模式。
 
 ## 全局 AGENTS
 

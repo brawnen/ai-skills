@@ -1,5 +1,5 @@
 # name|scope|source|bundles|status
-requirements-clarification|global|global/specialists/requirements-clarification|core|active
+decision-clarification|global|global/specialists/decision-clarification|core|active
 systematic-debugging|global|global/specialists/systematic-debugging|core|active
 test-first-development|global|global/specialists/test-first-development|core|active
 db-change-safety|global|global/specialists/db-change-safety|core|active
@@ -17,6 +17,7 @@ pdf|global|-|-|retired
 production-incident-hotfix|global|-|-|retired
 project-release-scope-check|global|-|-|retired
 repo-intake-scan|global|-|-|retired
+requirements-clarification|global|-|-|retired
 safe-editing|global|-|-|retired
 taste-skill|global|-|-|retired
 task-report|global|-|-|retired

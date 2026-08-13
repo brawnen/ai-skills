@@ -9,7 +9,7 @@
 
 ## 专项 Skill 路由
 
-- 用户明确要求梳理需求、进行需求访谈、比较方案或形成 PRD/spec 时使用 `requirements-clarification`；普通实施中的局部歧义由 Codex 原生澄清处理。
+- 用户明确要求压力测试或“拷打”想法、计划和决策，梳理软件或非软件产品需求、进行需求访谈、比较方案或形成 PRD/spec 时使用 `decision-clarification`；普通实施中的局部歧义由 Codex 原生澄清处理。
 - 根因未知、难复现、偶发、并发、性能或跨组件故障使用 `systematic-debugging`；生产影响仍在扩大时先执行其 Operational Gate 控制影响。根因明确的普通 bugfix 使用 Codex 原生能力。
 - 存在稳定自动化测试缝的新功能、bugfix、行为变更和重构保护使用 `test-first-development` 执行 RED-GREEN-REFACTOR；根因未知时先调试，该 skill 只负责内层实现循环，外层构建、全量测试、E2E 和替代验证仍由 Codex harness 负责。
 - DDL、索引、迁移、回填、数据修复或生产写入使用 `db-change-safety`；纯只读查询不触发。

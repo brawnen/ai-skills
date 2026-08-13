@@ -11,7 +11,7 @@ description: 适用于存在稳定自动化测试缝的新功能、bugfix、行�
 
 ## 前置判断
 
-1. 确认目标行为和验收口径已经足够明确；只存在局部歧义时使用 Codex 原生澄清，正式需求访谈或 spec 收敛才使用 `requirements-clarification`。
+1. 确认目标行为和验收口径已经足够明确；只存在局部歧义时使用 Codex 原生澄清，正式需求访谈或 spec 收敛才使用 `decision-clarification`。
 2. 根因未知、难以复现、偶发、性能或跨组件故障先使用 `systematic-debugging`；确认根因和真实缺陷链路后再进入本 skill。生产影响仍在扩大时，由它的 Operational Gate 先控制影响。
 3. 找到项目现有测试命令和稳定测试缝。优先选择公共 API、HTTP/CLI、service 边界、组件可观察行为或用户路径，不从私有实现倒推测试。
 4. 必要时运行最小基线测试，区分既有失败和本次引入的失败。

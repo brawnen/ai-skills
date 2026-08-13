@@ -44,10 +44,14 @@ fi
 [[ -d "${conflict_project}/.agents/skills/design-product-ui" ]] || fail "冲突目录被破坏"
 
 global_target="${test_root}/global-skills"
+mkdir -p "${global_target}"
+ln -s "${ROOT_DIR}/global/specialists/requirements-clarification" \
+  "${global_target}/requirements-clarification"
 "${PUBLISH_SCRIPT}" global --target "${global_target}" --bundles core >/dev/null
-for skill_name in requirements-clarification systematic-debugging test-first-development db-change-safety; do
+for skill_name in decision-clarification systematic-debugging test-first-development db-change-safety; do
   [[ -L "${global_target}/${skill_name}" ]] || fail "core 缺少 ${skill_name} 符号链接"
 done
+[[ ! -L "${global_target}/requirements-clarification" ]] || fail "未清理已退役的 requirements-clarification"
 "${PUBLISH_SCRIPT}" global --check --target "${global_target}" --bundles core >/dev/null
 
 legacy_target="${test_root}/legacy-global-skills"

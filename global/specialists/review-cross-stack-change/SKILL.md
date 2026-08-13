@@ -111,4 +111,4 @@ description: 适用于用户明确要求在实施前审查跨客户端、网页�
 - 不用通用“最佳实践”替代项目证据和具体失败场景。
 - 不计算实际发布闭包，不猜测流水线、tag 或环境配置。
 - 现有代码的深模块、局部性和测试摩擦体检使用 `architecture-friction-scan`。
-- 术语、身份和状态含义本身不明确时，先使用 `domain-modeling`；正式需求和验收未闭合时先使用 `requirements-clarification`。
+- 术语、身份和状态含义本身不明确时，先使用 `domain-modeling`；正式需求和验收未闭合时先使用 `decision-clarification`。

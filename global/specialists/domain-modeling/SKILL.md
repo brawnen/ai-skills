@@ -65,7 +65,7 @@ description: 适用于用户明确要求建立或收敛领域模型、统一业�
 
 ## 协作边界
 
-- 目标、范围和验收仍模糊时，使用 `requirements-clarification`；领域建模只负责概念语义。
+- 目标、范围和验收仍模糊时，使用 `decision-clarification`；领域建模只负责概念语义。
 - 跨客户端、服务和数据库的技术方案形成后，使用 `review-cross-stack-change` 审查契约与失败传播。
 - 现有代码模块深度和局部性体检使用 `architecture-friction-scan`。
 - 用户只要求分析时不写文档；用户要求建立或更新领域模型时，文档改动仍遵守项目作用域和现有约定。

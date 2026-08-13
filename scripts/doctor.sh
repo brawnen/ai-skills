@@ -14,7 +14,7 @@ required_paths=(
   "global/specialists/domain-modeling/SKILL.md"
   "global/specialists/domain-modeling/references/context-format.md"
   "global/specialists/domain-modeling/references/adr-format.md"
-  "global/specialists/requirements-clarification/SKILL.md"
+  "global/specialists/decision-clarification/SKILL.md"
   "global/specialists/review-cross-stack-change/SKILL.md"
   "global/specialists/systematic-debugging/SKILL.md"
   "global/specialists/test-first-development/SKILL.md"
