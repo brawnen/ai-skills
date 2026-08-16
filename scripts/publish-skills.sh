@@ -83,7 +83,61 @@ validate_skill_source() {
 
 selected_names=()
 selected_sources=()
+selected_dependencies=()
 retired_names=()
+
+append_dependency_skill() {
+  local dependency_name="$1"
+  local expected_scope="$2"
+  local name=""
+  local row_scope=""
+  local relative_source=""
+  local bundles=""
+  local status=""
+  local dependencies=""
+
+  while IFS='|' read -r name row_scope relative_source bundles status dependencies; do
+    [[ -z "${name}" || "${name}" == \#* || "${name}" != "${dependency_name}" ]] && continue
+    [[ "${status}" == "active" ]] || die "依赖 skill 未启用: ${dependency_name}"
+    [[ "${row_scope}" == "${expected_scope}" ]] || \
+      die "依赖 skill scope 不一致: ${dependency_name} (${row_scope})"
+    case "${row_scope}:${relative_source}" in
+      global:global/*|project:project/*|project:vendor/project-skills/*) ;;
+      *) die "skill 源码目录与 scope 不一致: ${name} -> ${relative_source}" ;;
+    esac
+    local source="${ROOT_DIR}/${relative_source}"
+    validate_skill_source "${name}" "${source}"
+    selected_names+=("${name}")
+    selected_sources+=("${source}")
+    selected_dependencies+=("${dependencies:--}")
+    return 0
+  done < "${SKILL_CATALOG}"
+
+  die "依赖 skill 不存在: ${dependency_name}"
+}
+
+expand_dependencies() {
+  local scope="$1"
+  local index=0
+  local dependency_csv=""
+  local dependency_name=""
+  local dependency_names=()
+
+  while [[ "${index}" -lt "${#selected_names[@]}" ]]; do
+    dependency_csv="${selected_dependencies[index]:--}"
+    if [[ -n "${dependency_csv}" && "${dependency_csv}" != "-" ]]; then
+      dependency_names=()
+      IFS=',' read -r -a dependency_names <<< "${dependency_csv}"
+      for dependency_name in "${dependency_names[@]}"; do
+        [[ -n "${dependency_name}" ]] || die "skill 依赖名称不能为空: ${selected_names[index]}"
+        if ! array_contains "${dependency_name}" "${selected_names[@]}"; then
+          append_dependency_skill "${dependency_name}" "${scope}"
+        fi
+      done
+    fi
+    index=$((index + 1))
+  done
+}
 
 load_selection() {
   local scope="$1"
@@ -93,13 +147,15 @@ load_selection() {
   local relative_source=""
   local bundles=""
   local status=""
+  local dependencies=""
   local matched="0"
 
   selected_names=()
   selected_sources=()
+  selected_dependencies=()
   retired_names=()
 
-  while IFS='|' read -r name row_scope relative_source bundles status; do
+  while IFS='|' read -r name row_scope relative_source bundles status dependencies; do
     [[ -z "${name}" || "${name}" == \#* ]] && continue
     [[ "${row_scope}" == "${scope}" ]] || continue
 
@@ -109,7 +165,7 @@ load_selection() {
     fi
     [[ "${status}" == "active" ]] || die "未知 skill 状态: ${name} (${status})"
     case "${row_scope}:${relative_source}" in
-      global:global/*|project:project/*) ;;
+      global:global/*|project:project/*|project:vendor/project-skills/*) ;;
       *) die "skill 源码目录与 scope 不一致: ${name} -> ${relative_source}" ;;
     esac
 
@@ -135,10 +191,13 @@ load_selection() {
       validate_skill_source "${name}" "${source}"
       selected_names+=("${name}")
       selected_sources+=("${source}")
+      selected_dependencies+=("${dependencies:--}")
     fi
   done < "${SKILL_CATALOG}"
 
   [[ "${#selected_names[@]}" -gt 0 ]] || die "没有匹配的 ${scope} skills: ${selector}"
+
+  expand_dependencies "${scope}"
 
   if [[ "${scope}" == "project" && "${selector}" != "all" ]]; then
     local requested_name=""
@@ -185,6 +244,23 @@ publish_link() {
   echo "linked ${name} -> ${source}"
 }
 
+preflight_selected_links() {
+  local target_dir="$1"
+  local index=0
+  local name=""
+  local target_path=""
+
+  for ((index=0; index<${#selected_names[@]}; index++)); do
+    name="${selected_names[index]}"
+    target_path="${target_dir}/${name}"
+    if [[ -e "${target_path}" || -L "${target_path}" ]]; then
+      [[ -L "${target_path}" ]] || die "拒绝覆盖已有实体路径: ${target_path}"
+      managed_link_belongs_here "${target_path}" || \
+        die "拒绝覆盖其他来源的符号链接: ${target_path}"
+    fi
+  done
+}
+
 prune_global_links() {
   local target_dir="$1"
   local check_only="$2"
@@ -215,6 +291,10 @@ publish_selected_to() {
   local check_only="$2"
   local scope="$3"
   local index=0
+
+  if [[ "${check_only}" -eq 0 ]]; then
+    preflight_selected_links "${target_dir}"
+  fi
 
   if [[ "${scope}" == "global" ]]; then
     prune_global_links "${target_dir}" "${check_only}"
@@ -292,11 +372,12 @@ find_target_row() {
 }
 
 list_catalog() {
-  printf '%-34s %-9s %-14s %s\n' "skill" "scope" "bundle" "source"
-  local name="" scope="" source="" bundles="" status=""
-  while IFS='|' read -r name scope source bundles status; do
+  printf '%-34s %-9s %-14s %-32s %s\n' "skill" "scope" "bundle" "dependencies" "source"
+  local name="" scope="" source="" bundles="" status="" dependencies=""
+  while IFS='|' read -r name scope source bundles status dependencies; do
     [[ -z "${name}" || "${name}" == \#* || "${status}" != "active" ]] && continue
-    printf '%-34s %-9s %-14s %s\n' "${name}" "${scope}" "${bundles}" "${source}"
+    printf '%-34s %-9s %-14s %-32s %s\n' \
+      "${name}" "${scope}" "${bundles}" "${dependencies:--}" "${source}"
   done < "${SKILL_CATALOG}"
 }
 

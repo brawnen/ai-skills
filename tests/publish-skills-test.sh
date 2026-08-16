@@ -5,6 +5,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 PUBLISH_SCRIPT="${ROOT_DIR}/scripts/publish-skills.sh"
 EXPECTED_PROJECT_SOURCE="${ROOT_DIR}/project/specialists/design-product-ui"
+EXPECTED_UIUX_SOURCE="${ROOT_DIR}/vendor/project-skills/ui-ux-pro-max"
+EXPECTED_IMPECCABLE_SOURCE="${ROOT_DIR}/vendor/project-skills/impeccable"
 
 fail() {
   echo "FAIL: $*" >&2
@@ -23,18 +25,39 @@ trap 'rm -rf -- "${test_root}"' EXIT
 
 [[ -x "${PUBLISH_SCRIPT}" ]] || fail "缺少可执行发布脚本 ${PUBLISH_SCRIPT}"
 [[ -f "${EXPECTED_PROJECT_SOURCE}/SKILL.md" ]] || fail "项目级 skill 不在规范源码目录"
-"${PUBLISH_SCRIPT}" list | grep -Fq 'design-product-ui' || fail "catalog 未列出项目级 skill"
+catalog_output="$("${PUBLISH_SCRIPT}" list)"
+grep -Fq 'design-product-ui' <<< "${catalog_output}" || fail "catalog 未列出项目级 skill"
 
 project_dir="${test_root}/sample-project"
 mkdir -p "${project_dir}"
 "${PUBLISH_SCRIPT}" project --project "${project_dir}" --skills design-product-ui >/dev/null
 
-project_link="${project_dir}/.agents/skills/design-product-ui"
-[[ -L "${project_link}" ]] || fail "项目发布结果不是符号链接"
-[[ "$(resolve_dir "${project_link}")" == "$(resolve_dir "${EXPECTED_PROJECT_SOURCE}")" ]] || \
-  fail "项目符号链接没有指向规范源码"
+for skill_name in design-product-ui ui-ux-pro-max impeccable; do
+  case "${skill_name}" in
+    design-product-ui) expected_source="${EXPECTED_PROJECT_SOURCE}" ;;
+    ui-ux-pro-max) expected_source="${EXPECTED_UIUX_SOURCE}" ;;
+    impeccable) expected_source="${EXPECTED_IMPECCABLE_SOURCE}" ;;
+  esac
+  project_link="${project_dir}/.agents/skills/${skill_name}"
+  [[ -L "${project_link}" ]] || fail "项目发布缺少 ${skill_name} 符号链接"
+  [[ "$(resolve_dir "${project_link}")" == "$(resolve_dir "${expected_source}")" ]] || \
+    fail "${skill_name} 符号链接没有指向规范源码"
+done
 
 "${PUBLISH_SCRIPT}" project --check --project "${project_dir}" --skills design-product-ui >/dev/null
+
+dependency_conflict_project="${test_root}/dependency-conflict-project"
+mkdir -p "${dependency_conflict_project}/.agents/skills/ui-ux-pro-max"
+if "${PUBLISH_SCRIPT}" project --project "${dependency_conflict_project}" \
+  --skills design-product-ui >/dev/null 2>&1; then
+  fail "发布脚本忽略了依赖 skill 的实体目录冲突"
+fi
+[[ -d "${dependency_conflict_project}/.agents/skills/ui-ux-pro-max" ]] || \
+  fail "依赖冲突目录被破坏"
+[[ ! -e "${dependency_conflict_project}/.agents/skills/design-product-ui" ]] || \
+  fail "依赖冲突时留下了部分 design-product-ui 发布结果"
+[[ ! -e "${dependency_conflict_project}/.agents/skills/impeccable" ]] || \
+  fail "依赖冲突时留下了部分 impeccable 发布结果"
 
 conflict_project="${test_root}/conflict-project"
 mkdir -p "${conflict_project}/.agents/skills/design-product-ui"

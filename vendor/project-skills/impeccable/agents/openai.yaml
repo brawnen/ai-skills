@@ -1,0 +1,6 @@
+interface:
+  display_name: "Impeccable"
+  short_description: "负责前端界面设计、评审、重构、细节打磨、可访问性与生产质量加固"
+  default_prompt: "Use $impeccable to design, critique, audit, or polish this frontend interface."
+policy:
+  allow_implicit_invocation: true

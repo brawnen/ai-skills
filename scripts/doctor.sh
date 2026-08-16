@@ -21,13 +21,24 @@ required_paths=(
   "global/helpers/codegraph-assisted-navigation/SKILL.md"
   "global/helpers/formal-html-docs/SKILL.md"
   "global/helpers/formal-html-docs/references/document-types.md"
+  "global/helpers/formal-html-docs/references/template-routing.md"
   "global/helpers/formal-html-docs/assets/formal-document-shell.html"
+  "global/helpers/formal-html-docs/assets/templates/decision-brief.html"
   "project/specialists/design-product-ui/SKILL.md"
   "project/specialists/design-product-ui/agents/openai.yaml"
+  "project/specialists/design-product-ui/references/capability-routing.md"
   "project/specialists/design-product-ui/references/craft-principles.md"
   "project/specialists/design-product-ui/references/platform-checks.md"
   "project/specialists/design-product-ui/references/review-rubric.md"
   "project/specialists/design-product-ui/assets/DESIGN.template.md"
+  "vendor/project-skills/ui-ux-pro-max/SKILL.md"
+  "vendor/project-skills/ui-ux-pro-max/agents/openai.yaml"
+  "vendor/project-skills/ui-ux-pro-max/UPSTREAM.md"
+  "vendor/project-skills/ui-ux-pro-max/LICENSE"
+  "vendor/project-skills/impeccable/SKILL.md"
+  "vendor/project-skills/impeccable/agents/openai.yaml"
+  "vendor/project-skills/impeccable/UPSTREAM.md"
+  "vendor/project-skills/impeccable/LICENSE"
   "vendor/superpowers/README.md"
   "vendor/gstack/README.md"
   "adapters/gemini/commands/fix-safe.toml"
@@ -39,6 +50,7 @@ required_paths=(
   "scripts/sync-global-platforms.sh"
   "scripts/doctor.sh"
   "tests/publish-skills-test.sh"
+  "tests/formal-html-docs-test.sh"
 )
 
 missing=0
@@ -54,7 +66,10 @@ for relative_path in "${required_paths[@]}"; do
 done
 
 catalog_names=()
-while IFS='|' read -r skill_name skill_scope skill_source skill_bundles skill_status; do
+catalog_scopes=()
+catalog_statuses=()
+catalog_dependencies=()
+while IFS='|' read -r skill_name skill_scope skill_source skill_bundles skill_status skill_dependencies; do
   [[ -z "${skill_name}" || "${skill_name}" == \#* ]] && continue
 
   for seen_name in "${catalog_names[@]-}"; do
@@ -64,6 +79,9 @@ while IFS='|' read -r skill_name skill_scope skill_source skill_bundles skill_st
     fi
   done
   catalog_names+=("${skill_name}")
+  catalog_scopes+=("${skill_scope}")
+  catalog_statuses+=("${skill_status}")
+  catalog_dependencies+=("${skill_dependencies:--}")
 
   case "${skill_scope}" in
     global|project) ;;
@@ -73,7 +91,7 @@ while IFS='|' read -r skill_name skill_scope skill_source skill_bundles skill_st
   case "${skill_status}" in
     active)
       case "${skill_scope}:${skill_source}" in
-        global:global/*|project:project/*) ;;
+        global:global/*|project:project/*|project:vendor/project-skills/*) ;;
         *)
           echo "MISS config/skills.tsv (scope 与源码目录不一致 ${skill_name})"
           missing=1
@@ -100,6 +118,38 @@ while IFS='|' read -r skill_name skill_scope skill_source skill_bundles skill_st
     *) echo "MISS config/skills.tsv (未知 status ${skill_status}: ${skill_name})"; missing=1 ;;
   esac
 done < "${ROOT_DIR}/config/skills.tsv"
+
+for ((catalog_index=0; catalog_index<${#catalog_names[@]}; catalog_index++)); do
+  dependency_csv="${catalog_dependencies[catalog_index]}"
+  [[ -n "${dependency_csv}" && "${dependency_csv}" != "-" ]] || continue
+  dependency_names=()
+  IFS=',' read -r -a dependency_names <<< "${dependency_csv}"
+  for dependency_name in "${dependency_names[@]}"; do
+    if [[ -z "${dependency_name}" || "${dependency_name}" == "${catalog_names[catalog_index]}" ]]; then
+      echo "MISS config/skills.tsv (非法依赖 ${catalog_names[catalog_index]} -> ${dependency_name:-<empty>})"
+      missing=1
+      continue
+    fi
+    dependency_found=0
+    for ((dependency_index=0; dependency_index<${#catalog_names[@]}; dependency_index++)); do
+      [[ "${catalog_names[dependency_index]}" == "${dependency_name}" ]] || continue
+      dependency_found=1
+      if [[ "${catalog_statuses[dependency_index]}" != "active" ]]; then
+        echo "MISS config/skills.tsv (依赖未启用 ${catalog_names[catalog_index]} -> ${dependency_name})"
+        missing=1
+      fi
+      if [[ "${catalog_scopes[dependency_index]}" != "${catalog_scopes[catalog_index]}" ]]; then
+        echo "MISS config/skills.tsv (依赖 scope 不一致 ${catalog_names[catalog_index]} -> ${dependency_name})"
+        missing=1
+      fi
+      break
+    done
+    if [[ "${dependency_found}" -eq 0 ]]; then
+      echo "MISS config/skills.tsv (依赖不存在 ${catalog_names[catalog_index]} -> ${dependency_name})"
+      missing=1
+    fi
+  done
+done
 
 for required_target in codex antigravity agents; do
   if ! grep -Eq "^${required_target}\\|" "${ROOT_DIR}/config/publish-targets.tsv"; then
@@ -155,6 +205,7 @@ while IFS= read -r skill_file; do
 done < <(find \
   "${ROOT_DIR}/global" \
   "${ROOT_DIR}/project" \
+  "${ROOT_DIR}/vendor/project-skills" \
   -name SKILL.md -type f | sort)
 
 if [[ "${missing}" -ne 0 ]]; then

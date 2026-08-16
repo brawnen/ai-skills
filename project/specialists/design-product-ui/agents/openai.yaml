@@ -1,6 +1,6 @@
 interface:
   display_name: "Design Product UI"
-  short_description: "为页面与客户端项目建立、实施并验证一致的 UI/UX 设计方向"
-  default_prompt: "Use $design-product-ui to design this project interface and define its durable UI/UX decisions."
+  short_description: "路由项目 UI/UX 设计、视觉探索与实现质量能力"
+  default_prompt: "Use $design-product-ui to choose the shortest UI/UX capability path for this project and keep approved decisions in DESIGN.md."
 policy:
   allow_implicit_invocation: true

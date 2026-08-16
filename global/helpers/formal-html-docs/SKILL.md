@@ -16,17 +16,22 @@ description: 可选的正式 HTML 文档外壳与章节模板 helper。仅在用
 ## 工作流
 
 1. 确认文档用途、读者、维护方式和项目已有格式。
-2. 选择最接近的文档类型。需要章节建议时只读取 [document-types.md](references/document-types.md) 中对应部分，不加载无关模板。
-3. 项目没有 HTML 模板时，以 [formal-document-shell.html](assets/formal-document-shell.html) 为基础，不从记忆重写一套样式。
-4. 接收上游已确认内容，保留已确认、推断、未验证和待确认等证据状态，不自行改变事实层级。
-5. 生成单个自包含 HTML：内联 CSS，不依赖远程 CDN 或前端构建链。
-6. 检查标题、摘要、目录、主体、风险/未确认项和下一步是否按需存在；不要为了模板完整而填空。
-7. 验证文件存在、HTML 结构和关键内容；条件允许时实际渲染，检查桌面、窄屏和打印表现。
+2. 选择最接近的文档类型。需要章节建议时只读取 [document-types.md](references/document-types.md) 中对应部分，不加载无关章节。
+3. 项目已有 HTML 模板或设计系统时优先使用。否则读取
+   [template-routing.md](references/template-routing.md)，只加载匹配用途的生产模板；当前
+   `decision-report` 使用 [decision-brief.html](assets/templates/decision-brief.html)。没有匹配
+   模板时使用 [formal-document-shell.html](assets/formal-document-shell.html)，不硬套 A 版。
+4. 复制所选资产，替换全部占位符并删除不适用模块；交付稿不得残留 `{{...}}`、示例内容或空章节。
+5. 接收上游已确认内容，保留已确认、推断、未验证和待确认等证据状态，不自行改变事实层级。
+6. 生成单个自包含 HTML：内联 CSS，不依赖远程 CDN 或前端构建链。
+7. 检查标题、摘要、目录、主体、风险/未确认项和下一步是否按需存在；不要为了模板完整而填空。
+8. 验证文件存在、HTML 结构、目录锚点和关键内容；实际渲染桌面、窄屏和打印表现，无法渲染时明确说明。
 
 ## 视觉约束
 
 - 风格专业、克制、偏技术出版物；培训讲义可以强化课程节奏，但不做营销页。
 - 标题区默认使用明亮、低饱和的浅蓝到青蓝渐变和深海军蓝文字，避免厚重深蓝实底。
+- `Executive Sunrise` 允许用珊瑚橙和少量阳光黄强化判断、机会及章节节奏；亮色不能替代风险或证据语义。
 - 正文阅读列约 760-860px；长目录桌面端可用左侧阅读索引，窄屏回落为单列。
 - 使用语义化 HTML；表格窄屏可横向滚动，代码块可读，callout 和 badge 不能只靠颜色传达含义。
 - 打印时使用白底，隐藏无关装饰，避免标题、表格行、代码块被生硬截断。
@@ -47,5 +52,6 @@ description: 可选的正式 HTML 文档外壳与章节模板 helper。仅在用
 
 - 不使用远程 CSS/JS、外部字体或构建链，除非用户明确要求。
 - 不把所有文档套进同一章节结构。
+- 不把 `decision-brief` 用于白皮书、证据工作台、Runbook 或时间线复盘。
 - 不生成只有视觉包装、缺少来源和验证边界的报告。
 - 不在用户要求 Markdown、README、AGENTS 或 ADR 时强行改成 HTML。

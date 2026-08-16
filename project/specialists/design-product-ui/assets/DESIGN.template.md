@@ -5,6 +5,7 @@
 > Last reviewed: `<YYYY-MM-DD>`
 
 本文档记录跨页面、跨状态和跨平台需要持续遵循的 UI/UX 决策。页面级临时值不要写入；未确认内容标记为 `proposed`。
+外部设计工具的输出只作为候选或证据；记录来源，但只有用户选择且与项目验证不冲突的决定才能标记为 `approved`。
 
 ## 1. Product and Users
 
@@ -124,6 +125,6 @@
 
 ## 12. Decision Log
 
-| Date | Status | Decision | Reason | Affected surfaces |
-| --- | --- | --- | --- | --- |
-| `<YYYY-MM-DD>` | `<proposed/approved/superseded>` | `<请填写>` | `<请填写>` | `<请填写>` |
+| Date | Status | Decision | Reason | Evidence / source | Affected surfaces |
+| --- | --- | --- | --- | --- | --- |
+| `<YYYY-MM-DD>` | `<proposed/approved/superseded>` | `<请填写>` | `<请填写>` | `<用户选择 / 代码事实 / 截图 / 工具候选>` | `<请填写>` |
