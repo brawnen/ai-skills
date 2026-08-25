@@ -25,6 +25,7 @@
       --warn: #745012;
       --risk: #a92b25;
       --inference: #655099;
+      --brand-mark: rgba(36, 87, 166, 0.018);
       --radius: 10px;
       --radius-sm: 7px;
     }
@@ -53,6 +54,8 @@
     }
     .skip-link:focus { top: 16px; }
     .report-shell {
+      position: relative;
+      isolation: isolate;
       width: min(1380px, calc(100% - 48px));
       min-height: 100dvh;
       margin: 24px auto;
@@ -65,6 +68,25 @@
       border-radius: 12px;
       box-shadow: 0 16px 48px rgba(35, 61, 84, 0.08);
     }
+    .report-shell::before {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 0;
+      content: attr(data-brand);
+      color: var(--brand-mark);
+      font-size: clamp(4.5rem, 14vw, 10rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.16em;
+      white-space: nowrap;
+      text-transform: lowercase;
+      transform: translate(-46%, -50%) rotate(-24deg);
+      transform-origin: center;
+      pointer-events: none;
+      user-select: none;
+    }
+    .report-shell > * { position: relative; z-index: 1; }
     .report-header {
       position: relative;
       grid-column: 1 / -1;
@@ -260,6 +282,7 @@
     @page { size: A4; margin: 16mm 14mm; }
     @media print {
       html, body { background: #ffffff !important; font-size: 10.2pt; }
+      :root { --brand-mark: rgba(38, 59, 80, 0.022); }
       .skip-link, .document-type { display: none !important; }
       .report-shell { display: block; width: auto; min-height: 0; margin: 0; padding: 0; border: 0; box-shadow: none; }
       .report-header {
@@ -285,7 +308,7 @@
 </head>
 <body data-layout="decision-brief" data-theme="executive-sunrise">
   <a class="skip-link" href="#report-content">跳到正文</a>
-  <main class="report-shell">
+  <main class="report-shell" data-brand="brawnen">
     <header class="report-header">
       <p class="document-type">{{DOCUMENT_TYPE}}</p>
       <h1>{{TITLE}}</h1>

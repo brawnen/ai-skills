@@ -3,6 +3,7 @@ decision-clarification|global|global/specialists/decision-clarification|core|act
 systematic-debugging|global|global/specialists/systematic-debugging|core|active|-
 test-first-development|global|global/specialists/test-first-development|core|active|-
 db-change-safety|global|global/specialists/db-change-safety|core|active|-
+venture-feasibility|global|global/specialists/venture-feasibility|strategy|active|-
 architecture-friction-scan|global|global/specialists/architecture-friction-scan|architecture|active|-
 review-cross-stack-change|global|global/specialists/review-cross-stack-change|architecture|active|-
 domain-modeling|global|global/specialists/domain-modeling|architecture|active|-

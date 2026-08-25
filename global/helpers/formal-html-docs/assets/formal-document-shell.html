@@ -21,6 +21,7 @@
       --ok: #047857;
       --warn: #b45309;
       --risk: #b91c1c;
+      --brand-mark: rgba(30, 90, 182, 0.018);
     }
     * { box-sizing: border-box; }
     html { background: var(--canvas); }
@@ -31,6 +32,8 @@
       line-height: 1.75;
     }
     .document-shell {
+      position: relative;
+      isolation: isolate;
       max-width: 1320px;
       min-height: 100dvh;
       margin: 0 auto;
@@ -41,6 +44,25 @@
       align-items: start;
       background: var(--paper);
     }
+    .document-shell::before {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: 0;
+      content: attr(data-brand);
+      color: var(--brand-mark);
+      font-size: clamp(4.5rem, 14vw, 10rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: 0.16em;
+      white-space: nowrap;
+      text-transform: lowercase;
+      transform: translate(-46%, -50%) rotate(-24deg);
+      transform-origin: center;
+      pointer-events: none;
+      user-select: none;
+    }
+    .document-shell > * { position: relative; z-index: 1; }
     .document-header {
       grid-column: 1 / -1;
       margin-bottom: 52px;
@@ -120,6 +142,7 @@
     }
     @media print {
       html, body { background: #fff; }
+      :root { --brand-mark: rgba(36, 56, 78, 0.022); }
       .document-shell { display: block; min-height: 0; margin: 0; padding: 0; max-width: none; }
       .document-header { margin: 0 0 24px; padding: 0 0 14px; background: #fff; border: 0; border-bottom: 1px solid var(--border); border-radius: 0; }
       .document-toc { position: static; margin: 0 0 24px; padding: 0; break-after: page; }
@@ -128,7 +151,7 @@
   </style>
 </head>
 <body>
-  <main class="document-shell">
+  <main class="document-shell" data-brand="brawnen">
     <header class="document-header">
       <h1>{{TITLE}}</h1>
       <p class="meta">更新时间：{{UPDATED_AT}} · {{METADATA}}</p>

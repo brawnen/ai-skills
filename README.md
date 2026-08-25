@@ -36,12 +36,17 @@
 | bundle | skills | 使用条件 |
 | --- | --- | --- |
 | `architecture` | `architecture-friction-scan`、`review-cross-stack-change`、`domain-modeling`、`codegraph-assisted-navigation` | 用户明确要求架构体检、跨栈方案评审或领域建模；CodeGraph helper 还要求项目索引和宿主工具可用 |
+| `strategy` | `venture-feasibility` | 新产品、新业务或高不确定技术机会需要用证据贯通可行性、市场、商业模式、技术方案和阶段投资决策 |
 | `docs` | `formal-html-docs` | 用户明确要求自包含、可打印的正式 HTML；普通 Markdown、Word、PDF 不使用 |
 
 `formal-html-docs` 当前包含第一款生产模板：`decision-brief` 布局配合
 `executive-sunrise` 主题，适用于可行性研究、商业分析、方案比较、投资评审和其他以
 “形成决定”为主要任务的正式报告。skill 触发后会按用途读取模板路由；白皮书、证据审查、
 Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会误套 A 版。
+所有正式 HTML 生产模板都在纸张层保留低对比度 `brawnen` 作品标记，屏幕与打印可见，
+但不会进入正文语义、复制文本或阻挡页面交互。
+源稿中三个及以上有序阶段、分支、回路、依赖或责任交接会转换为语义化流程图，不把
+多行箭头文本或着色文本框当作正式流程图；普通清单和并列事实仍保留原有结构。
 
 ### 项目级 UI/UX skill
 
@@ -168,7 +173,7 @@ Antigravity 以及项目级 `.agents/skills` 的发布落点。脚本不再维�
 ```bash
 ./scripts/publish-skills.sh global \
   --platforms codex,antigravity \
-  --bundles core,architecture,docs
+  --bundles core,architecture,strategy,docs
 ```
 
 只发布到指定全局目录，不同步规则：

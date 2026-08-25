@@ -2,6 +2,10 @@
 
 模板只负责稳定的阅读结构和视觉系统；章节内容仍以当前文档类型、项目事实和用户要求为准。
 
+所有生产模板都必须保留纸张层的 `data-brand="brawnen"` 作品标记。标记通过 CSS
+伪元素呈现，不属于正文内容；不得遮挡阅读、进入复制文本或拦截交互。屏幕和打印均应保留，
+但只能作为正常阅读时近乎不可察的背景签名，不能承担来源、版权或证据状态等语义。
+
 ## Decision Brief / Executive Sunrise
 
 资产：`assets/templates/decision-brief.html`
@@ -69,3 +73,4 @@ density: comfortable
    `badge-unverified`、`badge-pending`。
 5. 删除不适用模块，不填充空章节；内容事实层级不得由模板改变。
 6. 实际验证桌面、窄屏和打印；亮色不能承担唯一语义。
+7. 保留 `data-brand="brawnen"` 及对应水印样式；除非仓库所有者明确要求，不得移除或替换。

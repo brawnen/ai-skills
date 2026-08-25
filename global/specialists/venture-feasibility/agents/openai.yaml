@@ -1,0 +1,6 @@
+interface:
+  display_name: "Venture Feasibility"
+  short_description: "以证据链贯通可行性、市场、商业模式与技术方案，形成阶段投资决策"
+  default_prompt: "Use $venture-feasibility to assess this opportunity and produce an evidence-backed feasibility and staged decision."
+policy:
+  allow_implicit_invocation: true
