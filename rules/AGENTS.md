@@ -4,23 +4,19 @@
 
 - 始终使用中文回复；代码注释遵循项目现有风格，无法判断时默认中文。
 - 默认简洁，先结论后细节，保持高信息密度。
-- 明确区分「已验证」「推断」「未验证」；报错和异常先保留原文再分析。
+- 在关键结论和不确定处区分「已验证」「推断」「未验证」，不机械分栏；排障保留关键错误原文并脱敏。
 - 任务交付、出现阻塞或存在明显高价值后续动作时，给出一个最优下一步；没有实际价值时不强行推荐。
 
 ## 专项 Skill 路由
 
-- 用户明确要求压力测试或“拷打”想法、计划和决策，梳理软件或非软件产品需求、进行需求访谈、比较方案或形成 PRD/spec 时使用 `decision-clarification`；普通实施中的局部歧义由 Codex 原生澄清处理。
-- 根因未知、难复现、偶发、并发、性能或跨组件故障使用 `systematic-debugging`；生产影响仍在扩大时先执行其 Operational Gate 控制影响。根因明确的普通 bugfix 使用 Codex 原生能力。
-- 存在稳定自动化测试缝的新功能、bugfix、行为变更和重构保护使用 `test-first-development` 执行 RED-GREEN-REFACTOR；根因未知时先调试，该 skill 只负责内层实现循环，外层构建、全量测试、E2E 和替代验证仍由 Codex harness 负责。
-- DDL、索引、迁移、回填、数据修复或生产写入使用 `db-change-safety`；纯只读查询不触发。
-- 新产品、新业务、产业项目或高不确定技术机会的可行性报告、市场与竞品调研、商业模式/投资分析，以及由这些证据构建技术方案和分阶段验证路线时使用 `venture-feasibility`；普通单点技术选型、已有需求的实施设计和通用行业科普不触发。
-- `architecture-friction-scan`、`review-cross-stack-change`、`domain-modeling` 和 `codegraph-assisted-navigation` 属于 architecture 可选能力，只在已安装且满足各自 description 的条件时使用。
-- `formal-html-docs` 属于可选产物 helper，只在用户明确要求自包含、可打印的正式 HTML 时使用。
+- 按已安装 skill 的 description 匹配专项任务；普通任务使用 Codex 原生工作流，不在此重复维护 skill 清单。
+- 疑难故障影响仍在扩大时先控制影响，再定位根因；进入行为实现前按风险选择测试策略。数据库变更按实际操作和环境检查专项风险。
+- 多个 skills 命中时只组合当前需要的部分；已确认的目标、决策和授权在阶段之间复用，不因切换 skill 重复询问。
 - 所需专项 skill 未安装时，使用 Codex 原生能力完成能安全完成的部分；不要为此自动安装第三方能力。
 
 ## 文档偏好
 
 - README、AGENTS、轻量 ADR、开发说明和短记录默认使用 Markdown。
-- 用户明确要求正式、自包含、可打印的 HTML 文档时，使用 `formal-html-docs`；不因内容较长就自动改成 HTML。
+- 仅在明确要求自包含、可打印的正式 HTML 时使用已安装的 `formal-html-docs`；不因内容较长或称为「正式报告」就自动改成 HTML。
 - Word、PDF、幻灯片、表格、网站和产品设计优先使用 Codex 官方对应 skills/plugins。
 - 用户明确指定格式或项目已有约定时，以用户和项目约定为准。

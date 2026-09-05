@@ -77,6 +77,31 @@ done
 [[ ! -L "${global_target}/requirements-clarification" ]] || fail "未清理已退役的 requirements-clarification"
 "${PUBLISH_SCRIPT}" global --check --target "${global_target}" --bundles core >/dev/null
 
+retired_target="${test_root}/retired-skills"
+mkdir -p "${retired_target}"
+ln -s "${ROOT_DIR}/global/helpers/codegraph-assisted-navigation" \
+  "${retired_target}/codegraph-assisted-navigation"
+"${PUBLISH_SCRIPT}" global --target "${retired_target}" --bundles core,architecture,docs >/dev/null
+[[ ! -L "${retired_target}/codegraph-assisted-navigation" ]] || fail "未清理已退役的 CodeGraph 受管链接"
+"${PUBLISH_SCRIPT}" global --check --target "${retired_target}" --bundles core,architecture,docs >/dev/null
+
+# 退役清理不能删除同名的外部链接或实体目录。
+for foreign_kind in link directory; do
+  foreign_target="${test_root}/foreign-${foreign_kind}"
+  mkdir -p "${foreign_target}"
+  if [[ "${foreign_kind}" == link ]]; then
+    ln -s "${test_root}/external-codegraph" "${foreign_target}/codegraph-assisted-navigation"
+  else
+    mkdir -p "${foreign_target}/codegraph-assisted-navigation"
+  fi
+  "${PUBLISH_SCRIPT}" global --target "${foreign_target}" --bundles architecture >/dev/null
+  if [[ "${foreign_kind}" == link ]]; then
+    [[ "$(readlink "${foreign_target}/codegraph-assisted-navigation")" == "${test_root}/external-codegraph" ]] || fail "删除了外部链接"
+  else
+    [[ -d "${foreign_target}/codegraph-assisted-navigation" ]] || fail "删除了实体目录"
+  fi
+done
+
 legacy_target="${test_root}/legacy-global-skills"
 "${ROOT_DIR}/scripts/install-links.sh" "${legacy_target}" core architecture >/dev/null
 [[ -L "${legacy_target}/architecture-friction-scan" ]] || fail "旧 install-links 入口未转交新发布器"

@@ -7,7 +7,7 @@ venture-feasibility|global|global/specialists/venture-feasibility|strategy|activ
 architecture-friction-scan|global|global/specialists/architecture-friction-scan|architecture|active|-
 review-cross-stack-change|global|global/specialists/review-cross-stack-change|architecture|active|-
 domain-modeling|global|global/specialists/domain-modeling|architecture|active|-
-codegraph-assisted-navigation|global|global/helpers/codegraph-assisted-navigation|architecture|active|-
+codegraph-assisted-navigation|global|-|-|retired|-
 formal-html-docs|global|global/helpers/formal-html-docs|docs|active|-
 design-product-ui|project|project/specialists/design-product-ui|ui|active|ui-ux-pro-max,impeccable
 ui-ux-pro-max|project|vendor/project-skills/ui-ux-pro-max|ui|active|-

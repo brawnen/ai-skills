@@ -21,7 +21,6 @@ required_paths=(
   "global/specialists/venture-feasibility/SKILL.md"
   "global/specialists/venture-feasibility/references/evidence-and-market-research.md"
   "global/specialists/venture-feasibility/references/decision-models-and-deliverables.md"
-  "global/helpers/codegraph-assisted-navigation/SKILL.md"
   "global/helpers/formal-html-docs/SKILL.md"
   "global/helpers/formal-html-docs/references/document-types.md"
   "global/helpers/formal-html-docs/references/flow-diagrams.md"

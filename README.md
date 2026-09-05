@@ -8,7 +8,7 @@
 
 - 包含明确的领域风险模型，例如数据库上线风险或生产事故止损。
 - 包含会显著改变执行顺序、反馈循环或系统边界判断的可复用工程决策模型。
-- 依赖专用工具协议，例如 CodeGraph。
+- 依赖当前实际使用、且宿主原生能力未覆盖的专用工具协议。
 - 产出固定且可复用的非原生产物，例如自包含 HTML 正式文档。
 - 记录具体项目事实、禁区和发布约束，而不是通用工程常识。
 
@@ -28,14 +28,14 @@
 | --- | --- | --- |
 | `decision-clarification` | 依赖感知的分轮访谈；支持想法/计划压力测试、需求收敛及二者组合 | 普通实施中的局部歧义、需求和验收已经明确的任务 |
 | `systematic-debugging` | 疑难故障的反馈循环、根因验证，以及生产影响扩大时的止损分支 | 根因明确的普通 bugfix、组织级事故管理 |
-| `test-first-development` | 可测试行为的 RED-GREEN-REFACTOR、公共测试缝和 vertical slice | 全量测试、构建、E2E、视觉与发布验证 |
+| `test-first-development` | 缺陷回归、复杂规则、公共契约及高风险重构的行为测试 | 普通低风险改动的验证调度、全量测试、构建、E2E、视觉与发布验证 |
 | `db-change-safety` | DDL、迁移、回填、生产写入的锁、事务、幂等、分批和回滚风险 | 纯只读查询、普通代码验证 |
 
 ### 可选 bundle
 
 | bundle | skills | 使用条件 |
 | --- | --- | --- |
-| `architecture` | `architecture-friction-scan`、`review-cross-stack-change`、`domain-modeling`、`codegraph-assisted-navigation` | 用户明确要求架构体检、跨栈方案评审或领域建模；CodeGraph helper 还要求项目索引和宿主工具可用 |
+| `architecture` | `architecture-friction-scan`、`review-cross-stack-change`、`domain-modeling` | 用户明确要求架构体检、跨栈方案评审或领域建模 |
 | `strategy` | `venture-feasibility` | 新产品、新业务或高不确定技术机会需要用证据贯通可行性、市场、商业模式、技术方案和阶段投资决策 |
 | `docs` | `formal-html-docs` | 用户明确要求自包含、可打印的正式 HTML；普通 Markdown、Word、PDF 不使用 |
 

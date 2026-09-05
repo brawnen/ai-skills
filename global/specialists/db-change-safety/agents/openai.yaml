@@ -1,6 +1,6 @@
 interface:
   display_name: "数据库变更安全"
-  short_description: "评估数据库结构、索引、迁移、回填、数据修复和生产写入的执行风险"
-  default_prompt: "Use $db-change-safety to assess this database change, identify operational risks, and define a safe execution and rollback path."
+  short_description: "按数据库、环境和操作评估变更风险，准备可验证的执行与恢复路径"
+  default_prompt: "Use $db-change-safety to assess this database change and prepare operation-specific checks, stopping conditions, and a viable recovery path."
 policy:
   allow_implicit_invocation: true
