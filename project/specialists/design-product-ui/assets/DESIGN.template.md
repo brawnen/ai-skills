@@ -1,19 +1,18 @@
 # `<产品或项目名称>` Design System
 
-> Status: `<proposed / approved / evolving>`  
-> Owners: `<产品 / 设计 / 前端 / 客户端负责人>`  
+> Status: `<proposed / approved / delegated / evolving>`
+> Owners: `<产品 / 设计 / 前端 / 客户端负责人>`
 > Last reviewed: `<YYYY-MM-DD>`
 
 本文档记录跨页面、跨状态和跨平台需要持续遵循的 UI/UX 决策。页面级临时值不要写入；未确认内容标记为 `proposed`。
-外部设计工具的输出只作为候选或证据；记录来源，但只有用户选择且与项目验证不冲突的决定才能标记为 `approved`。
+外部工具输出只作为候选或证据。`approved` 标明既有项目批准或用户选择的来源；`delegated` 表示用户授权范围内的代理决策，不能写成用户已确认。实现验证另行记录。
 
-## 1. Product and Users
+## 1. Context Sources
 
-- 主要用户：`<请填写>`
-- 核心使用情境：`<请填写>`
-- 产品主要任务：`<请填写>`
-- 高风险误解或操作：`<请填写>`
-- 目标平台与输入方式：`<Web / iOS / Android / desktop / embedded；keyboard / touch / remote>`
+- 产品事实来源：`<现有 PRD / PRODUCT.md / 用户决定链接，不复制维护>`
+- 视觉规范适用范围：`<页面、平台、主题>`
+- 代码事实来源：`<tokens / 主题 / 公共组件路径>`
+- 局部 brief 与派生文件：`<路径、职责与来源；没有则删除>`
 
 ## 2. Experience Principles
 
@@ -127,4 +126,4 @@
 
 | Date | Status | Decision | Reason | Evidence / source | Affected surfaces |
 | --- | --- | --- | --- | --- | --- |
-| `<YYYY-MM-DD>` | `<proposed/approved/superseded>` | `<请填写>` | `<请填写>` | `<用户选择 / 代码事实 / 截图 / 工具候选>` | `<请填写>` |
+| `<YYYY-MM-DD>` | `<proposed/approved/delegated/superseded>` | `<请填写>` | `<请填写>` | `<既有批准 / 用户选择 / 授权代理决策；另列代码或截图验证>` | `<请填写>` |

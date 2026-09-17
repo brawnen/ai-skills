@@ -102,7 +102,7 @@ append_dependency_skill() {
     [[ "${row_scope}" == "${expected_scope}" ]] || \
       die "依赖 skill scope 不一致: ${dependency_name} (${row_scope})"
     case "${row_scope}:${relative_source}" in
-      global:global/*|project:project/*|project:vendor/project-skills/*) ;;
+      global:global/*|global:vendor/global-skills/*|project:project/*|project:vendor/project-skills/*) ;;
       *) die "skill 源码目录与 scope 不一致: ${name} -> ${relative_source}" ;;
     esac
     local source="${ROOT_DIR}/${relative_source}"
@@ -165,7 +165,7 @@ load_selection() {
     fi
     [[ "${status}" == "active" ]] || die "未知 skill 状态: ${name} (${status})"
     case "${row_scope}:${relative_source}" in
-      global:global/*|project:project/*|project:vendor/project-skills/*) ;;
+      global:global/*|global:vendor/global-skills/*|project:project/*|project:vendor/project-skills/*) ;;
       *) die "skill 源码目录与 scope 不一致: ${name} -> ${relative_source}" ;;
     esac
 

@@ -27,3 +27,4 @@ task-report|global|-|-|retired|-
 task-todolist-execution|global|-|-|retired|-
 validation-required|global|-|-|retired|-
 verification-before-completion|global|-|-|retired|-
+show-me|global|vendor/global-skills/show-me|trial|active|-

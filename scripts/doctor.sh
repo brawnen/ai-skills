@@ -94,7 +94,7 @@ while IFS='|' read -r skill_name skill_scope skill_source skill_bundles skill_st
   case "${skill_status}" in
     active)
       case "${skill_scope}:${skill_source}" in
-        global:global/*|project:project/*|project:vendor/project-skills/*) ;;
+        global:global/*|global:vendor/global-skills/*|project:project/*|project:vendor/project-skills/*) ;;
         *)
           echo "MISS config/skills.tsv (scope 与源码目录不一致 ${skill_name})"
           missing=1
@@ -209,6 +209,7 @@ done < <(find \
   "${ROOT_DIR}/global" \
   "${ROOT_DIR}/project" \
   "${ROOT_DIR}/vendor/project-skills" \
+  "${ROOT_DIR}/vendor/global-skills" \
   -name SKILL.md -type f | sort)
 
 if [[ "${missing}" -ne 0 ]]; then

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Show Me"
+  short_description: "用精简图表、代码结构草图和聚焦的可视化帮助理解当前讨论主题"
+  default_prompt: "Use $show-me to explain the current topic with the smallest useful visual."
+policy:
+  allow_implicit_invocation: true

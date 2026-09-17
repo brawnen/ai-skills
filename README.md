@@ -48,6 +48,20 @@ Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会
 源稿中三个及以上有序阶段、分支、回路、依赖或责任交接会转换为语义化流程图，不把
 多行箭头文本或着色文本框当作正式流程图；普通清单和并列事实仍保留原有结构。
 
+### 第三方 skills 试用与安装
+
+第三方 skills 先保存到本仓库的 `vendor/global-skills/` 或 `vendor/project-skills/`，
+记录固定提交、来源、许可证和本地适配，再通过 catalog 与发布器安装到指定 agent。
+保留上游原文试用，验证效果后再决定是否吸收为第一方能力；不直接维护 agent 目录中的独立副本。
+宿主内置和插件管理器托管的 skills 仍由其原管理机制负责。
+
+`trial` 是可选试用 bundle，具体成员以 `config/skills.tsv` 为准。发布时应显式包含需要保留的全部 bundles；
+例如 Codex 的现有组合加试用：
+
+```bash
+./scripts/publish-skills.sh global --platforms codex --bundles core,architecture,docs,trial
+```
+
 ### 项目级 UI/UX skill
 
 `project/specialists/design-product-ui` 是本仓库自研 UI/UX 路由 skill 的源码目录，
@@ -76,9 +90,9 @@ Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会
 `--project` 目标进行 dogfooding。此时 `.agents/` 只是已忽略的项目运行层，三个 skill
 都必须是指向本仓库事实源的受管符号链接，不能保存实体安装副本。
 
-该 skill 是项目 UI/UX 决策与路由控制面：从用户任务、现有设计系统和平台约束收敛
-方向，按复杂度处理局部调整、页面/流程、新设计系统和只读评审，并在需要跨页面复用
-时维护项目根目录 `DESIGN.md`。它按任务选择当前宿主可用的 UI UX Pro Max、
+该 skill 是项目 UI/UX 约束与能力适配层：复用用户任务、现有设计系统和平台约束，
+协调页面/流程、设计系统和只读评审；明确的小修直接交回宿主。稳定决策按项目约定
+记录到现有设计规范，不强制创建根目录 `DESIGN.md`。它按任务选择当前宿主可用的 UI UX Pro Max、
 Product Design、Impeccable 或原生能力，不复制这些工具的知识库和实现。
 
 #### 从产品需求到页面设计
@@ -99,20 +113,20 @@ Product Design、Impeccable 或原生能力，不复制这些工具的知识库�
 ```text
 基本产品需求
   → decision-clarification（仅在关键产品决定未闭合时）
-  → design-product-ui（brief、能力路由、方向门和 DESIGN.md）
+  → design-product-ui（项目约束、能力选择与决策来源）
       → UI UX Pro Max（仅在需要新候选知识时）
       → Product Design（仅在需要视觉探索、目标实现或体验审计时）
       → Impeccable（仅在需要实际页面打磨和质量检查时）
   → 宿主原生实现与验证（代码、测试、构建、浏览器或设备检查）
 ```
 
-`design-product-ui` 不要求每次都生成 `DESIGN.md`。只有已确认的设计决定需要跨页面、
-跨会话复用时才维护该文件；单页局部调整沿用现有设计系统并做局部验证即可。
+`design-product-ui` 不要求每次都生成 `DESIGN.md`。只有稳定设计决定需要跨页面、
+跨会话复用且没有合适的现有规范时才创建该文件；单页局部调整沿用现有设计系统并做局部验证即可。
 UI UX Pro Max 和 Impeccable 已作为固定第三方快照进入该路由的发布闭包；Product
-Design 仍是可选的宿主插件，缺失时按路由规则降级，不由本仓库安装。当前固定版本分别
-为 UI UX Pro Max `2.15.0` 和 Impeccable `4.1.1`，来源与升级要求见各自的
-`UPSTREAM.md`。项目根 `DESIGN.md` 是唯一人工设计事实源，外部候选、sidecar 和缓存
-不能与它并行维护另一套规范。
+Design 仍是可选的宿主插件，缺失时按路由规则降级，不由本仓库安装。当前快照为 UI UX Pro Max 上游提交 `15de38fb70bc` 和 Impeccable skill `4.3.1`
+（提交 `0a4e72a254f3`，引擎 `0.1.5`）；CLI 包版本与 skill 快照独立，来源与升级要求见各自的
+`UPSTREAM.md`。产品事实、视觉规范、代码 tokens 和局部 brief 各自有明确职责；工具 sidecar 可以保留，
+但应注明派生来源，避免人工重复维护同一事实。
 
 设计模型综合参考了 Impeccable 的设计语言与反模板化、UI UX Pro Max 的跨平台
 知识组织、Vercel Web Interface Guidelines 的质量检查、gstack 的方向选择与评审闭环，

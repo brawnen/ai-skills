@@ -106,4 +106,11 @@ legacy_target="${test_root}/legacy-global-skills"
 "${ROOT_DIR}/scripts/install-links.sh" "${legacy_target}" core architecture >/dev/null
 [[ -L "${legacy_target}/architecture-friction-scan" ]] || fail "旧 install-links 入口未转交新发布器"
 
+trial_target="${test_root}/trial-skills"
+"${PUBLISH_SCRIPT}" global --target "${trial_target}" --bundles core,architecture,docs,trial >/dev/null
+[[ -L "${trial_target}/show-me" ]] || fail "未发布第三方试用 skill"
+[[ "$(resolve_dir "${trial_target}/show-me")" == "$(resolve_dir "${ROOT_DIR}/vendor/global-skills/show-me")" ]] || fail "试用链接未指向项目快照"
+"${PUBLISH_SCRIPT}" global --check --target "${trial_target}" --bundles core,architecture,docs,trial >/dev/null
+[[ ! -e "${global_target}/show-me" ]] || fail "试用 skill 意外进入 core"
+
 echo "publish-skills tests passed"
