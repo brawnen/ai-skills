@@ -95,6 +95,8 @@ Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会
 记录到现有设计规范，不强制创建根目录 `DESIGN.md`。它按任务选择当前宿主可用的 UI UX Pro Max、
 Product Design、Impeccable 或原生能力，不复制这些工具的知识库和实现。
 
+两个第三方依赖在 Codex 中关闭隐式调用，仍可通过 `$impeccable`、`$ui-ux-pro-max` 明确使用，或由路由在专项需求下选择。UI UX Pro Max 默认入口只做定向检索，上游完整正文保留在 `UPSTREAM-SKILL.md`；Impeccable 保留完整上游流程，普通页面实现和小修使用宿主能力。其他宿主是否遵守 `openai.yaml` 调用策略需单独验证。既有受管符号链接直接引用更新后的源码；建议新建会话加载新元数据。
+
 #### 从产品需求到页面设计
 
 “已有基本产品需求，希望设计产品页面”是 `design-product-ui` 的核心使用场景。

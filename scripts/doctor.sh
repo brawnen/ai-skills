@@ -198,8 +198,8 @@ while IFS= read -r skill_file; do
     continue
   fi
 
-  if ! grep -Eq '^  allow_implicit_invocation: true$' "${metadata_file}"; then
-    echo "MISS ${metadata_file#${ROOT_DIR}/} (未启用隐式调用)"
+  if ! grep -Eq '^  allow_implicit_invocation: (true|false)$' "${metadata_file}"; then
+    echo "MISS ${metadata_file#${ROOT_DIR}/} (调用策略缺失或不是布尔值)"
     missing=1
     continue
   fi

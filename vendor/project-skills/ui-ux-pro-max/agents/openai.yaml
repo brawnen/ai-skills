@@ -3,4 +3,4 @@ interface:
   short_description: "提供可搜索的 UI/UX 风格、配色、字体、交互与技术栈设计建议"
   default_prompt: "Use $ui-ux-pro-max to search the local UI/UX knowledge base for this interface task."
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false
