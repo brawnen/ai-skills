@@ -28,7 +28,7 @@
 | --- | --- | --- |
 | `decision-clarification` | 依赖感知的分轮访谈；支持想法/计划压力测试、需求收敛及二者组合 | 普通实施中的局部歧义、需求和验收已经明确的任务 |
 | `systematic-debugging` | 疑难故障的反馈循环、根因验证，以及生产影响扩大时的止损分支 | 根因明确的普通 bugfix、组织级事故管理 |
-| `test-first-development` | 缺陷回归、复杂规则、公共契约及高风险重构的行为测试 | 普通低风险改动的验证调度、全量测试、构建、E2E、视觉与发布验证 |
+| `test-first-development` | 用户明确要求 TDD/test-first 时验证独立行为断言与 RED-GREEN-REFACTOR | 普通回归测试、验证调度、全量测试、构建、E2E、视觉与发布验证 |
 | `db-change-safety` | DDL、迁移、回填、生产写入的锁、事务、幂等、分批和回滚风险 | 纯只读查询、普通代码验证 |
 
 ### 可选 bundle

@@ -5,6 +5,7 @@
 - 路径：`plugins/show-me/skills/show-me/SKILL.md`
 - 获取日期：2026-09-05
 - 许可证：MIT，原文见 LICENSE。
-- SKILL.md 保持上游原样，与此前 Codex 安装内容逐字节一致。
+- 上游原文保存在 UPSTREAM-SKILL.md；SKILL.md 是本地适配入口。
 - 本地附加：此来源记录、根仓库 LICENSE 副本及 agents/openai.yaml 宿主元数据。
-- 当前用途：原版试用；未吸收为第一方 skill。后续升级先更新项目快照，再发布到明确指定的 agent。
+- 2026-10-02 本地适配：关闭隐式调用，收窄 description，使用宿主产物打开工具替代 Bash(open)。
+- 当前用途：显式调用试用；未吸收为第一方 skill。后续升级先更新项目快照，再发布到明确指定的 agent。

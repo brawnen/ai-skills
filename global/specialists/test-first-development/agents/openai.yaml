@@ -1,6 +1,6 @@
 interface:
   display_name: "Test First Development"
-  short_description: "为缺陷回归、复杂规则及关键契约建立行为测试，按风险选择验证范围"
-  default_prompt: "Use $test-first-development to protect this critical behavior with an independent regression test and an appropriate RED-GREEN-REFACTOR cycle."
+  short_description: "在用户明确要求 TDD 时以独立行为断言验证 RED-GREEN-REFACTOR"
+  default_prompt: "Use $test-first-development to implement the requested behavior test-first and verify a genuine RED-GREEN-REFACTOR cycle."
 policy:
   allow_implicit_invocation: true
