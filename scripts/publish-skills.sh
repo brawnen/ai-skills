@@ -13,7 +13,7 @@ usage() {
   ./scripts/publish-skills.sh list
   ./scripts/publish-skills.sh global [--platforms codex,antigravity] [--bundles core]
   ./scripts/publish-skills.sh global --target <skills-dir> [--bundles core,architecture]
-  ./scripts/publish-skills.sh project --project <repo> --skills design-product-ui
+  ./scripts/publish-skills.sh project --project <repo> --skills design
   ./scripts/publish-skills.sh <global|project> --check [其他选项]
 
 说明:
@@ -286,6 +286,22 @@ prune_global_links() {
   done < <(find "${target_dir}" -mindepth 1 -maxdepth 1 -type l -print | sort)
 }
 
+prune_retired_project_links() {
+  local target_dir="$1"
+  local check_only="$2"
+  local name=""
+  local target_path=""
+
+  for name in "${retired_names[@]-}"; do
+    [[ -n "${name}" ]] || continue
+    target_path="${target_dir}/${name}"
+    managed_link_belongs_here "${target_path}" || continue
+    [[ "${check_only}" -eq 0 ]] || die "存在已退役的托管项目 skill: ${target_path}"
+    rm -f -- "${target_path}"
+    echo "removed retired project link ${name}"
+  done
+}
+
 publish_selected_to() {
   local target_dir="$1"
   local check_only="$2"
@@ -298,8 +314,11 @@ publish_selected_to() {
 
   if [[ "${scope}" == "global" ]]; then
     prune_global_links "${target_dir}" "${check_only}"
-  elif [[ "${check_only}" -eq 1 && ! -d "${target_dir}" ]]; then
-    die "目标目录不存在: ${target_dir}"
+  else
+    if [[ "${check_only}" -eq 1 && ! -d "${target_dir}" ]]; then
+      die "目标目录不存在: ${target_dir}"
+    fi
+    prune_retired_project_links "${target_dir}" "${check_only}"
   fi
 
   for ((index=0; index<${#selected_names[@]}; index++)); do

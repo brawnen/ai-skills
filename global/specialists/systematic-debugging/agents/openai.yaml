@@ -1,6 +1,0 @@
-interface:
-  display_name: "Systematic Debugging"
-  short_description: "为疑难、偶发、性能和跨组件故障建立反馈循环并验证根因"
-  default_prompt: "Use $systematic-debugging to build a reproducible feedback loop, identify the root cause, and verify the fix."
-policy:
-  allow_implicit_invocation: true

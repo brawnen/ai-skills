@@ -1,0 +1,6 @@
+interface:
+  display_name: "诊断疑难故障"
+  short_description: "为疑难、偶发、性能和跨组件故障建立反馈循环并验证根因"
+  default_prompt: "Use $debug to build a reproducible feedback loop, identify the root cause, and verify the fix."
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,166 @@
+{
+  "run_id": "760b8d1d4ead4f449f39f57382b07bc2",
+  "subject": {
+    "artifact_digest": "004c7f86b5c7689d11e3e7f50dd3795f98cf370ddca2ec58a57c9be8b7ee2c30"
+  },
+  "environment": {
+    "target": "local",
+    "config_scope": "isolated-sqlite; fixture actors"
+  },
+  "checks": [
+    {
+      "ac": "AC-01",
+      "entry": "POST /items as admin-a",
+      "expected": "201; exactly one A/sample item and created audit",
+      "actual": {
+        "id": 1
+      },
+      "status": "PASS",
+      "database": {
+        "items": [
+          [
+            1,
+            "a",
+            "sample"
+          ]
+        ],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "ac": "AC-01-read",
+      "entry": "GET created item as admin-a",
+      "expected": "200; same id, tenant and name",
+      "actual": {
+        "id": 1,
+        "tenant": "a",
+        "name": "sample"
+      },
+      "status": "PASS",
+      "database": {
+        "items": [
+          [
+            1,
+            "a",
+            "sample"
+          ]
+        ],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "ac": "AC-02",
+      "entry": "DELETE A item as admin-b",
+      "expected": "403; original row unchanged; denied audit",
+      "actual": {
+        "status": 403,
+        "body": {
+          "error": "forbidden"
+        }
+      },
+      "status": "PASS",
+      "database": {
+        "items": [
+          [
+            1,
+            "a",
+            "sample"
+          ]
+        ],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ],
+          [
+            "denied",
+            "admin-b",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "ac": "AC-03",
+      "entry": "POST /items as member-a",
+      "expected": "403; no extra business row",
+      "actual": {
+        "error": "forbidden"
+      },
+      "status": "PASS",
+      "database": {
+        "items": [
+          [
+            1,
+            "a",
+            "sample"
+          ]
+        ],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ],
+          [
+            "denied",
+            "admin-b",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "ac": "AC-04",
+      "entry": "DELETE A item as admin-a",
+      "expected": "200; item removed; deleted audit",
+      "actual": {
+        "deleted": true
+      },
+      "status": "PASS",
+      "database": {
+        "items": [],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ],
+          [
+            "denied",
+            "admin-b",
+            1
+          ],
+          [
+            "deleted",
+            "admin-a",
+            1
+          ]
+        ]
+      }
+    }
+  ],
+  "coverage_gaps": [
+    "browser/staging/production not exercised"
+  ],
+  "cleanup": {
+    "process_stopped": true,
+    "owned_resources_removed": true,
+    "evidence_preserved": true
+  },
+  "instance": "http://127.0.0.1:61959",
+  "status": "PASS"
+}

@@ -3,12 +3,12 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
-ASSETS_DIR="${ROOT_DIR}/global/helpers/formal-html-docs/assets"
-TEMPLATE="${ROOT_DIR}/global/helpers/formal-html-docs/assets/templates/decision-brief.html"
-SHELL_TEMPLATE="${ROOT_DIR}/global/helpers/formal-html-docs/assets/formal-document-shell.html"
-SKILL_FILE="${ROOT_DIR}/global/helpers/formal-html-docs/SKILL.md"
-ROUTING_FILE="${ROOT_DIR}/global/helpers/formal-html-docs/references/template-routing.md"
-FLOW_RULES_FILE="${ROOT_DIR}/global/helpers/formal-html-docs/references/flow-diagrams.md"
+ASSETS_DIR="${ROOT_DIR}/global/helpers/to-html/assets"
+TEMPLATE="${ROOT_DIR}/global/helpers/to-html/assets/templates/decision-brief.html"
+SHELL_TEMPLATE="${ROOT_DIR}/global/helpers/to-html/assets/formal-document-shell.html"
+SKILL_FILE="${ROOT_DIR}/global/helpers/to-html/SKILL.md"
+ROUTING_FILE="${ROOT_DIR}/global/helpers/to-html/references/template-routing.md"
+FLOW_RULES_FILE="${ROOT_DIR}/global/helpers/to-html/references/flow-diagrams.md"
 
 fail() {
   echo "FAIL: $*" >&2
@@ -59,4 +59,4 @@ if grep -Fq 'TokenF' "${TEMPLATE}"; then
   fail "通用模板包含 TokenF 专用内容"
 fi
 
-echo "formal-html-docs tests passed"
+echo "to-html tests passed"

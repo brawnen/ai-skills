@@ -1,6 +1,0 @@
-interface:
-  display_name: "Domain Modeling"
-  short_description: "澄清领域术语、状态和上下文边界，并按需维护词汇表与架构决策"
-  default_prompt: "Use $domain-modeling to clarify the domain language and record durable decisions when needed."
-policy:
-  allow_implicit_invocation: true

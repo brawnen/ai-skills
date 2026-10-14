@@ -1,6 +1,0 @@
-interface:
-  display_name: "Design Product UI"
-  short_description: "维护项目设计约束，按需路由视觉探索与质量审查并处理能力冲突"
-  default_prompt: "Use $design-product-ui to preserve this project's design constraints, choose the shortest capability path, and record decisions in the existing sources of truth."
-policy:
-  allow_implicit_invocation: true

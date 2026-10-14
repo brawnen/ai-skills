@@ -8,8 +8,8 @@
 - 只维护 Codex harness 未原生覆盖的专项决策模型、工具适配和项目级能力。
 - 全局和项目级 skill 都以本仓库中的目录为唯一源码，通过符号链接发布。
 - 第一方源码位于 `global/` 和 `project/`；需要随项目级路由 skill 一起分发的固定版本
-  第三方运行包位于 `vendor/project-skills/`；第三方全局 skill 位于 `vendor/global-skills/`。`.agents/skills` 只允许保存发布器创建的
-  符号链接，不是源码或安装事实源。
+  第三方运行包位于 `vendor/project-skills/`；第三方全局 skill 位于 `vendor/global-skills/`。在本仓库内部，`.agents/skills` 只允许保存发布器创建的
+  符号链接，不是源码或安装事实源；目标项目自身维护的专用实体 skill（如 `verify-<app>`）由目标工程管理，不属于本仓库的受管事实源。
 - 不恢复静态项目模板；目标项目的 `AGENTS.md` 应根据其真实代码与约束生成。
 
 ## 事实源
@@ -77,6 +77,7 @@ skill、元数据或发布行为变更还应运行：
 ```bash
 ./tests/publish-skills-test.sh
 ./tests/formal-html-docs-test.sh
+PYTHONDONTWRITEBYTECODE=1 python3 tests/verification-flow-test.py
 bash -n scripts/publish-skills.sh scripts/install-links.sh \
   scripts/sync-global-platforms.sh scripts/doctor.sh tests/publish-skills-test.sh \
   tests/formal-html-docs-test.sh

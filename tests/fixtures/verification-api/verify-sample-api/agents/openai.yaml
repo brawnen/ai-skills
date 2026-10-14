@@ -1,0 +1,6 @@
+interface:
+  display_name: "验证 Sample API"
+  short_description: "验证隔离样例的实际 HTTP 权限与持久化结果，并保留失败取证和清理证据"
+  default_prompt: "Use $verify-sample-api to validate the isolated Sample API against its documented rules."
+policy:
+  allow_implicit_invocation: true

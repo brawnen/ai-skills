@@ -1,0 +1,6 @@
+interface:
+  display_name: "项目验证能力"
+  short_description: "根据项目事实建立或维护真实运行、取证与清理入口，并实跑说明覆盖范围"
+  default_prompt: "Use $setup-verification to create or maintain project-owned verification instructions and prove the covered paths."
+policy:
+  allow_implicit_invocation: false

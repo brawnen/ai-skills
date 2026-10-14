@@ -1,6 +1,0 @@
-interface:
-  display_name: "正式 HTML 文档"
-  short_description: "为正式工程文档提供统一、自包含、可打印且按用途适配的 HTML 视觉外壳"
-  default_prompt: "Use $formal-html-docs to produce a formal self-contained HTML document with the right template for its purpose."
-policy:
-  allow_implicit_invocation: true

@@ -1,0 +1,6 @@
+interface:
+  display_name: "研发交付"
+  short_description: "按风险选择研发交付路径，复用需求与授权并检查验收和发布证据"
+  default_prompt: "Use $dev to coordinate this engineering task through validation and the human release handoff."
+policy:
+  allow_implicit_invocation: false

@@ -1,6 +1,0 @@
-interface:
-  display_name: "Test First Development"
-  short_description: "在用户明确要求 TDD 时以独立行为断言验证 RED-GREEN-REFACTOR"
-  default_prompt: "Use $test-first-development to implement the requested behavior test-first and verify a genuine RED-GREEN-REFACTOR cycle."
-policy:
-  allow_implicit_invocation: true

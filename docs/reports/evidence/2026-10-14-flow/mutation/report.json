@@ -1,0 +1,113 @@
+{
+  "run_id": "ad23a0267e484ebf9b6ce43272c15bca",
+  "subject": {
+    "artifact_digest": "cbecd6ef2927acf26bb2d7e17538fcb5f0f943b6f4a4543fb734c6fa2a6be254"
+  },
+  "environment": {
+    "target": "local",
+    "config_scope": "isolated-sqlite; fixture actors"
+  },
+  "checks": [
+    {
+      "ac": "AC-01",
+      "entry": "POST /items as admin-a",
+      "expected": "201; exactly one A/sample item and created audit",
+      "actual": {
+        "id": 1
+      },
+      "status": "PASS",
+      "database": {
+        "items": [
+          [
+            1,
+            "a",
+            "sample"
+          ]
+        ],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "ac": "AC-01-read",
+      "entry": "GET created item as admin-a",
+      "expected": "200; same id, tenant and name",
+      "actual": {
+        "id": 1,
+        "tenant": "a",
+        "name": "sample"
+      },
+      "status": "PASS",
+      "database": {
+        "items": [
+          [
+            1,
+            "a",
+            "sample"
+          ]
+        ],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "ac": "AC-02",
+      "entry": "DELETE A item as admin-b",
+      "expected": "403; original row unchanged; denied audit",
+      "actual": {
+        "status": 200,
+        "body": {
+          "deleted": true
+        }
+      },
+      "status": "FAIL",
+      "database": {
+        "items": [],
+        "audit": [
+          [
+            "created",
+            "admin-a",
+            1
+          ],
+          [
+            "deleted",
+            "admin-b",
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "ac": "AC-03",
+      "status": "NOT_RUN",
+      "reason": "stopped after prior failure"
+    },
+    {
+      "ac": "AC-04",
+      "status": "NOT_RUN",
+      "reason": "stopped after prior failure"
+    }
+  ],
+  "coverage_gaps": [
+    "browser/staging/production not exercised"
+  ],
+  "cleanup": {
+    "process_stopped": true,
+    "owned_resources_removed": true,
+    "evidence_preserved": true
+  },
+  "instance": "http://127.0.0.1:61984",
+  "failure": "AC-02: expected 403; original row unchanged; denied audit; got {'status': 200, 'body': {'deleted': True}}",
+  "failure_class": "assertion",
+  "status": "FAIL"
+}

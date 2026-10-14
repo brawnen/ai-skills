@@ -1,0 +1,6 @@
+interface:
+  display_name: "澄清需求与决策"
+  short_description: "通过依赖感知的分轮访谈，压力测试决策或收敛可验收需求"
+  default_prompt: "Use $to-decision to pressure-test this idea or draft a testable specification, reusing established decisions and asking only material open questions."
+policy:
+  allow_implicit_invocation: true

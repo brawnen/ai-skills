@@ -1,6 +1,6 @@
 # 本地 AI Skills 中央目录
 
-这个仓库只保留 Codex harness 没有原生覆盖的专项决策模型、工具适配和项目约束模板。通用的计划管理、仓库探索、局部澄清、安全编辑、普通故障修复、外层验证、代码证据汇报和 Git 纪律由 Codex 自身负责，不再包装成 skills 或全局 AGENTS 规则。
+这个仓库只保留 Codex harness 没有原生覆盖的专项决策模型、工具适配和项目验证协议。通用的计划管理、仓库探索、局部澄清、安全编辑、普通故障修复、外层验证、代码证据汇报和 Git 纪律由 Codex 自身负责，不再包装成 skills 或全局 AGENTS 规则。
 
 ## 取舍原则
 
@@ -26,20 +26,21 @@
 
 | skill | 保留原因 | 不负责 |
 | --- | --- | --- |
-| `decision-clarification` | 依赖感知的分轮访谈；支持想法/计划压力测试、需求收敛及二者组合 | 普通实施中的局部歧义、需求和验收已经明确的任务 |
-| `systematic-debugging` | 疑难故障的反馈循环、根因验证，以及生产影响扩大时的止损分支 | 根因明确的普通 bugfix、组织级事故管理 |
-| `test-first-development` | 用户明确要求 TDD/test-first 时验证独立行为断言与 RED-GREEN-REFACTOR | 普通回归测试、验证调度、全量测试、构建、E2E、视觉与发布验证 |
-| `db-change-safety` | DDL、迁移、回填、生产写入的锁、事务、幂等、分批和回滚风险 | 纯只读查询、普通代码验证 |
+| `to-decision` | 依赖感知的分轮访谈；支持想法/计划压力测试、需求收敛及二者组合 | 普通实施中的局部歧义、需求和验收已经明确的任务 |
+| `debug` | 疑难故障的反馈循环、根因验证，以及生产影响扩大时的止损分支 | 根因明确的普通 bugfix、组织级事故管理 |
+| `tdd` | 用户明确要求 TDD/test-first 时验证独立行为断言与 RED-GREEN-REFACTOR | 普通回归测试、验证调度、全量测试、构建、E2E、视觉与发布验证 |
+| `review-db` | DDL、迁移、回填、生产写入的锁、事务、幂等、分批和回滚风险 | 纯只读查询、普通代码验证 |
 
 ### 可选 bundle
 
 | bundle | skills | 使用条件 |
 | --- | --- | --- |
-| `architecture` | `architecture-friction-scan`、`review-cross-stack-change`、`domain-modeling` | 用户明确要求架构体检、跨栈方案评审或领域建模 |
-| `strategy` | `venture-feasibility` | 新产品、新业务或高不确定技术机会需要用证据贯通可行性、市场、商业模式、技术方案和阶段投资决策 |
-| `docs` | `formal-html-docs` | 用户明确要求自包含、可打印的正式 HTML；普通 Markdown、Word、PDF 不使用 |
+| `architecture` | `scan-architecture`、`review-cross-stack-change`、`model` | 用户明确要求架构体检、跨栈方案评审或领域建模 |
+| `strategy` | `assess-venture` | 新产品、新业务或高不确定技术机会需要用证据贯通可行性、市场、商业模式、技术方案和阶段投资决策 |
+| `docs` | `to-html` | 用户明确要求自包含、可打印的正式 HTML；普通 Markdown、Word、PDF 不使用 |
+| `flow` | `dev`、`to-spec`、`verify-change`、`setup-verification` | 用户选择多阶段交付、可交接规格、专项变更验证或项目自测入口建设；可选、显式调用 |
 
-`formal-html-docs` 当前包含第一款生产模板：`decision-brief` 布局配合
+`to-html` 当前包含第一款生产模板：`decision-brief` 布局配合
 `executive-sunrise` 主题，适用于可行性研究、商业分析、方案比较、投资评审和其他以
 “形成决定”为主要任务的正式报告。skill 触发后会按用途读取模板路由；白皮书、证据审查、
 Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会误套 A 版。
@@ -47,6 +48,24 @@ Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会
 但不会进入正文语义、复制文本或阻挡页面交互。
 源稿中三个及以上有序阶段、分支、回路、依赖或责任交接会转换为语义化流程图，不把
 多行箭头文本或着色文本框当作正式流程图；普通清单和并列事实仍保留原有结构。
+
+### 研发交付与验证
+
+`$dev` 是多阶段研发交付入口，复用既有决定和授权；小任务直接使用宿主。`$to-spec` 把明确需求转为可交接的技术/验收契约，`$verify-change` 按风险核对本次变更的实际证据，`$setup-verification` 根据仓库事实建立或维护项目自有 `verify-<app>`。四者不构成每次必须完整执行的流水线，不自动启用 TDD、多代理或完整 UI 流程。
+
+共享格式见 [交付产物契约](docs/delivery-artifacts-spec.md)。流程 skills 内的 `references/artifacts.md` 指向这一份源码；经符号链接安装也能访问，不依赖目标项目再复制文档。
+
+项目专用验证资料和脚本随产品代码提交。Agent 在实际业务入口准备、驱动、断言、取证、清理；关键已知场景可直接固化到 CI，不等待模型探索。代码合并及生产部署/回滚/写入由人执行，Agent 推进到测试环境验证与人工发布包。
+
+验证命令：
+
+```bash
+PYTHONDONTWRITEBYTECODE=1 python3 tests/verification-flow-test.py
+```
+
+该样例使用本机随机端口和隔离 SQLite，检验正常/权限拒绝、隔离变异、版本错配、环境失败、并行运行及证据保留。需要允许监听本机端口；沙箱禁止监听时是环境阻塞。它证明样例协议，不证明真实项目、各宿主行为或团队收益。
+
+本次十二项确认名称已在源码和 catalog 迁移，旧名称保留 retired 记录。旧安装中的绝对链接需要重新发布：保持各平台已有 bundles，需要流程能力时再加入 `flow`。Codex 的既有 `trial` 必须保留，项目 UI 改用 `--skills design`。实际发布仅在明确目标和授权后执行；仅更新源码不等于宿主已生效。
 
 ### 第三方 skills 试用与安装
 
@@ -64,21 +83,21 @@ Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会
 
 ### 项目级 UI/UX skill
 
-`project/specialists/design-product-ui` 是本仓库自研 UI/UX 路由 skill 的源码目录，
+`project/specialists/design` 是本仓库自研 UI/UX 路由 skill 的源码目录，
 不属于任何全局 bundle。它在 catalog 中声明了 `ui-ux-pro-max` 和 `impeccable` 两个
 项目级运行依赖；发布路由 skill 时，发布器会自动展开并链接完整依赖闭包：
 
 ```bash
 ./scripts/publish-skills.sh project \
   --project /absolute/path/to/project \
-  --skills design-product-ui
+  --skills design
 ```
 
 默认结果是：
 
 ```text
 <project>/.agents/skills/
-├── design-product-ui -> <repo>/project/specialists/design-product-ui
+├── design -> <repo>/project/specialists/design
 ├── ui-ux-pro-max    -> <repo>/vendor/project-skills/ui-ux-pro-max
 └── impeccable       -> <repo>/vendor/project-skills/impeccable
 ```
@@ -99,30 +118,30 @@ Product Design、Impeccable 或原生能力，不复制这些工具的知识库�
 
 #### 从产品需求到页面设计
 
-“已有基本产品需求，希望设计产品页面”是 `design-product-ui` 的核心使用场景。
+“已有基本产品需求，希望设计产品页面”是 `design` 的核心使用场景。
 按需求成熟度和交付目标选择入口：
 
 | 当前输入与目标 | 使用方式 |
 | --- | --- |
-| 已明确主要用户、核心任务、功能范围和关键约束，需要设计页面或流程 | 直接使用 `design-product-ui` |
-| 需求仍有会改变信息架构、功能边界或验收标准的重要分歧 | 先使用 `decision-clarification` 收敛需求，再进入 `design-product-ui` |
-| 需求清楚，但视觉方向仍开放，希望比较多套方案 | 由 `design-product-ui` 建立 brief；UI UX Pro Max 可用时先查询候选，再由 Product Design 或图片生成能力制作可比较方案 |
-| 已有完整设计稿或截图，只需要忠实实现 | 不触发 `design-product-ui`；直接使用宿主的 image-to-code 或原生代码实现能力 |
+| 已明确主要用户、核心任务、功能范围和关键约束，需要设计页面或流程 | 直接使用 `design` |
+| 需求仍有会改变信息架构、功能边界或验收标准的重要分歧 | 先使用 `to-decision` 收敛需求，再进入 `design` |
+| 需求清楚，但视觉方向仍开放，希望比较多套方案 | 由 `design` 建立 brief；UI UX Pro Max 可用时先查询候选，再由 Product Design 或图片生成能力制作可比较方案 |
+| 已有完整设计稿或截图，只需要忠实实现 | 不触发 `design`；直接使用宿主的 image-to-code 或原生代码实现能力 |
 | 页面已经实现，需要评估完整体验和一致性 | Product Design audit 负责截图支持的体验评审；Impeccable 负责代码级 critique、audit、polish、harden 和 detector |
 
 标准责任链是：
 
 ```text
 基本产品需求
-  → decision-clarification（仅在关键产品决定未闭合时）
-  → design-product-ui（项目约束、能力选择与决策来源）
+  → to-decision（仅在关键产品决定未闭合时）
+  → design（项目约束、能力选择与决策来源）
       → UI UX Pro Max（仅在需要新候选知识时）
       → Product Design（仅在需要视觉探索、目标实现或体验审计时）
       → Impeccable（仅在需要实际页面打磨和质量检查时）
   → 宿主原生实现与验证（代码、测试、构建、浏览器或设备检查）
 ```
 
-`design-product-ui` 不要求每次都生成 `DESIGN.md`。只有稳定设计决定需要跨页面、
+`design` 不要求每次都生成 `DESIGN.md`。只有稳定设计决定需要跨页面、
 跨会话复用且没有合适的现有规范时才创建该文件；单页局部调整沿用现有设计系统并做局部验证即可。
 UI UX Pro Max 和 Impeccable 已作为固定第三方快照进入该路由的发布闭包；Product
 Design 仍是可选的宿主插件，缺失时按路由规则降级，不由本仓库安装。当前快照为 UI UX Pro Max 上游提交 `15de38fb70bc` 和 Impeccable skill `4.3.1`
@@ -133,7 +152,7 @@ Design 仍是可选的宿主插件，缺失时按路由规则降级，不由本�
 设计模型综合参考了 Impeccable 的设计语言与反模板化、UI UX Pro Max 的跨平台
 知识组织、Vercel Web Interface Guidelines 的质量检查、gstack 的方向选择与评审闭环，
 以及 Open Design 将项目 `DESIGN.md`、通用 craft 规则和具体 artifact skill 分离的结构；
-`design-product-ui` 自身不复制这些能力的知识库或命令路由，固定第三方快照仍保留各自
+`design` 自身不复制这些能力的知识库或命令路由，固定第三方快照仍保留各自
 正常运行所需的脚本和规则，但不启用 hook、daemon 或自动提交。Open Design 当前只作为
 架构参考，不属于该 skill 的调用目标。
 
@@ -148,11 +167,11 @@ Design 仍是可选的宿主插件，缺失时按路由规则降级，不由本�
 | `frontend-project-flow` | 重复编排设计、实现、浏览器验证和审查 | Product Design、Browser、Sites 与原生计划 |
 | `doc-converter` | 依赖旧本机 CLI，且与官方 Documents/PDF 能力重复 | 官方 Documents/PDF skills |
 | `project-release-scope-check` | 发布闭包依赖项目制品拓扑和流水线事实，通用部分只是原生分析与验证 | 项目级 `AGENTS.md` 发布事实 + Codex 原生能力 |
-| `production-incident-hotfix` | 止损只是疑难调试在生产影响扩大时的入口分支，独立维护会重复诊断与回归流程 | `systematic-debugging` Operational Gate |
+| `production-incident-hotfix` | 止损只是疑难调试在生产影响扩大时的入口分支，独立维护会重复诊断与回归流程 | `debug` Operational Gate |
 
 历史上已经退役的 `task-report`、`validation-required`、`verification-before-completion`、`code-review`、`pdf` 和 `taste-skill` 继续由安装脚本清理旧链接。
 
-`requirements-clarification` 已合并到 `decision-clarification`：后者保留需求
+`requirements-clarification` 已合并到 `to-decision`：后者保留需求
 访谈与可验收 spec，同时增加适用于软件及非软件场景的 grill 压力测试模式。
 
 ## 全局 AGENTS

@@ -1,0 +1,6 @@
+interface:
+  display_name: "验证变更"
+  short_description: "按风险验证需求与业务结果，分类失败并给出可追溯的版本和覆盖证据"
+  default_prompt: "Use $verify-change to validate this change against its acceptance criteria and report evidence gaps."
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,6 @@
+interface:
+  display_name: "编写实施规格"
+  short_description: "把已明确需求形成独立验收判据、必要技术方案和可交接的行为切片"
+  default_prompt: "Use $to-spec to turn established requirements into a testable implementation specification."
+policy:
+  allow_implicit_invocation: false
