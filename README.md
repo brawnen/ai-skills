@@ -1,6 +1,6 @@
 # 本地 AI Skills 中央目录
 
-这个仓库只保留 Codex harness 没有原生覆盖的专项决策模型、工具适配和项目验证协议。通用的计划管理、仓库探索、局部澄清、安全编辑、普通故障修复、外层验证、代码证据汇报和 Git 纪律由 Codex 自身负责，不再包装成 skills 或全局 AGENTS 规则。
+这个仓库只保留 当前 coding agent 没有原生覆盖的专项决策模型、工具适配和项目验证协议。通用的计划管理、仓库探索、局部澄清、安全编辑、普通故障修复、外层验证、代码证据汇报和 Git 纪律由 宿主自身负责，不再包装成 skills 或全局 AGENTS 规则。
 
 ## 取舍原则
 
@@ -14,11 +14,11 @@
 
 以下内容不再由本仓库重复维护：
 
-- TODO、阶段状态、依赖顺序和恢复执行：使用 Codex 原生计划能力。
-- 陌生仓库扫描、读取 README/AGENTS、寻找测试入口：使用 Codex 原生仓库探索。
-- 普通实施中的局部澄清、范围控制、最小改动和验证汇报：使用 Codex 原生执行纪律。
-- 根因明确的普通 bugfix、代码审查和代码事实说明：使用 Codex 原生分析与验证能力。
-- Word、PDF、幻灯片、表格、网站和产品设计：使用 Codex 官方 skills/plugins。
+- TODO、阶段状态、依赖顺序和恢复执行：使用 宿主原生计划能力。
+- 陌生仓库扫描、读取 README/AGENTS、寻找测试入口：使用 宿主原生仓库探索。
+- 普通实施中的局部澄清、范围控制、最小改动和验证汇报：使用 宿主原生执行纪律。
+- 根因明确的普通 bugfix、代码审查和代码事实说明：使用 宿主原生分析与验证能力。
+- Word、PDF、幻灯片、表格、网站和产品设计：使用 当前宿主可用的官方 skills/plugins。
 
 ## 当前 skills
 
@@ -26,7 +26,7 @@
 
 | skill | 保留原因 | 不负责 |
 | --- | --- | --- |
-| `to-decision` | 依赖感知的分轮访谈；支持想法/计划压力测试、需求收敛及二者组合 | 普通实施中的局部歧义、需求和验收已经明确的任务 |
+| `to-requirement` | 依赖感知的分轮访谈；支持想法/计划压力测试、需求收敛及二者组合 | 普通实施中的局部歧义、需求和验收已经明确的任务 |
 | `debug` | 疑难故障的反馈循环、根因验证，以及生产影响扩大时的止损分支 | 根因明确的普通 bugfix、组织级事故管理 |
 | `tdd` | 用户明确要求 TDD/test-first 时验证独立行为断言与 RED-GREEN-REFACTOR | 普通回归测试、验证调度、全量测试、构建、E2E、视觉与发布验证 |
 | `review-db` | DDL、迁移、回填、生产写入的锁、事务、幂等、分批和回滚风险 | 纯只读查询、普通代码验证 |
@@ -35,10 +35,12 @@
 
 | bundle | skills | 使用条件 |
 | --- | --- | --- |
-| `architecture` | `scan-architecture`、`review-cross-stack-change`、`model` | 用户明确要求架构体检、跨栈方案评审或领域建模 |
+| `architecture` | `scan-architecture`、`model`、`api-contract` | 用户明确要求架构体检、跨栈方案评审、领域建模或前后端API共同契约 |
 | `strategy` | `assess-venture` | 新产品、新业务或高不确定技术机会需要用证据贯通可行性、市场、商业模式、技术方案和阶段投资决策 |
 | `docs` | `to-html` | 用户明确要求自包含、可打印的正式 HTML；普通 Markdown、Word、PDF 不使用 |
-| `flow` | `dev`、`to-spec`、`verify-change`、`setup-verification` | 用户选择多阶段交付、可交接规格、专项变更验证或项目自测入口建设；可选、显式调用 |
+| `flow` | `dev`、`to-spec`、`to-tickets`、`verify-change`、`setup-verification`、`setup-guardrails`、`code-review`、`interrogate`、`retro` | 交付主干与验证；阶段入口与红队实证审查显式选择，代码审查与静态门禁可按任务匹配 |
+| `flow-parallel` | `implement-spec` | 整份规格任务图实施；并行委派需明确授权，无能力时可顺序执行 |
+| `flow-explore` | `prototype` | 需要实际运行实验回答状态/逻辑或 UI 设计问题 |
 
 `to-html` 当前包含第一款生产模板：`decision-brief` 布局配合
 `executive-sunrise` 主题，适用于可行性研究、商业分析、方案比较、投资评审和其他以
@@ -49,36 +51,45 @@ Runbook 和复盘在专用模板尚未落地前继续使用通用 shell，不会
 源稿中三个及以上有序阶段、分支、回路、依赖或责任交接会转换为语义化流程图，不把
 多行箭头文本或着色文本框当作正式流程图；普通清单和并列事实仍保留原有结构。
 
+`$api-contract`复用[前后端HTTP JSON API默认规范](global/specialists/api-contract/references/api-conventions.md)，覆盖四字段响应、HTTP／业务错误分层、请求关联、金额与时间、分页、OpenAPI契约优先及版本兼容。新项目直接沿用，只收敛实际差异；已有契约优先，不自动迁移旧接口。单独调用[skill入口](global/specialists/api-contract/SKILL.md)即可，不依赖完整研发流程；源码登记于可选architecture bundle，真实发布沿用下方发布边界。
+
 ### 研发交付与验证
 
-`$dev` 是多阶段研发交付入口，复用既有决定和授权；小任务直接使用宿主。`$to-spec` 把明确需求转为可交接的技术/验收契约，`$verify-change` 按风险核对本次变更的实际证据，`$setup-verification` 根据仓库事实建立或维护项目自有 `verify-<app>`。四者不构成每次必须完整执行的流水线，不自动启用 TDD、多代理或完整 UI 流程。
+`$dev` 是完整交付入口，按实际缺口加载阶段协议并复用授权；小任务直接使用宿主。`$to-requirement` 收敛需求或显式压力测试，`$to-spec` 固定技术与验收规格。初版规格形成后检查界面设计是否就绪：新页面或重要交互缺少设计时主动衔接可查看方案，交互不确定才做原型，并将决定回写规格；已有明确设计和纯后端任务直接继续。只要求规格时说明设计缺口和建议，不自动扩展任务。无需独立交接且相关设计已就绪时，规格可内联简短实施顺序直接实施；跨人/会话领取、依赖状态或并行才用 `$to-tickets`。
 
-共享格式见 [交付产物契约](docs/delivery-artifacts-spec.md)。流程 skills 内的 `references/artifacts.md` 指向这一份源码；经符号链接安装也能访问，不依赖目标项目再复制文档。
+单任务实施和 PR 表达使用 [implementation](docs/workflow-protocols/implementation.md) / [pr](docs/workflow-protocols/pr.md) 协议，不新增 implement/pr skill。`code-review` 分别审查规范与需求，`interrogate` 负责红队对抗实证审查（只保留经真实运行复现证明打破原意图的缺陷），`verify-change` 判断实际运行证据；PASS 场景仍检查实现与断言盲区，相同且有效的运行检查不重复执行。`$retro` 从实际会话提出环境改进，不自动增加全局规则。
 
-项目专用验证资料和脚本随产品代码提交。Agent 在实际业务入口准备、驱动、断言、取证、清理；关键已知场景可直接固化到 CI，不等待模型探索。代码合并及生产部署/回滚/写入由人执行，Agent 推进到测试环境验证与人工发布包。
+需要可运行设计实验时用 prototype；整份规格按任务图实施时用 implement-spec。二者是可选 bundle，不因安装主干自动启用。并行与独立审查遵循委派授权，不强制 TDD、多代理、新会话、固定切片数量或完整 UI 流程。
 
-验证命令：
+共享阶段方法位于 [workflow-protocols](docs/workflow-protocols/)，产物字段以 [交付契约](docs/delivery-artifacts-spec.md) 为准。入口只引用自身 references，相对符号链接指向权威源，隔离发布测试逐字节检查可读性。`review-cross-stack-change` 已退役为 [跨边界设计参考](docs/workflow-protocols/cross-boundary-design.md)，由规格与审查按实际风险使用；scan-architecture 保留为独立可选体检。
+
+项目专用验证资料随产品代码提交。`setup-verification` 建立/维护项目 `verify-app`（运行态自测底座）；`setup-guardrails` 负责接手新建/存量/开源项目时的静态检查底座与研发盘中按“第二次原则”沉淀带测试的自定义 lint 规则；`$retro` 负责事后基于会话日志复盘，其捞出的 lint 候选可交由 `setup-guardrails` 落地。已有可靠脚本可直接复用，不强制生成 skill 或安装 MCP。合并遵循用户授权、项目分支策略和必要门禁；生产部署/回滚/写入仍由人执行。
+
+[整体方案](docs/reports/2026-10-18-matt-aligned-workflow-design.md)及[本轮实施记录](docs/reports/2026-10-19-matt-workflow-implementation.md)区分源码、安装、确定性演练和真实业务。新项目词汇表推荐 GLOSSARY.md，已有 CONTEXT.md 约定继续沿用，不生成同义副本。
+
+本仓库使用 [验证入口](docs/verification.md)，local/CI 共用：
 
 ```bash
-PYTHONDONTWRITEBYTECODE=1 python3 tests/verification-flow-test.py
+./scripts/check-workflow.sh
 ```
 
-该样例使用本机随机端口和隔离 SQLite，检验正常/权限拒绝、隔离变异、版本错配、环境失败、并行运行及证据保留。需要允许监听本机端口；沙箱禁止监听时是环境阻塞。它证明样例协议，不证明真实项目、各宿主行为或团队收益。
-
-本次十二项确认名称已在源码和 catalog 迁移，旧名称保留 retired 记录。旧安装中的绝对链接需要重新发布：保持各平台已有 bundles，需要流程能力时再加入 `flow`。Codex 的既有 `trial` 必须保留，项目 UI 改用 `--skills design`。实际发布仅在明确目标和授权后执行；仅更新源码不等于宿主已生效。
+真实 HTTP/SQLite 测试需允许本机监听；沙箱阻止端口绑定时是环境阻塞。临时目标不修改真实安装，真实发布仅在已授权范围内执行。目录改名必须重新发布；Codex 保留既有 trial，主干发布不自动加并行/探索 bundle。
 
 ### 第三方 skills 试用与安装
 
-第三方 skills 先保存到本仓库的 `vendor/global-skills/` 或 `vendor/project-skills/`，
+实际运行的第三方 skills 先保存到本仓库的 `vendor/global-skills/` 或 `vendor/project-skills/`，
 记录固定提交、来源、许可证和本地适配，再通过 catalog 与发布器安装到指定 agent。
 保留上游原文试用，验证效果后再决定是否吸收为第一方能力；不直接维护 agent 目录中的独立副本。
 宿主内置和插件管理器托管的 skills 仍由其原管理机制负责。
+完整 Matt v1.3.2 参考快照保存在 `vendor/mattpocock/`，不发布整包；[摘要记录](vendor/mattpocock.snapshot.json)固定完整提交、原文文件及符号链接，[来源与适配](docs/workflow-protocols/UPSTREAM.md)记录本地差异和许可。
+
+REA 配套 `reverse-engineer-anything` 以可选 `rea` bundle 保存，固定 npm `6.8.0` 与上游提交；只在需要逆向发行包或运行行为时使用。MCP/CLI 安装独立于 skill 发布，来源与更新边界见 [上游记录](vendor/global-skills/reverse-engineer-anything/UPSTREAM.md)。
 
 `trial` 是可选试用 bundle，具体成员以 `config/skills.tsv` 为准。发布时应显式包含需要保留的全部 bundles；
 例如 Codex 的现有组合加试用：
 
 ```bash
-./scripts/publish-skills.sh global --platforms codex --bundles core,architecture,docs,trial
+./scripts/publish-skills.sh global --platforms codex --bundles core,architecture,docs,flow,trial
 ```
 
 ### 项目级 UI/UX skill
@@ -124,7 +135,7 @@ Product Design、Impeccable 或原生能力，不复制这些工具的知识库�
 | 当前输入与目标 | 使用方式 |
 | --- | --- |
 | 已明确主要用户、核心任务、功能范围和关键约束，需要设计页面或流程 | 直接使用 `design` |
-| 需求仍有会改变信息架构、功能边界或验收标准的重要分歧 | 先使用 `to-decision` 收敛需求，再进入 `design` |
+| 需求仍有会改变信息架构、功能边界或验收标准的重要分歧 | 先使用 `to-requirement` 收敛需求，再进入 `design` |
 | 需求清楚，但视觉方向仍开放，希望比较多套方案 | 由 `design` 建立 brief；UI UX Pro Max 可用时先查询候选，再由 Product Design 或图片生成能力制作可比较方案 |
 | 已有完整设计稿或截图，只需要忠实实现 | 不触发 `design`；直接使用宿主的 image-to-code 或原生代码实现能力 |
 | 页面已经实现，需要评估完整体验和一致性 | Product Design audit 负责截图支持的体验评审；Impeccable 负责代码级 critique、audit、polish、harden 和 detector |
@@ -133,7 +144,7 @@ Product Design、Impeccable 或原生能力，不复制这些工具的知识库�
 
 ```text
 基本产品需求
-  → to-decision（仅在关键产品决定未闭合时）
+  → to-requirement（仅在关键产品决定未闭合时）
   → design（项目约束、能力选择与决策来源）
       → UI UX Pro Max（仅在需要新候选知识时）
       → Product Design（仅在需要视觉探索、目标实现或体验审计时）
@@ -158,7 +169,7 @@ Design 仍是可选的宿主插件，缺失时按路由规则降级，不由本�
 
 ## 已移除的重复能力
 
-| skill | 移除原因 | Codex 对应能力 |
+| skill | 移除原因 | 宿主对应能力 |
 | --- | --- | --- |
 | `task-todolist-execution` | 只是维护 TODO、状态和验证门槛 | 原生计划与持续任务状态 |
 | `repo-intake-scan` | 只是读取仓库入口、技术栈和验证命令 | 原生仓库探索与 AGENTS 发现 |
@@ -166,13 +177,13 @@ Design 仍是可选的宿主插件，缺失时按路由规则降级，不由本�
 | `code-evidence-docs` | 证据化分析和文档生成属于通用执行能力 | 原生代码分析与文档 skills |
 | `frontend-project-flow` | 重复编排设计、实现、浏览器验证和审查 | Product Design、Browser、Sites 与原生计划 |
 | `doc-converter` | 依赖旧本机 CLI，且与官方 Documents/PDF 能力重复 | 官方 Documents/PDF skills |
-| `project-release-scope-check` | 发布闭包依赖项目制品拓扑和流水线事实，通用部分只是原生分析与验证 | 项目级 `AGENTS.md` 发布事实 + Codex 原生能力 |
+| `project-release-scope-check` | 发布闭包依赖项目制品拓扑和流水线事实，通用部分只是原生分析与验证 | 项目级 `AGENTS.md` 发布事实 + 宿主原生能力 |
 | `production-incident-hotfix` | 止损只是疑难调试在生产影响扩大时的入口分支，独立维护会重复诊断与回归流程 | `debug` Operational Gate |
 
-历史上已经退役的 `task-report`、`validation-required`、`verification-before-completion`、`code-review`、`pdf` 和 `taste-skill` 继续由安装脚本清理旧链接。
+历史上已经退役的 `task-report`、`validation-required`、`verification-before-completion`、`pdf` 和 `taste-skill` 继续由安装脚本清理旧链接。`code-review` 已按新双轴方法恢复为 flow 入口，不属于当前退役清理范围。
 
-`requirements-clarification` 已合并到 `to-decision`：后者保留需求
-访谈与可验收 spec，同时增加适用于软件及非软件场景的 grill 压力测试模式。
+`requirements-clarification` 已合并到 `to-requirement`：后者保留需求
+访谈与业务验收要求，技术规格由 to-spec 承担；保留适用于软件及非软件场景的 grill 压力测试模式。
 
 ## 全局 AGENTS
 

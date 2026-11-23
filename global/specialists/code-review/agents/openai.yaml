@@ -1,0 +1,6 @@
+interface:
+  display_name: "审查代码与需求"
+  short_description: "以固定比较范围分别审查规范与需求，检查实现、测试盲区和越界变更"
+  default_prompt: "Use $code-review to review this change against its requirements and repository standards, reusing valid runtime evidence."
+policy:
+  allow_implicit_invocation: true

@@ -78,7 +78,8 @@ skill、元数据或发布行为变更还应运行：
 ./tests/publish-skills-test.sh
 ./tests/formal-html-docs-test.sh
 PYTHONDONTWRITEBYTECODE=1 python3 tests/verification-flow-test.py
+PYTHONDONTWRITEBYTECODE=1 python3 tests/workflow-contract-test.py
 bash -n scripts/publish-skills.sh scripts/install-links.sh \
-  scripts/sync-global-platforms.sh scripts/doctor.sh tests/publish-skills-test.sh \
+  scripts/sync-global-platforms.sh scripts/doctor.sh scripts/check-workflow.sh tests/publish-skills-test.sh \
   tests/formal-html-docs-test.sh
 ```

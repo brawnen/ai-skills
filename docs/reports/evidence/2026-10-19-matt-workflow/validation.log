@@ -1,0 +1,126 @@
+OK   AGENTS.md
+OK   README.md
+OK   config/skills.tsv
+OK   config/publish-targets.tsv
+OK   rules/AGENTS.md
+OK   global/specialists/scan-architecture/SKILL.md
+OK   global/specialists/review-db/SKILL.md
+OK   global/specialists/model/SKILL.md
+OK   global/specialists/model/references/context-format.md
+OK   global/specialists/model/references/adr-format.md
+OK   global/specialists/to-requirement/SKILL.md
+OK   global/specialists/debug/SKILL.md
+OK   global/specialists/tdd/SKILL.md
+OK   global/specialists/assess-venture/SKILL.md
+OK   global/specialists/assess-venture/references/evidence-and-market-research.md
+OK   global/specialists/assess-venture/references/decision-models-and-deliverables.md
+OK   global/specialists/dev/SKILL.md
+OK   global/specialists/dev/agents/openai.yaml
+OK   global/specialists/to-spec/SKILL.md
+OK   global/specialists/to-spec/agents/openai.yaml
+OK   global/specialists/verify-change/SKILL.md
+OK   global/specialists/verify-change/agents/openai.yaml
+OK   global/specialists/setup-verification/SKILL.md
+OK   global/specialists/setup-verification/agents/openai.yaml
+OK   docs/delivery-artifacts-spec.md
+OK   docs/workflow-protocols/requirements.md
+OK   docs/workflow-protocols/spec.md
+OK   docs/workflow-protocols/tickets.md
+OK   docs/workflow-protocols/implementation.md
+OK   docs/workflow-protocols/review.md
+OK   docs/workflow-protocols/pr.md
+OK   docs/workflow-protocols/retro.md
+OK   docs/workflow-protocols/parallel-implementation.md
+OK   docs/workflow-protocols/prototype.md
+OK   docs/workflow-protocols/architecture-design.md
+OK   docs/workflow-protocols/cross-boundary-design.md
+OK   docs/workflow-protocols/authoring.md
+OK   docs/workflow-protocols/UPSTREAM.md
+OK   docs/workflow-protocols/LICENSE.mattpocock
+OK   scripts/check-task-graph.py
+OK   scripts/check-workflow.sh
+OK   docs/verification.md
+OK   vendor/mattpocock.snapshot.json
+OK   vendor/mattpocock/LICENSE
+OK   tests/workflow-contract-test.py
+OK   global/helpers/to-html/SKILL.md
+OK   global/helpers/to-html/references/document-types.md
+OK   global/helpers/to-html/references/flow-diagrams.md
+OK   global/helpers/to-html/references/template-routing.md
+OK   global/helpers/to-html/assets/formal-document-shell.html
+OK   global/helpers/to-html/assets/templates/decision-brief.html
+OK   project/specialists/design/SKILL.md
+OK   project/specialists/design/agents/openai.yaml
+OK   project/specialists/design/references/capability-routing.md
+OK   project/specialists/design/references/craft-principles.md
+OK   project/specialists/design/references/platform-checks.md
+OK   project/specialists/design/references/review-rubric.md
+OK   project/specialists/design/assets/DESIGN.template.md
+OK   vendor/project-skills/ui-ux-pro-max/SKILL.md
+OK   vendor/project-skills/ui-ux-pro-max/agents/openai.yaml
+OK   vendor/project-skills/ui-ux-pro-max/UPSTREAM.md
+OK   vendor/project-skills/ui-ux-pro-max/LICENSE
+OK   vendor/project-skills/impeccable/SKILL.md
+OK   vendor/project-skills/impeccable/agents/openai.yaml
+OK   vendor/project-skills/impeccable/UPSTREAM.md
+OK   vendor/project-skills/impeccable/LICENSE
+OK   vendor/superpowers/README.md
+OK   vendor/gstack/README.md
+OK   adapters/gemini/commands/fix-safe.toml
+OK   adapters/gemini/commands/review-ready.toml
+OK   adapters/gemini/commands/db-check.toml
+OK   adapters/gemini/commands/legacy-fix.toml
+OK   scripts/install-links.sh
+OK   scripts/publish-skills.sh
+OK   scripts/sync-global-platforms.sh
+OK   scripts/doctor.sh
+OK   tests/publish-skills-test.sh
+OK   tests/formal-html-docs-test.sh
+OK   tests/verification-flow-test.py
+OK   global/helpers/to-html/agents/openai.yaml
+OK   global/specialists/assess-venture/agents/openai.yaml
+OK   global/specialists/code-review/agents/openai.yaml
+OK   global/specialists/debug/agents/openai.yaml
+OK   global/specialists/dev/agents/openai.yaml
+OK   global/specialists/implement-spec/agents/openai.yaml
+OK   global/specialists/model/agents/openai.yaml
+OK   global/specialists/prototype/agents/openai.yaml
+OK   global/specialists/retro/agents/openai.yaml
+OK   global/specialists/review-db/agents/openai.yaml
+OK   global/specialists/scan-architecture/agents/openai.yaml
+OK   global/specialists/setup-verification/agents/openai.yaml
+OK   global/specialists/tdd/agents/openai.yaml
+OK   global/specialists/to-requirement/agents/openai.yaml
+OK   global/specialists/to-spec/agents/openai.yaml
+OK   global/specialists/to-tickets/agents/openai.yaml
+OK   global/specialists/verify-change/agents/openai.yaml
+OK   project/specialists/design/agents/openai.yaml
+OK   vendor/global-skills/show-me/agents/openai.yaml
+OK   vendor/project-skills/impeccable/agents/openai.yaml
+OK   vendor/project-skills/ui-ux-pro-max/agents/openai.yaml
+结构检查通过。
+publish-skills tests passed
+to-html tests passed
+test_installed_resources_resolve_to_authoritative_files (__main__.DistributionTests.test_installed_resources_resolve_to_authoritative_files) ... ok
+test_reference_snapshot_preserves_all_original_files (__main__.DistributionTests.test_reference_snapshot_preserves_all_original_files) ... ok
+test_cli_reports_frontier_and_fails_invalid_graph (__main__.TaskGraphTests.test_cli_reports_frontier_and_fails_invalid_graph) ... ok
+test_frontier_updates_only_after_actual_blockers_done (__main__.TaskGraphTests.test_frontier_updates_only_after_actual_blockers_done) ... ok
+test_rejects_invalid_edges_cycles_and_premature_completion (__main__.TaskGraphTests.test_rejects_invalid_edges_cycles_and_premature_completion) ... ok
+test_conflict_preserves_unmerged_work_and_blocks_downstream (__main__.WorktreeIntegrationTests.test_conflict_preserves_unmerged_work_and_blocks_downstream) ... ok
+test_two_ready_tasks_then_dependent_task_integrate_and_verify (__main__.WorktreeIntegrationTests.test_two_ready_tasks_then_dependent_task_integrate_and_verify) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.800s
+
+OK
+test_doctor_rejects_wrong_artifact (__main__.VerificationFlowTests.test_doctor_rejects_wrong_artifact) ... ok
+test_environment_failure_is_not_successful_negative_proof (__main__.VerificationFlowTests.test_environment_failure_is_not_successful_negative_proof) ... ok
+test_existing_evidence_is_not_overwritten (__main__.VerificationFlowTests.test_existing_evidence_is_not_overwritten) ... ok
+test_isolated_mutation_detects_target_defect_and_preserves_source (__main__.VerificationFlowTests.test_isolated_mutation_detects_target_defect_and_preserves_source) ... ok
+test_parallel_runs_are_isolated (__main__.VerificationFlowTests.test_parallel_runs_are_isolated) ... ok
+test_real_normal_and_rejection_paths (__main__.VerificationFlowTests.test_real_normal_and_rejection_paths) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.929s
+
+OK

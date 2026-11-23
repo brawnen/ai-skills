@@ -1,0 +1,6 @@
+interface:
+  display_name: "项目静态门禁"
+  short_description: "按项目类型建立静态门禁底座，并按第二次原则将重复纠偏沉淀为带测试的自定义规则"
+  default_prompt: "Use $setup-guardrails to audit or initialize static lint guardrails for this project, or encode a recurring correction into a tested rule."
+policy:
+  allow_implicit_invocation: true

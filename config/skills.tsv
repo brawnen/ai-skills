@@ -1,6 +1,7 @@
 # name|scope|source|bundles|status|dependencies
 decision-clarification|global|-|-|retired|-
-to-decision|global|global/specialists/to-decision|core|active|-
+to-decision|global|-|-|retired|-
+to-requirement|global|global/specialists/to-requirement|core|active|-
 systematic-debugging|global|-|-|retired|-
 debug|global|global/specialists/debug|core|active|-
 test-first-development|global|-|-|retired|-
@@ -11,7 +12,7 @@ venture-feasibility|global|-|-|retired|-
 assess-venture|global|global/specialists/assess-venture|strategy|active|-
 architecture-friction-scan|global|-|-|retired|-
 scan-architecture|global|global/specialists/scan-architecture|architecture|active|-
-review-cross-stack-change|global|global/specialists/review-cross-stack-change|architecture|active|-
+review-cross-stack-change|global|-|-|retired|-
 domain-modeling|global|-|-|retired|-
 model|global|global/specialists/model|architecture|active|-
 codegraph-assisted-navigation|global|-|-|retired|-
@@ -24,11 +25,13 @@ to-spec|global|global/specialists/to-spec|flow|active|-
 verify-change|global|global/specialists/verify-change|flow|active|-
 verification-harness|global|-|-|retired|-
 setup-verification|global|global/specialists/setup-verification|flow|active|-
+setup-guardrails|global|global/specialists/setup-guardrails|flow|active|-
 design-product-ui|project|-|-|retired|-
 design|project|project/specialists/design|ui|active|ui-ux-pro-max,impeccable
 ui-ux-pro-max|project|vendor/project-skills/ui-ux-pro-max|ui|active|-
 impeccable|project|vendor/project-skills/impeccable|ui|active|-
-code-review|global|-|-|retired|-
+code-review|global|global/specialists/code-review|flow|active|-
+interrogate|global|global/specialists/interrogate|flow|active|-
 code-evidence-docs|global|-|-|retired|-
 doc-converter|global|-|-|retired|-
 frontend-project-flow|global|-|-|retired|-
@@ -44,3 +47,9 @@ task-todolist-execution|global|-|-|retired|-
 validation-required|global|-|-|retired|-
 verification-before-completion|global|-|-|retired|-
 show-me|global|vendor/global-skills/show-me|trial|active|-
+to-tickets|global|global/specialists/to-tickets|flow|active|-
+retro|global|global/specialists/retro|flow|active|-
+implement-spec|global|global/specialists/implement-spec|flow-parallel|active|-
+prototype|global|global/specialists/prototype|flow-explore|active|-
+reverse-engineer-anything|global|vendor/global-skills/reverse-engineer-anything|rea|active|-
+api-contract|global|global/specialists/api-contract|architecture|active|-

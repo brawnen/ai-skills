@@ -1,0 +1,6 @@
+interface:
+  display_name: "复盘开发环境"
+  short_description: "从真实会话和运行证据提炼环境改进，优先修复确定性检查并精简指令"
+  default_prompt: "Use $retro to inspect this coding session and propose evidence-backed improvements to the agent environment."
+policy:
+  allow_implicit_invocation: false

@@ -103,4 +103,4 @@ description: 适用于用户明确要求只读架构体检、维护性分析或�
 - 需要把扫描结果落正式 HTML 报告：配合 `to-html`。
 - 需要把候选转成 spec 或进入实现：交回宿主 Agent 原生工作流。
 - 来源于生产故障：先使用 `debug` 控制仍在扩大的影响并验证根因，再谈架构候选。
-- 术语或 bounded context 本身混乱：使用 `model`；具体跨栈变更实施前审查使用 `review-cross-stack-change`。
+- 术语或 bounded context 本身混乱：使用 `model`；具体跨栈方案风险按需读取 [跨边界设计参考](references/cross-boundary-design.md)。

@@ -1,0 +1,6 @@
+interface:
+  display_name: "前后端 API 契约"
+  short_description: "复用响应、错误、数据和版本兼容约定，按项目差异收敛 API 契约"
+  default_prompt: "使用 $api-contract 为当前项目定义前后端 API 契约，沿用默认规范，只收敛与现有项目有冲突的部分。"
+policy:
+  allow_implicit_invocation: true

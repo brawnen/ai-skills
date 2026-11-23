@@ -1,6 +1,6 @@
-# CONTEXT 格式
+# 领域词汇表格式
 
-`CONTEXT.md` 只记录领域语言和边界，不记录框架、数据库表、部署方式、任务计划或临时实现细节。
+沿用项目现有 `CONTEXT.md` 或 `GLOSSARY.md`，新项目推荐后者；只记录领域语言和边界，不记录框架、数据库表、部署方式、任务计划或临时实现细节。
 
 ## 推荐结构
 
@@ -29,7 +29,7 @@
 
 ## 多上下文
 
-存在多个 bounded context 时，在根目录维护轻量 `CONTEXT-MAP.md`：
+存在多个 bounded context 时，沿用项目映射约定，新项目在约定位置维护轻量 `GLOSSARY-MAP.md`：
 
 ```markdown
 # Context Map

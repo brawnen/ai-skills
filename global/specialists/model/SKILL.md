@@ -1,6 +1,6 @@
 ---
 name: model
-description: 适用于用户明确要求建立或收敛领域模型、统一业务术语和 ubiquitous language，或身份、状态、生命周期、事件语义及 bounded context 的歧义已经影响接口或数据设计；通过具体场景和代码事实澄清概念，并按需维护 CONTEXT.md、CONTEXT-MAP.md 或少量 ADR。普通需求澄清、仅阅读既有术语、简单 CRUD 或实现细节讨论不触发。
+description: 适用于用户明确要求建立或收敛领域模型、统一业务术语和 ubiquitous language，或身份、状态、生命周期、事件语义及 bounded context 的歧义已经影响接口或数据设计；通过具体场景和代码事实澄清概念，并按项目约定维护 GLOSSARY/CONTEXT 词汇表或少量 ADR。普通需求澄清、仅阅读既有术语、简单 CRUD 或实现细节讨论不触发。
 ---
 
 # Domain Modeling
@@ -11,7 +11,7 @@ description: 适用于用户明确要求建立或收敛领域模型、统一业�
 
 ## 工作流
 
-1. 读取现有 `CONTEXT.md`、`CONTEXT-MAP.md`、相关 ADR、接口、schema、事件和核心代码；没有这些文件时不要提前创建空模板。
+1. 读取项目已有 `GLOSSARY.md`/`GLOSSARY-MAP.md` 或 `CONTEXT.md`/`CONTEXT-MAP.md`、相关 ADR、接口、schema、事件和核心代码；没有这些文件时不要提前创建空模板。
 2. 列出当前问题涉及的名词、角色、身份、值对象、状态、命令和事件，标记同义、重载或冲突用法。
 3. 对每个模糊词提出精确候选定义，例如区分 User、Account、Customer，或 Cancel、Close、Disable、Delete。
 4. 用具体场景攻击定义：部分成功、重复操作、跨租户、离线、退款、撤销、过期、重试、并发和历史数据。
@@ -21,8 +21,8 @@ description: 适用于用户明确要求建立或收敛领域模型、统一业�
 
 ## 文档落点
 
-- 单一上下文：在仓库根或项目约定位置维护 `CONTEXT.md`。
-- 多个 bounded context：使用 `CONTEXT-MAP.md` 指向各上下文自己的 `CONTEXT.md`；系统级 ADR 放公共 `docs/adr/`，局部 ADR 跟随上下文。
+- 单一上下文：沿用已有领域文档；新项目推荐 `GLOSSARY.md`，已有 `CONTEXT.md` 不强制改名，也不新增同义副本。
+- 多个 bounded context：沿用已有映射；新项目推荐 `GLOSSARY-MAP.md` 指向各上下文词汇表；系统级 ADR 放公共 `docs/adr/`，局部 ADR 跟随上下文。
 - 创建或更新词汇表时完整读取 [context-format.md](references/context-format.md)，保持实现无关。
 - 只有决定同时满足“难回退、缺少上下文会令人意外、存在真实取舍”三个条件时，才完整读取 [adr-format.md](references/adr-format.md) 并建议 ADR。
 
@@ -60,12 +60,12 @@ description: 适用于用户明确要求建立或收敛领域模型、统一业�
 - ...
 
 ## 建议文档动作
-- 无 / 更新 CONTEXT.md / 更新 CONTEXT-MAP.md / 建议 ADR
+- 无 / 更新既有词汇表 / 更新上下文映射 / 建议 ADR
 ```
 
 ## 协作边界
 
-- 目标、范围和验收仍模糊时，使用 `to-decision`；领域建模只负责概念语义。
-- 跨客户端、服务和数据库的技术方案形成后，使用 `review-cross-stack-change` 审查契约与失败传播。
+- 目标、范围和验收仍模糊时，使用 `to-requirement`；领域建模只负责概念语义。
+- 跨客户端、服务和数据库的技术方案形成后，按需读取 [跨边界设计参考](references/cross-boundary-design.md)。
 - 现有代码模块深度和局部性体检使用 `scan-architecture`。
 - 用户只要求分析时不写文档；用户要求建立或更新领域模型时，文档改动仍遵守项目作用域和现有约定。

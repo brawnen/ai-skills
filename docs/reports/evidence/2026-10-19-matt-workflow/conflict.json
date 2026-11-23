@@ -1,0 +1,8 @@
+{
+  "merge_returncode": 1,
+  "status": "UU shared.txt\n",
+  "conflict": "diff --cc shared.txt\nindex e39f4f9,e76420e..0000000\n--- a/shared.txt\n+++ b/shared.txt\n@@@ -1,1 -1,1 +1,5 @@@\n++<<<<<<< HEAD\n +left change\n++=======\n+ right change\n++>>>>>>> right\n",
+  "unmerged_commit": "0dbfce58ef6e0c89692ac341adf66dc71a47e98e",
+  "downstream_ready": [],
+  "task_work_preserved_before_cleanup": true
+}

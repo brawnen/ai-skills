@@ -1,0 +1,6 @@
+interface:
+  display_name: "实施整份规格"
+  short_description: "按任务图推进整份规格，隔离工作区并验证最终集成版本而非汇总绿灯"
+  default_prompt: "Use $implement-spec to deliver this specification from its task graph with authorized integration and verifiable evidence."
+policy:
+  allow_implicit_invocation: false

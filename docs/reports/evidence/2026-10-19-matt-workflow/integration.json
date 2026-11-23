@@ -1,0 +1,22 @@
+{
+  "scope": "deterministic Git worktree exercise; no model workers",
+  "frontiers": [
+    [
+      "A",
+      "B"
+    ],
+    [
+      "B"
+    ],
+    [
+      "C"
+    ],
+    []
+  ],
+  "base": "dddd0ce64230c888dfba61c0a33037011689a5a5",
+  "head": "355a3ab87bedd3ed8d7dc239b875b85d3611b498",
+  "log": "* 355a3ab C integrated checkout behavior\n*   b96fdf4 Merge branch 'integration' into shipping\n|\\  \n| * b5e0afb A price behavior\n* | 6936a99 B shipping behavior\n|/  \n* dddd0ce fixture baseline\n",
+  "patch": "diff --git a/checkout.py b/checkout.py\nnew file mode 100644\nindex 0000000..2990518\n--- /dev/null\n+++ b/checkout.py\n@@ -0,0 +1,4 @@\n+from price import price\n+from shipping import shipping\n+def total(quantity, unit):\n+    return price(quantity,unit)+shipping()\ndiff --git a/price.py b/price.py\nnew file mode 100644\nindex 0000000..03dc83e\n--- /dev/null\n+++ b/price.py\n@@ -0,0 +1,2 @@\n+def price(quantity, unit):\n+    return quantity * unit\ndiff --git a/shipping.py b/shipping.py\nnew file mode 100644\nindex 0000000..1b9e71e\n--- /dev/null\n+++ b/shipping.py\n@@ -0,0 +1,2 @@\n+def shipping():\n+    return 7\ndiff --git a/test_checkout.py b/test_checkout.py\nnew file mode 100644\nindex 0000000..25abc24\n--- /dev/null\n+++ b/test_checkout.py\n@@ -0,0 +1,4 @@\n+import unittest\n+from checkout import total\n+class Checkout(unittest.TestCase):\n+    def test_total(self): self.assertEqual(total(3,14),49)\ndiff --git a/test_price.py b/test_price.py\nnew file mode 100644\nindex 0000000..77ce4d8\n--- /dev/null\n+++ b/test_price.py\n@@ -0,0 +1,4 @@\n+import unittest\n+from price import price\n+class Price(unittest.TestCase):\n+    def test_price(self): self.assertEqual(price(3,14),42)\ndiff --git a/test_shipping.py b/test_shipping.py\nnew file mode 100644\nindex 0000000..eeb665b\n--- /dev/null\n+++ b/test_shipping.py\n@@ -0,0 +1,4 @@\n+import unittest\n+from shipping import shipping\n+class Shipping(unittest.TestCase):\n+    def test_shipping(self): self.assertEqual(shipping(),7)\n",
+  "final_tests": "test_total (test_checkout.Checkout.test_total) ... ok\ntest_price (test_price.Price.test_price) ... ok\ntest_shipping (test_shipping.Shipping.test_shipping) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.000s\n\nOK\n",
+  "owned_worktrees_removed": true
+}

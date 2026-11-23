@@ -71,7 +71,7 @@ mkdir -p "${global_target}"
 ln -s "${ROOT_DIR}/global/specialists/requirements-clarification" \
   "${global_target}/requirements-clarification"
 "${PUBLISH_SCRIPT}" global --target "${global_target}" --bundles core >/dev/null
-for skill_name in to-decision debug tdd review-db; do
+for skill_name in to-requirement debug tdd review-db; do
   [[ -L "${global_target}/${skill_name}" ]] || fail "core 缺少 ${skill_name} 符号链接"
 done
 [[ ! -L "${global_target}/requirements-clarification" ]] || fail "未清理已退役的 requirements-clarification"
@@ -125,7 +125,7 @@ touch "${unmanaged_project}/.agents/skills/verify-my-app/SKILL.md"
 # 测试 flow bundle 正确发布与检查
 flow_target="${test_root}/flow-skills"
 "${PUBLISH_SCRIPT}" global --target "${flow_target}" --bundles flow >/dev/null
-for skill_name in dev to-spec verify-change setup-verification; do
+for skill_name in dev to-spec verify-change setup-verification setup-guardrails interrogate; do
   [[ -L "${flow_target}/${skill_name}" ]] || fail "flow bundle 缺少 ${skill_name} 符号链接"
   [[ "$(resolve_dir "${flow_target}/${skill_name}")" == "$(resolve_dir "${ROOT_DIR}/global/specialists/${skill_name}")" ]] || \
     fail "${skill_name} 符号链接未指向规范源码"
@@ -139,7 +139,7 @@ ln -s "${ROOT_DIR}/global/specialists/decision-clarification" "${rename_target}/
 ln -s "${ROOT_DIR}/global/helpers/formal-html-docs" "${rename_target}/formal-html-docs"
 "${PUBLISH_SCRIPT}" global --target "${rename_target}" --bundles core,architecture,docs,flow >/dev/null
 [[ ! -L "${rename_target}/decision-clarification" && ! -L "${rename_target}/formal-html-docs" ]] || fail "全局改名未清理旧链接"
-[[ -L "${rename_target}/to-decision" && -L "${rename_target}/to-html" ]] || fail "全局改名未发布新入口"
+[[ -L "${rename_target}/to-requirement" && -L "${rename_target}/to-html" ]] || fail "全局改名未发布新入口"
 "${PUBLISH_SCRIPT}" global --check --target "${rename_target}" --bundles core,architecture,docs,flow >/dev/null
 
 # 补齐其余建议名称：四个失效旧链接必须清理，strategy 仍按选择发布。
@@ -195,5 +195,68 @@ if "${PUBLISH_SCRIPT}" project --project "${partial_project}" --skills design >/
 fi
 [[ -L "${partial_project}/.agents/skills/design-product-ui" ]] || fail "冲突前清理了旧入口"
 [[ ! -L "${partial_project}/.agents/skills/impeccable" ]] || fail "冲突留下了部分依赖"
+
+# 当前迁移：两个失效受管入口被清理，外部同名入口仍受保护。
+workflow_target="${test_root}/workflow-migration"
+mkdir -p "${workflow_target}"
+for old_name in to-decision review-cross-stack-change; do
+  ln -s "${ROOT_DIR}/global/specialists/${old_name}" "${workflow_target}/${old_name}"
+done
+"${PUBLISH_SCRIPT}" global --target "${workflow_target}" --bundles core,architecture,flow >/dev/null
+for old_name in to-decision review-cross-stack-change; do
+  [[ ! -L "${workflow_target}/${old_name}" ]] || fail "流程迁移未清理 ${old_name}"
+done
+for new_name in to-requirement to-tickets code-review retro; do
+  [[ -L "${workflow_target}/${new_name}" ]] || fail "流程迁移未发布 ${new_name}"
+done
+"${PUBLISH_SCRIPT}" global --check --target "${workflow_target}" --bundles core,architecture,flow >/dev/null
+
+for foreign_kind in link directory; do
+  preserved="${test_root}/workflow-foreign-${foreign_kind}"
+  mkdir -p "${preserved}"
+  for old_name in to-decision review-cross-stack-change; do
+    if [[ "${foreign_kind}" == link ]]; then
+      ln -s "${test_root}/outside-${old_name}" "${preserved}/${old_name}"
+    else
+      mkdir -p "${preserved}/${old_name}"
+      touch "${preserved}/${old_name}/keep"
+    fi
+  done
+  "${PUBLISH_SCRIPT}" global --target "${preserved}" --bundles core,architecture,flow >/dev/null
+  for old_name in to-decision review-cross-stack-change; do
+    if [[ "${foreign_kind}" == link ]]; then
+      [[ "$(readlink "${preserved}/${old_name}")" == "${test_root}/outside-${old_name}" ]] || fail "删除外部旧入口"
+    else
+      [[ -f "${preserved}/${old_name}/keep" ]] || fail "删除实体旧入口"
+    fi
+  done
+done
+
+workflow_conflict="${test_root}/workflow-conflict"
+mkdir -p "${workflow_conflict}/to-requirement"
+ln -s "${ROOT_DIR}/global/specialists/to-decision" "${workflow_conflict}/to-decision"
+ln -s "${ROOT_DIR}/global/specialists/review-cross-stack-change" "${workflow_conflict}/review-cross-stack-change"
+if "${PUBLISH_SCRIPT}" global --target "${workflow_conflict}" --bundles core,architecture,flow >/dev/null 2>&1; then
+  fail "新流程名称冲突未被拒绝"
+fi
+[[ -L "${workflow_conflict}/to-decision" && -L "${workflow_conflict}/review-cross-stack-change" ]] || fail "冲突时提前清理旧入口"
+[[ ! -e "${workflow_conflict}/to-tickets" ]] || fail "冲突时留下部分流程发布"
+
+# 校验全局规则同步完整性（含 Codex 浏览器操作与直白解释约定）。
+platform_rule_root="${test_root}/platform-rules"
+CODEX_SKILLS_DIR="${platform_rule_root}/codex-skills" \
+CODEX_RULE_TARGET="${platform_rule_root}/codex-AGENTS.md" \
+ANTIGRAVITY_SKILLS_DIR="${platform_rule_root}/ag-skills" \
+GEMINI_RULE_TARGET="${platform_rule_root}/GEMINI.md" \
+  "${PUBLISH_SCRIPT}" global --platforms codex,antigravity --bundles core >/dev/null
+grep -Fq "## 浏览器操作" "${platform_rule_root}/codex-AGENTS.md" || fail "codex 规则缺少浏览器操作段"
+grep -Fq "先用直白的中文说清现象、原因和影响" "${platform_rule_root}/codex-AGENTS.md" || fail "codex 规则缺少技术解释约定"
+cmp -s "${ROOT_DIR}/rules/AGENTS.md" "${platform_rule_root}/codex-AGENTS.md" || fail "codex 规则未与事实源一致"
+cmp -s "${ROOT_DIR}/rules/AGENTS.md" "${platform_rule_root}/GEMINI.md" || fail "antigravity 规则未与事实源一致"
+CODEX_SKILLS_DIR="${platform_rule_root}/codex-skills" \
+CODEX_RULE_TARGET="${platform_rule_root}/codex-AGENTS.md" \
+ANTIGRAVITY_SKILLS_DIR="${platform_rule_root}/ag-skills" \
+GEMINI_RULE_TARGET="${platform_rule_root}/GEMINI.md" \
+  "${PUBLISH_SCRIPT}" global --check --platforms codex,antigravity --bundles core >/dev/null
 
 echo "publish-skills tests passed"

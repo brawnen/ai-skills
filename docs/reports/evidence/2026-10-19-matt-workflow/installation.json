@@ -1,0 +1,91 @@
+[
+  {
+    "platform": "codex",
+    "bundles": "core,architecture,docs,flow,trial",
+    "managed_skills": [
+      "code-review",
+      "debug",
+      "dev",
+      "model",
+      "retro",
+      "review-db",
+      "scan-architecture",
+      "setup-verification",
+      "show-me",
+      "tdd",
+      "to-html",
+      "to-requirement",
+      "to-spec",
+      "to-tickets",
+      "verify-change"
+    ],
+    "check": "PASS",
+    "output": "verified to-requirement -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-requirement\nverified debug -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/debug\nverified tdd -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/tdd\nverified review-db -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/review-db\nverified scan-architecture -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/scan-architecture\nverified model -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/model\nverified to-html -> /Users/lijianfeng/code/pp/ai-skills/global/helpers/to-html\nverified dev -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/dev\nverified to-spec -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-spec\nverified verify-change -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/verify-change\nverified setup-verification -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/setup-verification\nverified code-review -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/code-review\nverified show-me -> /Users/lijianfeng/code/pp/ai-skills/vendor/global-skills/show-me\nverified to-tickets -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-tickets\nverified retro -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/retro\nverified rule /Users/lijianfeng/.codex/AGENTS.md\n全局发布完成。平台: codex; bundles: core,architecture,docs,flow,trial\n"
+  },
+  {
+    "platform": "claude",
+    "bundles": "core,architecture,docs,flow",
+    "managed_skills": [
+      "code-review",
+      "debug",
+      "dev",
+      "model",
+      "retro",
+      "review-db",
+      "scan-architecture",
+      "setup-verification",
+      "tdd",
+      "to-html",
+      "to-requirement",
+      "to-spec",
+      "to-tickets",
+      "verify-change"
+    ],
+    "check": "PASS",
+    "output": "verified to-requirement -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-requirement\nverified debug -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/debug\nverified tdd -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/tdd\nverified review-db -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/review-db\nverified scan-architecture -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/scan-architecture\nverified model -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/model\nverified to-html -> /Users/lijianfeng/code/pp/ai-skills/global/helpers/to-html\nverified dev -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/dev\nverified to-spec -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-spec\nverified verify-change -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/verify-change\nverified setup-verification -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/setup-verification\nverified code-review -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/code-review\nverified to-tickets -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-tickets\nverified retro -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/retro\nverified rule /Users/lijianfeng/.claude/CLAUDE.md\n全局发布完成。平台: claude; bundles: core,architecture,docs,flow\n"
+  },
+  {
+    "platform": "antigravity",
+    "bundles": "core,architecture,docs,flow",
+    "managed_skills": [
+      "code-review",
+      "debug",
+      "dev",
+      "model",
+      "retro",
+      "review-db",
+      "scan-architecture",
+      "setup-verification",
+      "tdd",
+      "to-html",
+      "to-requirement",
+      "to-spec",
+      "to-tickets",
+      "verify-change"
+    ],
+    "check": "PASS",
+    "output": "verified to-requirement -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-requirement\nverified debug -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/debug\nverified tdd -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/tdd\nverified review-db -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/review-db\nverified scan-architecture -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/scan-architecture\nverified model -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/model\nverified to-html -> /Users/lijianfeng/code/pp/ai-skills/global/helpers/to-html\nverified dev -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/dev\nverified to-spec -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-spec\nverified verify-change -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/verify-change\nverified setup-verification -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/setup-verification\nverified code-review -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/code-review\nverified to-tickets -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-tickets\nverified retro -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/retro\nverified rule /Users/lijianfeng/.gemini/GEMINI.md\n全局发布完成。平台: antigravity; bundles: core,architecture,docs,flow\n"
+  },
+  {
+    "platform": "gemini",
+    "bundles": "core,architecture,docs,flow",
+    "managed_skills": [
+      "code-review",
+      "debug",
+      "dev",
+      "model",
+      "retro",
+      "review-db",
+      "scan-architecture",
+      "setup-verification",
+      "tdd",
+      "to-html",
+      "to-requirement",
+      "to-spec",
+      "to-tickets",
+      "verify-change"
+    ],
+    "check": "PASS",
+    "output": "verified to-requirement -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-requirement\nverified debug -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/debug\nverified tdd -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/tdd\nverified review-db -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/review-db\nverified scan-architecture -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/scan-architecture\nverified model -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/model\nverified to-html -> /Users/lijianfeng/code/pp/ai-skills/global/helpers/to-html\nverified dev -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/dev\nverified to-spec -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-spec\nverified verify-change -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/verify-change\nverified setup-verification -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/setup-verification\nverified code-review -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/code-review\nverified to-tickets -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/to-tickets\nverified retro -> /Users/lijianfeng/code/pp/ai-skills/global/specialists/retro\nverified rule /Users/lijianfeng/.gemini/GEMINI.md\n全局发布完成。平台: gemini; bundles: core,architecture,docs,flow\n"
+  }
+]
