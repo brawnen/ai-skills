@@ -122,7 +122,18 @@
 
 - `<请填写项目特有禁区及原因；不要复制通用审美黑名单>`
 
-## 12. Decision Log
+## 12. Agent Prompt Guide（AI 编码速查卡）
+
+浓缩供后续编码会话快速加载的核心硬约束（10 行以内，全部写实值）：
+
+- **视觉基准与语域**：`<如：参考 Linear 清爽工作台基因 / Operate 模式>`
+- **核心色值角色**：`Canvas <...> | Surface <...> | Text <...> | Muted <...> | Primary Accent <...>`
+- **深度与圆角公式**：`<如：1px 低对比细边替代阴影；外卡片圆角 12px = 内控件 6px + 内边距 6px>`
+- **排版与数字硬约束**：`<如：标题 text-wrap: balance；正文 14px/1.6；表格与金额强制 tabular-nums>`
+- **按钮与布局铁律**：`<如：单屏仅 1 个实心主色按钮；手机端主动作沉入底部 1/3 拇指区并使用 100dvh>`
+- **项目红线**：`<如：严禁渐变字、Emoji 充当图标、套娃卡片及未配空/错/加载状态的裸列表>`
+
+## 13. Decision Log
 
 | Date | Status | Decision | Reason | Evidence / source | Affected surfaces |
 | --- | --- | --- | --- | --- | --- |

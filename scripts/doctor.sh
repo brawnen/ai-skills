@@ -79,6 +79,7 @@ required_paths=(
   "global/specialists/x-ui/SKILL.md"
   "global/specialists/x-ui/agents/openai.yaml"
   "global/specialists/x-ui/references/discovery-and-prototyping.md"
+  "global/specialists/x-ui/references/brand-archetypes.md"
   "global/specialists/x-ui/references/capability-routing.md"
   "global/specialists/x-ui/references/craft-principles.md"
   "global/specialists/x-ui/references/platform-checks.md"
