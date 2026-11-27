@@ -18,7 +18,7 @@
 | --- | --- | --- |
 | **语言原生基础检查** | 格式、强类型检查、常见语言级 bug | Go: `gofmt` + `go vet` / `golangci-lint`<br>TS/JS: `oxlint` / `eslint` + `tsc --noEmit`<br>Python: `ruff` + `pyright`/`mypy`<br>Rust: `rustfmt --check` + `clippy`<br>Kotlin/Android: `ktlint` / `detekt` |
 | **跨语言自定义 AST 规则** | 禁用特定 API/裸控件、特定调用模式、禁止不安全参数等单文件 AST 规则 | 优先 `ast-grep`（单二进制，一套 YAML 规则 + 内置测试覆盖 20+ 语言） |
-| **强类型 / 跨文件架构检查** | 跨层 import 边界、接口实现约束、目录布局、生成物一致性、配置红线 | 语言原生测试或轻量校验脚本（如 Go `go/ast` 架构测试、TS ESLint boundary/dep-cruiser、Python 轻量结构脚本） |
+| **强类型 / 跨文件架构检查** | 跨层 import 边界、深模块根入口隐藏、目录布局、生成物一致性、配置红线 | 语言原生测试或轻量校验脚本（如 Go `go/ast` 架构测试、TS `dependency-cruiser` 见同目录 [ts-deep-modules.md](ts-deep-modules.md)、Python 轻量结构脚本） |
 
 选型原则：
 - 若仓库已有成熟的语言原生 linter 插件体系（如已有 ESLint flat config 或 Go `*_test.go` 架构测试），优先就近复用，不为了统一而强行引入多余二进制。

@@ -109,6 +109,7 @@ class DistributionTests(unittest.TestCase):
                 "to-decision", "review-cross-stack-change", "implement", "pr", "release",
                 "show-me", "prototype", "implement-spec", "verify-change",
                 "dev", "to-requirement", "to-spec", "to-tickets", "code-review", "to-html",
+                "x-tdd", "x-domain", "x-tasks", "x-retro",
             ]:
                 self.assertFalse((target / retired_or_protocol).exists(), retired_or_protocol)
                 self.assertFalse((target / retired_or_protocol).is_symlink(), retired_or_protocol)

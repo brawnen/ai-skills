@@ -71,7 +71,7 @@ density: comfortable
 - 架构摩擦扫描报告（`x-arch`）与重构候选评审；
 - 技术设计方案、实施规格（`x-spec`）与跨服务/数据库变更评估（`x-db`）；
 - 排障手册、生产发布可执行 Runbook（`release.md`）；
-- 线上故障或研发会话证据复盘报告（`x-debug` / `x-retro`）。
+- 线上故障或研发会话证据复盘报告（`x-debug` / `x-guard` 复盘模式）。
 
 默认组合：
 

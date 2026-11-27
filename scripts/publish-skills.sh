@@ -340,7 +340,7 @@ validate_rule_file() {
   require_file "${path}"
   [[ -s "${path}" ]] || die "规则文件为空: ${path}"
   local marker=""
-  for marker in "# User Preferences" "## 沟通" "## 专项 Skill 路由" "## 文档偏好"; do
+  for marker in "# User Preferences" "## 沟通与解释" "## 交付与安全红线" "## 工具与文档边界"; do
     grep -Fq "${marker}" "${path}" || die "规则文件缺少必要标记 '${marker}': ${path}"
   done
 }

@@ -1,6 +1,0 @@
-interface:
-  display_name: "X·任务拆解"
-  short_description: "将明确规格拆分为可独立领取的行为任务切片，标明真实阻塞边与验收入口"
-  default_prompt: "Use $x-tasks to turn this specification into independently verifiable tasks and real blocking edges."
-policy:
-  allow_implicit_invocation: false

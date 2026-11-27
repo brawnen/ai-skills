@@ -11,14 +11,14 @@ description: 仅在用户显式选择多阶段研发交付、恢复任务，或�
 
 按实际缺口读取阶段协议并串联专项能力：
 
-1. **需求与领域概念**：需求不清读 [需求澄清](references/requirements.md)（`x-req`）；业务术语/状态生命周期存在歧义时选用 `x-domain`。
+1. **需求、切口与领域术语**：需求不清、需压力测试最小价值切口或业务术语/状态生命周期存在歧义时，读 [需求澄清与领域建模](references/requirements.md)（`x-req`，按需维护 `GLOSSARY.md` 与 `ADR`）。
 2. **产品界面与看样定调（涉及 Web App / 手机 App / 后台页面时）**：凡涉及 0→1 新应用、新核心页面或界面改版且视觉方向未定，**在冻结技术规格与写前端业务代码前先进入 `x-ui`**——用非术语通俗问答与 2~3 套可视化首屏小样引导用户选定顺眼的方向，并将确认的页面结构、交互状态与设计系统（`DESIGN.md`）作为后续规格与接口设计的输入。纯后端/CLI 任务、已有明确设计稿或已有成熟规范内的简单微调直接跳过。
-3. **接口契约与技术规格**：前后端接口约定选用 `x-api`；技术与验收契约读 [规格](references/spec.md)（`x-spec`），将已敲定的页面字段、空/加载/错误/权限状态及跨端约束写入规格（局部交互技术可行性存疑时按需读 [原型实验](references/prototype.md)）。同会话无需独立交接时可附简短实施顺序直接实施。
-4. **任务与编码实施**：跨人/会话领取、依赖管理或并行时读 [任务](references/tickets.md)（`x-tasks`）；进入代码读 [单任务实施](references/implementation.md)，前端/客户端实现严格遵循 `x-ui` 已确认的视觉小样、`DESIGN.md` 与反 AI 塑料感底线，并在真实目标视口核对渲染效果；明确授权并行且宿主支持时读 [并行集成](references/parallel-implementation.md)。
-5. **运行验证与双轴审查**：运行验收读 [验证方法](references/verification.md) 并复用项目 `verify-<app>` 或可靠脚本（缺失底座时按需用 `x-verify`）；代码、需求与界面视觉还原审查读 [双轴审查](references/review.md)（`x-review`），交接说明读 [PR 协议](references/pr.md) 与 [产物契约](references/artifacts.md)。
-6. **CI、测试部署与生产发布**：代码合入、测试环境自动部署与 smoke、迁移先后顺序及人工生产发布 Runbook 准备，读取 [测试部署与生产发布](references/release.md)。重要构建结束后按需读 [复盘](references/retro.md)（`x-retro` → `x-guard`）。
+3. **接口契约与技术规格**：前后端接口约定选用 `x-api`；技术与验收契约读 [规格](references/spec.md)（`x-spec`），明确模块边界、候选测试缝得失对比及页面字段/空·加载·错误·权限状态（局部交互技术可行性存疑时按需读 [原型实验](references/prototype.md)）。同会话无需独立交接时可附简短实施顺序直接实施。
+4. **编码实施与并行交接**：进入代码读 [单任务实施](references/implementation.md)，前端/客户端严格遵循 `x-ui` 已确认视觉小样、`DESIGN.md` 与反 AI 塑料感底线；确需跨会话独立领取或维护阻塞任务图时读 [任务协议](references/tickets.md)（可用 `python3 <本入口>/scripts/check-task-graph.py <任务图.json>` 校验 ready frontier），明确授权并行且宿主支持时读 [并行集成](references/parallel-implementation.md)。
+5. **运行验证、三视口走查与双轴审查**：运行验收读 [验证方法](references/verification.md) 并复用项目 `verify-<app>` 或可靠脚本（缺失底座时按需用 `x-verify`；涉及前端界面时在宿主内置浏览器走通核心路径与目标视口检查，将实测缺陷固化为回归）；代码、需求与界面还原审查读 [双轴审查](references/review.md)（`x-review`），交接说明读 [PR 协议](references/pr.md) 与 [产物契约](references/artifacts.md)。
+6. **CI、文档同步、测试部署与生产发布**：对照 diff 原位同步已存在的权威项目文档，核验 CI、执行测试环境自动部署 smoke 及生成人工生产发布 Runbook，读取 [测试部署与生产发布](references/release.md)（需人工配置第三方后台密钥与 `.env` / GitHub Secrets 时按需读 [交互式配置向导](references/wizard-setup.md) 并复用 `<本入口>/scripts/wizard-template.sh`）。重要构建结束后按需调用 `x-guard`（`retro` / `encode` 模式，读 [复盘](references/retro.md)）沉淀工程防呆规则。
 
-只加载当前所需阶段；不自动启用 TDD、多代理或全量测试。跨边界风险、真实数据库变更、疑难故障分别选择相关参考、`x-db` 和 `x-debug`。
+只加载当前所需阶段；不自动启用 test-first、多代理或全量测试。跨边界风险、真实数据库变更、疑难故障分别选择相关参考、`x-db` 和 `x-debug`。
 
 代码合并遵循用户授权、项目分支策略和门禁；测试环境部署沿用既有权限并核对实际制品与 smoke，未运行项明确标注。生产部署、回滚和生产写入始终由人执行，agent 准备可执行发布包并做允许的只读观察。
 

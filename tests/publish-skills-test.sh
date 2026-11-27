@@ -28,13 +28,13 @@ trap 'rm -rf -- "${test_root}"' EXIT
 catalog_output="$("${PUBLISH_SCRIPT}" list)"
 grep -Fq 'x-ui' <<< "${catalog_output}" || fail "catalog 未列出全局 skill x-ui"
 
-# 1. 测试 core bundle（7 项局部增强工具）正确发布与退役清理
+# 1. 测试 core bundle（6 项局部增强工具）正确发布与退役清理
 global_target="${test_root}/global-skills"
 mkdir -p "${global_target}"
 ln -s "${ROOT_DIR}/global/specialists/requirements-clarification" \
   "${global_target}/requirements-clarification"
 "${PUBLISH_SCRIPT}" global --target "${global_target}" --bundles core >/dev/null
-for skill_name in x-debug x-db x-arch x-redteam x-biz x-html x-tdd; do
+for skill_name in x-debug x-db x-arch x-redteam x-biz x-html; do
   [[ -L "${global_target}/${skill_name}" ]] || fail "core 缺少 ${skill_name} 符号链接"
 done
 [[ ! -L "${global_target}/requirements-clarification" ]] || fail "未清理已退役的 requirements-clarification"
@@ -42,10 +42,10 @@ done
 [[ ! -e "${global_target}/ui-ux-pro-max" ]] || fail "ui-deps 意外混入纯 core"
 "${PUBLISH_SCRIPT}" global --check --target "${global_target}" --bundles core >/dev/null
 
-# 2. 测试 flow bundle（11 项研发全流程 + 自动展开 x-ui 的两个全局 UI 依赖闭包）
+# 2. 测试 flow bundle（8 项研发全流程主入口 + 自动展开 x-ui 的两个全局 UI 依赖闭包）
 flow_target="${test_root}/flow-skills"
 "${PUBLISH_SCRIPT}" global --target "${flow_target}" --bundles flow >/dev/null
-for skill_name in x-dev x-req x-domain x-api x-spec x-tasks x-review x-guard x-verify x-retro x-ui; do
+for skill_name in x-dev x-req x-api x-spec x-review x-guard x-verify x-ui; do
   [[ -L "${flow_target}/${skill_name}" ]] || fail "flow bundle 缺少 ${skill_name} 符号链接"
   [[ "$(resolve_dir "${flow_target}/${skill_name}")" == "$(resolve_dir "${ROOT_DIR}/global/specialists/${skill_name}")" ]] || \
     fail "${skill_name} 符号链接未指向规范源码"
@@ -98,7 +98,7 @@ addons_target="${test_root}/addons-skills"
 [[ "$(resolve_dir "${addons_target}/x-rea")" == "$(resolve_dir "${ROOT_DIR}/vendor/global-skills/x-rea")" ]] || fail "x-rea 链接未指向项目快照"
 "${PUBLISH_SCRIPT}" global --check --target "${addons_target}" --bundles core,flow,addons >/dev/null
 
-# 6. 全量旧全局名称与新退役项迁移：所有旧受管链接必须清理干净，全部 20 个新链接（18 x-* + 2 依赖）就位
+# 6. 全量旧全局名称与新退役项迁移：所有旧受管链接必须清理干净，全部 16 个新链接（14 x-* + 2 依赖）就位
 rename_target="${test_root}/rename-global"
 mkdir -p "${rename_target}"
 old_global_names=(
@@ -106,6 +106,7 @@ old_global_names=(
   setup-guardrails setup-verification retro verify-change implement-spec
   prototype debug review-db scan-architecture interrogate assess-venture
   tdd to-decision review-cross-stack-change
+  x-tdd x-domain x-tasks x-retro
 )
 for old_name in "${old_global_names[@]}"; do
   ln -s "${ROOT_DIR}/global/specialists/${old_name}" "${rename_target}/${old_name}"
@@ -118,8 +119,8 @@ ln -s "${ROOT_DIR}/vendor/global-skills/reverse-engineer-anything" "${rename_tar
 for old_name in "${old_global_names[@]}" to-html show-me reverse-engineer-anything; do
   [[ ! -L "${rename_target}/${old_name}" ]] || fail "全局改名未清理旧受管链接 ${old_name}"
 done
-for new_name in x-debug x-db x-arch x-redteam x-biz x-html x-tdd \
-                x-dev x-req x-domain x-api x-spec x-tasks x-review x-guard x-verify x-retro \
+for new_name in x-debug x-db x-arch x-redteam x-biz x-html \
+                x-dev x-req x-api x-spec x-review x-guard x-verify \
                 x-ui ui-ux-pro-max impeccable; do
   [[ -L "${rename_target}/${new_name}" ]] || fail "全局改名未发布新入口或依赖 ${new_name}"
 done
@@ -170,7 +171,8 @@ CODEX_RULE_TARGET="${platform_rule_root}/codex-AGENTS.md" \
 ANTIGRAVITY_SKILLS_DIR="${platform_rule_root}/ag-skills" \
 GEMINI_RULE_TARGET="${platform_rule_root}/GEMINI.md" \
   "${PUBLISH_SCRIPT}" global --platforms codex,antigravity --bundles core >/dev/null
-grep -Fq "## 浏览器操作" "${platform_rule_root}/codex-AGENTS.md" || fail "codex 规则缺少浏览器操作段"
+grep -Fq "## 工具与文档边界" "${platform_rule_root}/codex-AGENTS.md" || fail "codex 规则缺少工具与文档边界段"
+grep -Fq "内置的隔离/后台浏览器" "${platform_rule_root}/GEMINI.md" || fail "跨宿主通用浏览器边界未同步"
 grep -Fq "先用直白的中文说清现象、原因和影响" "${platform_rule_root}/codex-AGENTS.md" || fail "codex 规则缺少技术解释约定"
 cmp -s "${ROOT_DIR}/rules/AGENTS.md" "${platform_rule_root}/codex-AGENTS.md" || fail "codex 规则未与事实源一致"
 cmp -s "${ROOT_DIR}/rules/AGENTS.md" "${platform_rule_root}/GEMINI.md" || fail "antigravity 规则未与事实源一致"
