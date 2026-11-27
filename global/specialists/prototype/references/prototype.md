@@ -1,1 +1,0 @@
-../../../../docs/workflow-protocols/prototype.md

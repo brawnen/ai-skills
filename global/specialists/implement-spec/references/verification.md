@@ -1,1 +1,0 @@
-../../verify-change/SKILL.md

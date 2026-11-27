@@ -9,41 +9,52 @@ required_paths=(
   "config/skills.tsv"
   "config/publish-targets.tsv"
   "rules/AGENTS.md"
-  "global/specialists/scan-architecture/SKILL.md"
-  "global/specialists/review-db/SKILL.md"
-  "global/specialists/model/SKILL.md"
-  "global/specialists/model/references/context-format.md"
-  "global/specialists/model/references/adr-format.md"
-  "global/specialists/to-requirement/SKILL.md"
-  "global/specialists/debug/SKILL.md"
-  "global/specialists/debug/references/benchmark-checklist.md"
-  "global/specialists/tdd/SKILL.md"
-  "global/specialists/assess-venture/SKILL.md"
-  "global/specialists/assess-venture/references/evidence-and-market-research.md"
-  "global/specialists/assess-venture/references/decision-models-and-deliverables.md"
-  "global/specialists/dev/SKILL.md"
-  "global/specialists/dev/agents/openai.yaml"
-  "global/specialists/to-spec/SKILL.md"
-  "global/specialists/to-spec/agents/openai.yaml"
-  "global/specialists/verify-change/SKILL.md"
-  "global/specialists/verify-change/agents/openai.yaml"
-  "global/specialists/setup-verification/SKILL.md"
-  "global/specialists/setup-verification/agents/openai.yaml"
-  "global/specialists/setup-guardrails/SKILL.md"
-  "global/specialists/setup-guardrails/agents/openai.yaml"
-  "global/specialists/setup-guardrails/references/project-modes.md"
-  "global/specialists/setup-guardrails/references/rule-encoding.md"
-  "global/specialists/setup-guardrails/references/sql-guardrails.md"
-  "global/specialists/interrogate/SKILL.md"
-  "global/specialists/interrogate/agents/openai.yaml"
-  "global/specialists/interrogate/references/adversarial-protocol.md"
+  "global/specialists/x-arch/SKILL.md"
+  "global/specialists/x-arch/references/architecture-design.md"
+  "global/specialists/x-arch/references/cross-boundary-design.md"
+  "global/specialists/x-db/SKILL.md"
+  "global/specialists/x-db/references/online-ddl-pitfalls.md"
+  "global/specialists/x-domain/SKILL.md"
+  "global/specialists/x-domain/references/context-format.md"
+  "global/specialists/x-domain/references/adr-format.md"
+  "global/specialists/x-api/SKILL.md"
+  "global/specialists/x-api/references/api-conventions.md"
+  "global/specialists/x-req/SKILL.md"
+  "global/specialists/x-debug/SKILL.md"
+  "global/specialists/x-debug/references/benchmark-checklist.md"
+  "global/specialists/x-tdd/SKILL.md"
+  "global/specialists/x-biz/SKILL.md"
+  "global/specialists/x-biz/references/evidence-and-market-research.md"
+  "global/specialists/x-biz/references/decision-models-and-deliverables.md"
+  "global/specialists/x-dev/SKILL.md"
+  "global/specialists/x-dev/references/verification.md"
+  "global/specialists/x-dev/references/release.md"
+  "global/specialists/x-spec/SKILL.md"
+  "global/specialists/x-tasks/SKILL.md"
+  "global/specialists/x-review/SKILL.md"
+  "global/specialists/x-review/references/release.md"
+  "global/specialists/x-retro/SKILL.md"
+  "global/specialists/x-verify/SKILL.md"
+  "global/specialists/x-guard/SKILL.md"
+  "global/specialists/x-guard/references/project-modes.md"
+  "global/specialists/x-guard/references/rule-encoding.md"
+  "global/specialists/x-guard/references/sql-guardrails.md"
+  "global/specialists/x-redteam/SKILL.md"
+  "global/specialists/x-redteam/references/adversarial-protocol.md"
+  "vendor/global-skills/x-rea/SKILL.md"
+  "vendor/global-skills/x-rea/UPSTREAM-SKILL.md"
+  "vendor/global-skills/x-rea/UPSTREAM.md"
+  "vendor/global-skills/x-rea/LICENSE"
+  "vendor/global-skills/x-rea/references/desktop-build.md"
   "docs/delivery-artifacts-spec.md"
   "docs/workflow-protocols/requirements.md"
   "docs/workflow-protocols/spec.md"
   "docs/workflow-protocols/tickets.md"
   "docs/workflow-protocols/implementation.md"
+  "docs/workflow-protocols/verification.md"
   "docs/workflow-protocols/review.md"
   "docs/workflow-protocols/pr.md"
+  "docs/workflow-protocols/release.md"
   "docs/workflow-protocols/retro.md"
   "docs/workflow-protocols/parallel-implementation.md"
   "docs/workflow-protocols/prototype.md"
@@ -58,19 +69,20 @@ required_paths=(
   "vendor/mattpocock.snapshot.json"
   "vendor/mattpocock/LICENSE"
   "tests/workflow-contract-test.py"
-  "global/helpers/to-html/SKILL.md"
-  "global/helpers/to-html/references/document-types.md"
-  "global/helpers/to-html/references/flow-diagrams.md"
-  "global/helpers/to-html/references/template-routing.md"
-  "global/helpers/to-html/assets/formal-document-shell.html"
-  "global/helpers/to-html/assets/templates/decision-brief.html"
-  "project/specialists/design/SKILL.md"
-  "project/specialists/design/agents/openai.yaml"
-  "project/specialists/design/references/capability-routing.md"
-  "project/specialists/design/references/craft-principles.md"
-  "project/specialists/design/references/platform-checks.md"
-  "project/specialists/design/references/review-rubric.md"
-  "project/specialists/design/assets/DESIGN.template.md"
+  "global/helpers/x-html/SKILL.md"
+  "global/helpers/x-html/references/document-types.md"
+  "global/helpers/x-html/references/flow-diagrams.md"
+  "global/helpers/x-html/references/template-routing.md"
+  "global/helpers/x-html/assets/formal-document-shell.html"
+  "global/helpers/x-html/assets/templates/decision-brief.html"
+  "global/helpers/x-html/assets/templates/engineering-review.html"
+  "project/specialists/x-ui/SKILL.md"
+  "project/specialists/x-ui/agents/openai.yaml"
+  "project/specialists/x-ui/references/capability-routing.md"
+  "project/specialists/x-ui/references/craft-principles.md"
+  "project/specialists/x-ui/references/platform-checks.md"
+  "project/specialists/x-ui/references/review-rubric.md"
+  "project/specialists/x-ui/assets/DESIGN.template.md"
   "vendor/project-skills/ui-ux-pro-max/SKILL.md"
   "vendor/project-skills/ui-ux-pro-max/agents/openai.yaml"
   "vendor/project-skills/ui-ux-pro-max/UPSTREAM.md"
@@ -81,10 +93,6 @@ required_paths=(
   "vendor/project-skills/impeccable/LICENSE"
   "vendor/superpowers/README.md"
   "vendor/gstack/README.md"
-  "adapters/gemini/commands/fix-safe.toml"
-  "adapters/gemini/commands/review-ready.toml"
-  "adapters/gemini/commands/db-check.toml"
-  "adapters/gemini/commands/legacy-fix.toml"
   "scripts/install-links.sh"
   "scripts/publish-skills.sh"
   "scripts/sync-global-platforms.sh"
@@ -104,6 +112,22 @@ for relative_path in "${required_paths[@]}"; do
     echo "MISS ${relative_path}"
     missing=1
   fi
+done
+
+# 拦截已退役或误留下的空壳 skill 子目录
+for skill_parent in \
+  "global/specialists" \
+  "global/helpers" \
+  "project/specialists" \
+  "vendor/global-skills" \
+  "vendor/project-skills"; do
+  [[ -d "${ROOT_DIR}/${skill_parent}" ]] || continue
+  while IFS= read -r child_dir; do
+    if [[ ! -f "${child_dir}/SKILL.md" ]]; then
+      echo "MISS ${child_dir#${ROOT_DIR}/} (存在缺少 SKILL.md 的残留空壳目录)"
+      missing=1
+    fi
+  done < <(find "${ROOT_DIR}/${skill_parent}" -mindepth 1 -maxdepth 1 -type d | sort)
 done
 
 catalog_names=()
@@ -143,6 +167,9 @@ while IFS='|' read -r skill_name skill_scope skill_source skill_bundles skill_st
         missing=1
       elif [[ "$(basename "${skill_source}")" != "${skill_name}" ]]; then
         echo "MISS config/skills.tsv (名称与源码目录不一致 ${skill_name})"
+        missing=1
+      elif ! grep -Eq "^name: ${skill_name}$" "${ROOT_DIR}/${skill_source}/SKILL.md"; then
+        echo "MISS ${skill_source}/SKILL.md (frontmatter name 与 ${skill_name} 不一致)"
         missing=1
       fi
       [[ -n "${skill_bundles}" && "${skill_bundles}" != "-" ]] || {
@@ -251,7 +278,7 @@ done < <(find \
   -name SKILL.md -type f | sort)
 
 if [[ "${missing}" -ne 0 ]]; then
-  echo "结构检查失败：存在缺失文件。" >&2
+  echo "结构检查失败：存在缺失或不一致文件。" >&2
   exit 1
 fi
 

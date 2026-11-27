@@ -1,6 +1,0 @@
-interface:
-  display_name: "编写实施规格"
-  short_description: "把已确认需求形成必要技术与验收规格，按交接需要选择实施路径"
-  default_prompt: "Use $to-spec to turn established requirements into a testable implementation specification."
-policy:
-  allow_implicit_invocation: false

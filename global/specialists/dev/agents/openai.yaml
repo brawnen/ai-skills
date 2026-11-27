@@ -1,6 +1,0 @@
-interface:
-  display_name: "研发交付"
-  short_description: "按阶段复用需求、任务、实施和审查协议，推进验证并提供可追溯交接"
-  default_prompt: "Use $dev to deliver this engineering task through verification, review and the authorized integration handoff."
-policy:
-  allow_implicit_invocation: false

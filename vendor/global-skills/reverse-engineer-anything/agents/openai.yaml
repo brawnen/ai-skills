@@ -1,6 +1,0 @@
-interface:
-  display_name: "Reverse Engineer Anything"
-  short_description: "通过 REA 检查发行包、原生二进制与运行行为，保留逆向分析证据及能力边界"
-  default_prompt: "Use $reverse-engineer-anything to investigate the supplied artifact with REA and explain the evidence and limitations."
-policy:
-  allow_implicit_invocation: true

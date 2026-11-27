@@ -1,10 +1,10 @@
 ---
 name: ui-ux-pro-max
-description: "UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 79 searchable styles (50 active), 192 product palettes and reasoning profiles, 74 font pairings, 119 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks."
+description: "UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 80 searchable styles (51 active), 194 product palettes and reasoning profiles, 74 font pairings, 141 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks."
 ---
 # ui-ux-pro-max
 
-UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 79 searchable styles (50 active), 192 product palettes and reasoning profiles, 74 font pairings, 119 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks.
+UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 80 searchable styles (51 active), 194 product palettes and reasoning profiles, 74 font pairings, 141 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks.
 
 ## When to Apply
 
@@ -223,6 +223,7 @@ UI/UX design intelligence for web, mobile, and desktop. This skill should be use
 - `input-labels` - Visible label per input (not placeholder-only)
 - `error-placement` - Show a specific error below the related field and connect it with aria-describedby
 - `submit-feedback` - Loading then success/error state on submit
+- `ime-composition-enter` - For custom web Enter shortcuts, cancel the handled Enter default before the isComposing/229 guard; keep IME confirmation separate from submission, preserve newline/modifier policy, and provide an explicit submit button
 - `required-indicators` - Mark required fields (e.g. asterisk)
 - `empty-states` - Helpful message and action when no content
 - `toast-dismiss` - Auto-dismiss toasts in 3-5s
@@ -251,6 +252,15 @@ UI/UX design intelligence for web, mobile, and desktop. This skill should be use
 - `aria-live-errors` - Form errors use aria-live region or role="alert" to notify screen readers (WCAG)
 - `contrast-feedback` - Error and success state colors must meet 4.5:1 contrast ratio (WCAG, MD)
 - `timeout-feedback` - Request timeout must show clear feedback with retry option (MD)
+- `error-clears-on-fix` - Remove a field's error message, error styling and aria-invalid as soon as the value is valid; once a field shows an error re-check it on input, and drop stale summary items on resubmit (Baymard, WCAG 3 draft)
+- `no-premature-validation` - Do not flag a field before the user has entered something and left it; report empty required fields on submit (Baymard, NN/g, GOV.UK)
+- `keep-input-on-error` - A failed submit shows the form again with every entered value, passing and failing; never reset or clear it (GOV.UK, NN/g)
+- `submit-not-pre-disabled` - Keep submit enabled and show what to fix on click; disable it only while the request is in flight, with an idempotency key (Vercel, GOV.UK)
+- `unsaved-changes-guard` - Ask before leaving, closing or cancelling with unsaved edits, and never when nothing changed (Vercel)
+- `forgiving-formats` - Trim whitespace, ignore spaces, hyphens and brackets in numbers and codes, and accept accents and apostrophes in names (GOV.UK, Vercel)
+- `allow-paste` - Never block paste, including password, confirmation and one-time-code fields (Vercel)
+- `persistent-errors` - Errors stay until fixed or dismissed; auto-dismissing toasts are only for non-critical confirmations (WCAG)
+- `dialog-focus` - Move focus into a modal on open, keep Tab inside, close on Escape and return focus to the opener on close (WAI-ARIA APG)
 
 ### 9. Navigation Patterns (HIGH)
 
@@ -313,6 +323,15 @@ UI/UX design intelligence for web, mobile, and desktop. This skill should be use
 - `export-option` - For data-heavy products, offer CSV/image export of chart data
 - `drill-down-consistency` - Drill-down interactions must maintain a clear back-path and hierarchy breadcrumb
 - `time-scale-clarity` - Time series charts must clearly label time granularity (day/week/month) and allow switching
+- `map-attribution` - Keep the web map's tile and data attribution (and the Mapbox logo with Mapbox tiles) visible on load; never hide it with CSS (OSMF, Mapbox)
+- `map-text-alternative` - Name the map region and add a text summary plus a feature list or table that follows the filters (WCAG)
+- `map-keyboard-no-drag` - Arrow keys pan, +/- zoom, markers focusable, zoom buttons and search or coordinate input so no drag is required (WCAG)
+- `map-not-color-alone` - Map status and categories need an icon, shape, pattern or label as well as hue; use colorblind-safe schemes (WCAG)
+- `normalized-choropleth` - Choropleth fills show rates or densities, never raw counts; show totals with proportional symbols
+- `map-color-ramps` - Sequential or perceptually uniform ramps, no rainbow; lightness follows the basemap; muted basemap, strongest data
+- `map-popup-text` - Render feature attributes in popups as text (setDOMContent/setText), not interpolated HTML (XSS)
+- `map-clustering` - Cluster dense points at low zoom with counts; serve large geodata as vector tiles instead of huge GeoJSON
+- `map-reduced-motion` - Keep camera flights non-essential and skip custom map animation loops under prefers-reduced-motion
 
 ## How to Use
 
@@ -333,6 +352,14 @@ If Python is not installed, **do not install it yourself**. Stop and ask the use
 If the user prefers not to install Python, skip the CLI searches and rely on the Quick Reference sections above.
 
 > **Note:** On Windows, use `python` instead of `python3` to run scripts (e.g., `python scripts/search.py` instead of `python3 scripts/search.py`).
+
+---
+
+## Using the Search Script (CLI)
+
+When invoked, this skill can run the bundled Python search script to query the catalogs. The script uses only the Python 3 standard library - no extra dependencies.
+
+The script lives in this skill's own `scripts/search.py`. The commands below use the install-rooted path so they resolve when run from the project root.
 
 ---
 
@@ -368,6 +395,8 @@ For accessibility work, search one observable outcome at a time and use explicit
 Do not accept a generic accessibility result for a specific interaction or WCAG criterion.
 
 For text-layout and compact-component bugs, search the **semantic UX outcome first, then the detected stack** for implementation details. Useful outcome queries include `"orphan heading line balance" --domain ux`, `"badge chip label wraps" --domain ux`, `"live badge count screen reader" --domain ux`, and `"rapid chip animation interrupted" --domain ux`. After choosing the applicable UX guidance, use a separate stack query such as `"chip badge overflow nowrap" --stack html-tailwind`; do not replace the outcome search with a framework keyword.
+
+For right-to-left interfaces (Arabic, Hebrew, Persian, Urdu, or an explicit `dir="rtl"` / `rtl:` request), add `--rtl` to the `style` and `product` searches and respect the returned `rtl_level`: `full` needs no directional rework, `partial` mirrors but requires per-component checks (icons, carousels, motion paths, charts), and `caveats` means the style or product encodes reading direction — say so before recommending it, and propose a mirrorable alternative when the user needs a strict RTL build. `--rtl=full` restricts the search to the safest rows; `--rtl` alone keeps every level.
 
 Before using a result, verify the returned domain/category, top result identity, and whether its guidance fits the user's product and platform. **Retry once** with a narrower rewrite or an explicit domain/stack when the result is empty or off-topic. If the retry still fails, state that no verified match was found and use clearly labeled general guidance instead. **Do not persist unverified output.**
 
@@ -425,7 +454,33 @@ python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system
 This also creates:
 - `design-system/<project-slug>/pages/dashboard.md` — Page-specific deviations from Master
 
+**Preview the generated system as a static page:**
+
+```bash
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist --preview -p "Project Name" --output-dir "<project-root>"
+```
+
+`--preview` is valid only with `--design-system`. With `--persist` it writes `design-system/<project-slug>/preview.html` next to `MASTER.md`. Without `--persist`, pass `--output-dir` to write `preview.html` there, or omit it to get a temp file whose path is printed. Existing `preview.html` files are skipped unless `--force` is set, same as Master.
+
 If Master already exists, a new page file is created without changing Master. Existing Master and page files are skipped by default. Read an existing `MASTER.md` before deciding whether `--force` is justified; without explicit user authorization, keep existing files unchanged.
+
+### Step 2b-tokens: Export Design Tokens
+
+`--tokens` is valid only with `--design-system`. It prints a machine-readable token document so hex values and font names do not have to be copied by hand:
+
+```bash
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --tokens dtcg
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --tokens css
+```
+
+- `dtcg` prints W3C Design Tokens Community Group JSON (`$value` / `$type`, `color`, `font`, and a `semantic` layer such as `color.primary`, `color.on-primary`, `color.background`, `font.heading`).
+- `css` prints `:root` custom properties using the same names `../design-system/scripts/generate-tokens.cjs` emits (`--color-primary`, `--font-heading`, …).
+- Dark-mode results emit the resolved dark values and record the mode in `$description`.
+- With `--persist`, also write `tokens.json` next to `MASTER.md` (and `tokens.css` when `--tokens css`). Existing files follow the same `--force` / skip-if-exists rules. Token files are master-level only; `--page` overrides do not emit page-specific tokens.
+
+```bash
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<query>" --design-system --persist --tokens dtcg -p "Project Name" --output-dir "<project-root>"
+```
 
 **How hierarchical retrieval works:**
 1. Read `design-system/<project-slug>/MASTER.md`
@@ -488,6 +543,7 @@ python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<keyword>" --domain <dom
 | Icon suggestions | `icons` | `"decorative icon aria hidden" --domain icons` |
 | Individual Google Fonts | `google-fonts` | `"variable sans serif" --domain google-fonts` |
 | GSAP animation snippets | `gsap` | `"scroll reveal stagger" --domain gsap` |
+| RTL compatibility | `style`, `product` | `"dashboard" --domain style --rtl=full` |
 
 ### Step 4: Stack Guidelines
 
@@ -577,7 +633,7 @@ python3 .agents/skills/ui-ux-pro-max/scripts/search.py "streaming suspense" --st
 
 ## Output Formats
 
-The `--design-system` flag supports two output formats:
+The `--design-system` flag supports ASCII, Markdown, JSON, and token export:
 
 ```bash
 # ASCII box (default) - best for terminal display
@@ -585,6 +641,10 @@ python3 .agents/skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design
 
 # Markdown - best for documentation
 python3 .agents/skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system -f markdown
+
+# Design tokens (requires --design-system)
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system --tokens dtcg
+python3 .agents/skills/ui-ux-pro-max/scripts/search.py "fintech crypto" --design-system --tokens css
 ```
 
 ---
@@ -630,7 +690,7 @@ Scope notice: The rules below are for App UI (iOS/Android/React Native/Flutter),
 
 ### Icons & Visual Elements
 
-- 默认图标库使用 **Phosphor (`@phosphor-icons/react`)**。`src/ui-ux-pro-max/data/icons.csv` 中列出的只是常用推荐图标，不是完整集合。
+- 默认图标库使用 **Phosphor (`@phosphor-icons/react`)**。`data/icons.csv` 中列出的只是常用推荐图标，不是完整集合。
 - 当推荐表中找不到合适的图标时：
   - **优先继续从 Phosphor 的完整图标集中选择任何语义更贴切的图标**；
   - 如果 Phosphor 也没有理想选项，可以使用 **Heroicons (`@heroicons/react`)** 作为备选，注意保持风格一致（线性/填充、笔画粗细、圆角风格）。

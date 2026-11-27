@@ -1,1 +1,0 @@
-../../../../docs/delivery-artifacts-spec.md

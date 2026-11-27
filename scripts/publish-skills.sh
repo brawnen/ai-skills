@@ -11,9 +11,9 @@ usage() {
   cat <<'EOF'
 用法:
   ./scripts/publish-skills.sh list
-  ./scripts/publish-skills.sh global [--platforms codex,antigravity] [--bundles core]
-  ./scripts/publish-skills.sh global --target <skills-dir> [--bundles core,architecture]
-  ./scripts/publish-skills.sh project --project <repo> --skills design
+  ./scripts/publish-skills.sh global [--platforms codex,antigravity] [--bundles core,flow]
+  ./scripts/publish-skills.sh global --target <skills-dir> [--bundles core,flow]
+  ./scripts/publish-skills.sh project --project <repo> --skills x-ui
   ./scripts/publish-skills.sh <global|project> --check [其他选项]
 
 说明:

@@ -1,6 +1,0 @@
-interface:
-  display_name: "澄清需求"
-  short_description: "以依赖感知访谈收敛目标、范围和业务验收，复用已确认决定与事实"
-  default_prompt: "Use $to-requirement to clarify the requirements or pressure-test this idea without repeating settled decisions."
-policy:
-  allow_implicit_invocation: false

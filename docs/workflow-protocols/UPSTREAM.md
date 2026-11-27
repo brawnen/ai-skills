@@ -9,32 +9,22 @@
 
 ## 适配关系
 
-requirements：沿用本仓库需求/压力测试方法，参考 grilling/grill-with-docs（含 v1.3.2 的推荐默认“是”措辞与事实探索不阻塞就绪决策）。
-spec/tickets：参考 to-spec/to-tickets，保留纵向行为、独立判据、真实阻塞边与 expand–contract。
-implementation/parallel-implementation：参考 implement/implement-spec。
-开工核对任务归属和原始标题、拆分时分别复用原生子项和阻塞边，参考 Matt Pocock 1.3.2 的 [implement](https://github.com/mattpocock/skills/blob/abeeaf95660ba9e8b7c753eb38f441ca707a8823/skills/engineering/implement/SKILL.md) 与 [to-tickets](https://github.com/mattpocock/skills/blob/abeeaf95660ba9e8b7c753eb38f441ca707a8823/skills/engineering/to-tickets/SKILL.md)。本地也支持以仓库 Markdown 台账作为任务来源。
-review：参考 code-review 的 Standards + Spec 双轴，保留 PASS 场景独立审查。
-
-审查协议另外借鉴了 [Matt Pocock 1.3.2 的规范查找方法](https://github.com/mattpocock/skills/blob/abeeaf95660ba9e8b7c753eb38f441ca707a8823/skills/engineering/code-review/SKILL.md)、[Lauren Tan 的 pstack blast-radius](https://github.com/cursor/plugins/blob/7a583913eb1b8d1a0ee76753d1a2cf072e7b54f9/pstack/skills/blast-radius/SKILL.md) 中验证关键假设的方法，以及 `pstack` `comment-sicko` / `principle-minimize-reader-load` / `principle-subtract-before-you-add` 的反逃生舱与结构负担检查。本地沿用同一双轴协议，既有证据充分时直接复用。
-
-interrogate：借鉴 `pstack` `interrogate`（0.15.46）的红队对抗实证思路（仅保留经真实运行复现证明打破原意图的发现），本地化为不绑定固定模型或编排器的独立可选 skill。
-setup-guardrails：吸收 `pstack` `correct`（0.15.46）与 `principle-encode-lessons-in-structure` 的历史失误归类、真实历史红灯、豁免三要素与规则退场机制，并结合三类项目适配底座。
-
-pr：参考 pr；其最小可视化方法来自 Dex Horthy / Humanlayer show-me。上游原始归属见 vendor/mattpocock/skills/engineering/pr/CREDITS.md，本地不依赖安装 show-me。
-retro/authoring：参考 retro/writing-for-agents；prototype：参考 prototype；architecture-design：参考 codebase-design、本地 scan-architecture 及 `pstack` 的 `boundary-discipline` / `type-system-discipline` / `separate-before-serializing-shared-state`。
-复盘也参考 [pstack reflect](https://github.com/cursor/plugins/blob/0b46ec399d55f2829e88822998f53b84944837d3/pstack/skills/reflect/SKILL.md) 的做法：先读相关 skill，再决定经验应落在哪里。本地同时核对当时的协议版本、调用记录与项目接线，避免重复添加指令。
-cross-boundary-design：由本仓库已退役 review-cross-stack-change 方法迁入。验证与发布结构继续以 docs/delivery-artifacts-spec.md 为准。
-
-verify-change / debug：人为制造失败时先对照原副本核实变异，再核对失败原因，参考 [Matt Pocock diagnosing-bugs 的回归验证](https://github.com/mattpocock/skills/blob/abeeaf95660ba9e8b7c753eb38f441ca707a8823/skills/engineering/diagnosing-bugs/SKILL.md#phase-5-fix--regression-test)；`debug` 另吸收 `pstack` `principle-attack-the-premise`（同前提连败 2 次质疑前提）与 `benchmark-checklist`（性能测量 7 问清单）。
+- `x-req` / `requirements.md`：沿用本仓库需求与压力测试访谈方法，参考 grilling/grill-with-docs（含 v1.3.2 的推荐默认“是”措辞与事实探索不阻塞就绪决策）。
+- `x-spec` / `x-tasks`（`spec.md` / `tickets.md`）：参考 to-spec/to-tickets，保留纵向行为、独立判据、真实阻塞边与 expand–contract；支持仓库 Markdown 台账与平台原生父子/阻塞关系。
+- `implementation.md` / `parallel-implementation.md`：参考 implement/implement-spec（不单独立全局 skill，统一由 `x-dev` 与宿主按需复用）。
+- `x-review` / `review.md`：参考 code-review 的 Standards + Spec 双轴审查，结合 `pstack` `blast-radius` 的可证伪关键假设验证与反逃生舱/结构负担检查。
+- `x-redteam`：借鉴 `pstack` `interrogate`（0.15.46）的红队对抗实证思路（仅保留经真实运行复现证明打破原意图的发现），本地化为模型无关入口。
+- `x-guard`：吸收 `pstack` `correct`（0.15.46）与 `principle-encode-lessons-in-structure` 的第二次原则、四件套交付与存量豁免机制，结合三类项目底座与 SQL 静态写门禁。
+- `pr.md`：参考 pr；最小可视化方法源于 Dex Horthy / Humanlayer show-me（上游归属见 `vendor/mattpocock/skills/engineering/pr/CREDITS.md`），已退役独立的 `show-me` 试用包。
+- `release.md`：本地原创扩展，补齐 Matt 主线未覆盖的 CI 门禁验真、环境变量/迁移发布顺序、测试环境自动部署 smoke 与人工生产发布 Runbook 交接。
+- `verification.md` / `x-debug`：由原 `verify-change` 收回为共享验证协议；变异反向证明参考 `diagnosing-bugs` Phase 5，`x-debug` 另结合同前提连败 2 次质疑前提与性能测量 7 问清单。
+- `x-tdd`：吸收 v1.3.2 的候选测试缝（seam）得失对比（能捕获什么 vs 会漏掉什么）。
+- `x-arch` / `architecture-design.md`：参考 improve-codebase-architecture（含 Git 变更热点优先与 ADR 冲突核对）、codebase-design 及 `pstack` 边界校验集中化/强类型不变量原则。
+- `x-retro` / `authoring.md`：参考 retro/writing-for-agents 与 `pstack` `reflect`。
+- `prototype.md` / `cross-boundary-design.md`：分别由已退役 `prototype`、`review-cross-stack-change` 收回为按需共享协议。
 
 ## 本地差异
 
-独立审查借鉴 Matt 1.3.2 在 [code-review](https://github.com/mattpocock/skills/blob/abeeaf95660ba9e8b7c753eb38f441ca707a8823/skills/engineering/code-review/SKILL.md) 与 [implement-spec](https://github.com/mattpocock/skills/blob/abeeaf95660ba9e8b7c753eb38f441ca707a8823/skills/engineering/implement-spec/SKILL.md) 中使用新上下文的做法。“先留存初判、再给实现者说明”是本地交接约定。
-
-使用第一方中文入口与单一共享协议；不发布上游整包，不重复安装同义入口。
-沿用已有项目事实、tracker、文档位置与授权，不强制每阶段确认或安装专门 setup skill。
-implement/pr 仅为协议；TDD、子代理、上下文切换和全量测试按任务选择，不自动要求。
-规格到实施之间增加按需的界面设计就绪检查，补齐页面/交互方案后回写规格；原型只用于待验证问题，不把设计变成固定审批或强制安装项。
-保留安全基线与用户工作区，不采用上游盲目 reset；集成后检查实际版本，按项目权限合并，生产操作仍由人执行。
-原型必须运行代表性操作并保留证据，不将探索代码默认为生产实现；复盘先提出候选，不自动更改全局偏好。
-上游文件保持原文，升级先比较固定版本差异再适配。此说明不把作者经验称为本团队已验证收益。
+- 自管第一方与全局扩展入口统一采用 `x-*` 私人短前缀命名空间，避免与各宿主内置斜杠命令冲突；全局能力收敛为 `core`（增强工具箱）、`flow`（研发全流程）、`addons`（重外部依赖按需扩展）三组。
+- `implement`、`implement-spec`、`prototype`、`verify-change`、`pr`、`release` 均作为共享协议维护于 `docs/workflow-protocols/`，减少常驻入口冗余。
+- 规格到实施之间保留界面设计就绪检查（衔接项目级 `x-ui`）；集成合并遵循用户授权与门禁，生产部署、回滚与生产数据写入维持人工执行红线。

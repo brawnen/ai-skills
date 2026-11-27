@@ -1,0 +1,6 @@
+interface:
+  display_name: "编写实施规格"
+  short_description: "将已确认需求转化为架构边界、独立验收规格与合适的实施交接路径"
+  default_prompt: "Use $x-spec to turn established requirements into a testable implementation specification."
+policy:
+  allow_implicit_invocation: true

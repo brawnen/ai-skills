@@ -105,10 +105,13 @@ class DistributionTests(unittest.TestCase):
                         self.assertTrue(installed.is_file(), installed)
                         self.assertEqual(installed.read_bytes(), link.resolve().read_bytes())
                         results.append(str(installed.relative_to(target)))
-            self.assertFalse((target / "to-decision").is_symlink())
-            self.assertFalse((target / "review-cross-stack-change").is_symlink())
-            self.assertFalse((target / "implement").exists())
-            self.assertFalse((target / "pr").exists())
+            for retired_or_protocol in [
+                "to-decision", "review-cross-stack-change", "implement", "pr", "release",
+                "show-me", "prototype", "implement-spec", "verify-change",
+                "dev", "to-requirement", "to-spec", "to-tickets", "code-review", "to-html",
+            ]:
+                self.assertFalse((target / retired_or_protocol).exists(), retired_or_protocol)
+                self.assertFalse((target / retired_or_protocol).is_symlink(), retired_or_protocol)
             evidence("publication-resources.json", {"checked": results, "count": len(results)})
 
 

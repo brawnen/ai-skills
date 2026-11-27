@@ -1,0 +1,6 @@
+interface:
+  display_name: "前后端 API 契约"
+  short_description: "复用响应、错误分层、流式事件、幂等与分页约定，按项目差异收敛接口契约"
+  default_prompt: "使用 $x-api 为当前项目定义或收敛前后端 API 契约，沿用默认规范并处理实际项目差异。"
+policy:
+  allow_implicit_invocation: true

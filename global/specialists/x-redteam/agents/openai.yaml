@@ -1,0 +1,6 @@
+interface:
+  display_name: "红队实证审查"
+  short_description: "红队对抗式攻击代码改动或方案，仅保留经真实运行复现证明的缺陷"
+  default_prompt: "Use $x-redteam to run an adversarial review on this change or design, keeping only findings proven by actual execution."
+policy:
+  allow_implicit_invocation: false
