@@ -1,5 +1,5 @@
 interface:
-  display_name: "二进制与包逆向分析"
+  display_name: "X·逆向分析"
   short_description: "通过 REA 检查发行包、原生二进制与运行行为，保留逆向分析证据与能力边界"
   default_prompt: "Use $x-rea to investigate the supplied artifact with REA and explain the evidence and limitations."
 policy:

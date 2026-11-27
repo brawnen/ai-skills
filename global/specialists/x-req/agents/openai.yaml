@@ -1,5 +1,5 @@
 interface:
-  display_name: "需求澄清与压测"
+  display_name: "X·需求分析"
   short_description: "以依赖感知访谈收敛目标、范围与业务验收，或对想法和计划做压力测试"
   default_prompt: "Use $x-req to clarify requirements or pressure-test this idea without repeating settled decisions."
 policy:

@@ -1,5 +1,5 @@
 interface:
-  display_name: "架构摩擦扫描"
+  display_name: "X·架构体检"
   short_description: "只读扫描高频改动区架构摩擦，输出证据、优先级、验证边界和改进候选"
   default_prompt: "Use $x-arch to inspect architecture friction read-only and rank evidence-backed improvement candidates."
 policy:

@@ -1,5 +1,5 @@
 interface:
-  display_name: "商业与可行性评估"
+  display_name: "X·商业分析"
   short_description: "评估商业模式、单位经济、市场竞品与技术可行性，形成阶段投资决策"
   default_prompt: "Use $x-biz to analyze the business model, unit economics, or full venture feasibility with clear evidence tiers."
 policy:

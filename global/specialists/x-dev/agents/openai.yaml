@@ -1,5 +1,5 @@
 interface:
-  display_name: "研发全流程交付"
+  display_name: "X·研发交付"
   short_description: "串联需求、规格、实施、审查、测试部署与生产发布包准备的交付总入口"
   default_prompt: "Use $x-dev to drive this task across specification, implementation, review, staging smoke, and production release handoff."
 policy:

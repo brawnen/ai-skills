@@ -3,7 +3,7 @@ name: x-tdd
 description: 仅在用户显式调用或明确要求 TDD、test-first 测试先行开发时使用；通过独立行为断言与 RED-GREEN-REFACTOR 证明测试能捕获目标缺陷。普通回归测试与验证由宿主处理。
 ---
 
-# Test First Development
+# 测试驱动开发
 
 ## 适用边界
 

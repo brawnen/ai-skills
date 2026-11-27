@@ -1,5 +1,5 @@
 interface:
-  display_name: "代码双轴审查"
+  display_name: "X·代码审查"
   short_description: "以固定比较基线分别审查项目规范与需求符合性，核查测试盲区与越界变更"
   default_prompt: "Use $x-review to review this change against its requirements and repository standards, reusing valid runtime evidence."
 policy:

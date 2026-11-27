@@ -3,7 +3,7 @@ name: x-domain
 description: 用户要求建立或收敛领域模型、统一业务术语和 ubiquitous language，或身份、状态、生命周期、事件语义及 bounded context 歧义已影响接口与数据设计时使用；普通需求澄清、简单 CRUD 或实现细节讨论不触发。
 ---
 
-# Domain Modeling
+# 领域建模与业务术语
 
 ## 目标
 

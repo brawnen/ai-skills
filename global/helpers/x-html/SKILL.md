@@ -3,7 +3,7 @@ name: x-html
 description: 可选的正式 HTML 文档外壳与章节模板 helper。仅在用户明确需要自包含、可打印的 HTML 正式文档时使用；README、AGENTS、普通分析和宿主已支持的 Word/PDF 文档不触发。
 ---
 
-# Formal HTML Docs
+# 正式 HTML 文档
 
 ## 定位
 
