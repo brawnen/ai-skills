@@ -117,17 +117,51 @@ ask_secret() {
   printf -v "$key" '%s' "$input"
 }
 
+_file_mode() {
+  stat -L -c '%a' "$1" 2>/dev/null || stat -L -f '%Lp' "$1" 2>/dev/null || return 1
+}
+
+_ensure_private_env_file() {
+  local path="$1" mode=""
+  if [[ -e "$path" && ! -f "$path" ]]; then
+    warn "拒绝写入 ${path}：目标不是普通文件"
+    return 1
+  fi
+  if [[ ! -e "$path" ]]; then
+    (umask 077 && : > "$path") || {
+      warn "无法创建私有配置文件 ${path}"
+      return 1
+    }
+  fi
+  if [[ ! -O "$path" ]]; then
+    warn "拒绝写入 ${path}：当前用户不是目标文件所有者，无法保证密钥私有权限"
+    return 1
+  fi
+  chmod 600 "$path" 2>/dev/null || true
+  mode=$(_file_mode "$path" || true)
+  if [[ "$mode" != "600" ]]; then
+    warn "拒绝写入 ${path}：当前权限为 ${mode:-unknown}，无法收紧为 0600（仅所有者可读写）"
+    return 1
+  fi
+}
+
 write_env() {
-  local key="$1" value="$2" tmp sq="'\\''"
-  [[ -e "$ENV_FILE" ]] || (umask 077 && : > "$ENV_FILE")
-  tmp=$(mktemp)
+  local key="$1" value="$2" tmp="" sq="'\\''"
+  _ensure_private_env_file "$ENV_FILE"
+  tmp=$(umask 077 && mktemp)
+  trap 'rm -f -- "${tmp:-}"' RETURN
   grep -vE "^${key}=" "$ENV_FILE" > "$tmp" || true
   printf "%s='%s'\n" "$key" "${value//\'/$sq}" >> "$tmp"
   cat "$tmp" > "$ENV_FILE"
-  rm -f "$tmp"
+  rm -f -- "$tmp"
+  trap - RETURN
+  if [[ "$(_file_mode "$ENV_FILE" || true)" != "600" ]]; then
+    warn "写入后权限复核失败：${ENV_FILE} 未保持 0600"
+    return 1
+  fi
   printf -v "$key" '%s' "$value"
   WRITTEN_ENV+=("$key")
-  printf '  %s✓ 已写入%s %s → %s\n' "$GREEN" "$RESET" "$key" "$ENV_FILE"
+  printf '  %s✓ 已写入%s %s → %s (0600)\n' "$GREEN" "$RESET" "$key" "$ENV_FILE"
 }
 
 set_secret() {
@@ -139,8 +173,8 @@ set_secret() {
       return
     fi
   fi
-  SKIPPED+=("GitHub Secret $name（请手动执行: gh secret set $name）")
-  warn "跳过 GitHub Secret $name：gh 未就绪，请稍后手动设置"
+  SKIPPED+=("GitHub Secret ${name}（请手动执行: gh secret set ${name}）")
+  warn "跳过 GitHub Secret ${name}：gh 未就绪，请稍后手动设置"
 }
 
 set_var() {
@@ -151,18 +185,18 @@ set_var() {
       return
     fi
   fi
-  SKIPPED+=("GitHub Variable $name")
-  warn "跳过 GitHub Variable $name：gh 未就绪，请稍后手动设置"
+  SKIPPED+=("GitHub Variable ${name}")
+  warn "跳过 GitHub Variable ${name}：gh 未就绪，请稍后手动设置"
 }
 
 finish() {
   _clear
   printf '\n%s%s  ✓ 配置向导已完成%s\n' "$BOLD" "$GREEN" "$RESET"
-  (( ${#WRITTEN_ENV[@]} ))    && note "已写入 ${#WRITTEN_ENV[@]} 项到 $ENV_FILE: ${WRITTEN_ENV[*]}"
-  (( ${#WRITTEN_SECRET[@]} )) && note "已设置 ${#WRITTEN_SECRET[@]} 项 GitHub Secret: ${WRITTEN_SECRET[*]}"
+  (( ${#WRITTEN_ENV[@]} ))    && note "已写入 ${#WRITTEN_ENV[@]} 项到 ${ENV_FILE}: ${WRITTEN_ENV[*]-}"
+  (( ${#WRITTEN_SECRET[@]} )) && note "已设置 ${#WRITTEN_SECRET[@]} 项 GitHub Secret: ${WRITTEN_SECRET[*]-}"
   if (( ${#SKIPPED[@]} )); then
     printf '\n'; warn "以下项目需手动补齐:"
-    for s in "${SKIPPED[@]}"; do note "  - $s"; done
+    for s in "${SKIPPED[@]-}"; do [[ -n "$s" ]] && note "  - $s"; done
   fi
   printf '\n'
 }

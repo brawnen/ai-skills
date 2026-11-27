@@ -31,6 +31,7 @@ required_paths=(
   "global/specialists/x-dev/scripts/check-task-graph.py"
   "global/specialists/x-dev/scripts/wizard-template.sh"
   "global/specialists/x-spec/SKILL.md"
+  "global/specialists/x-spec/references/prototype.md"
   "global/specialists/x-review/SKILL.md"
   "global/specialists/x-review/references/release.md"
   "global/specialists/x-verify/SKILL.md"

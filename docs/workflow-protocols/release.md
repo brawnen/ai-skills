@@ -14,7 +14,7 @@
 进入部署或生成发布包前，逐项核查本次变更的文档一致性与外部耦合：
 
 - **权威文档防腐败同步（借鉴 `gstack /document-release`）**：对照本次分支实际 diff，检查项目中**已经存在**的 `README.md`、`AGENTS.md` / `CLAUDE.md`、`DESIGN.md`、`GLOSSARY.md` / `CONTEXT.md`、`.env.example` 及 OpenAPI/接口契约文档是否因本次改动失真；有漂移时原位更新对应条目（无对应文件时绝不硬造空模板），防止过期文档误导后续迭代的开发者与 Agent。
-- **配置、密钥与人工外部向导**：列出新增、修改或废弃的环境变量、配置文件项、Secret/证书与 Feature Flag 默认值，禁止把代码默认值兜底当作生产配置已配好。若涉及必须由人在第三方网页控制台手工获取的密钥或开通动作（如支付、OAuth、云存储及同步写入 `.env` 与 GitHub Actions `secrets.*`），可按同目录 `wizard-setup.md` 基于 `scripts/wizard-template.sh` 生成一次性交互式配置向导辅助完成。
+- **配置、密钥与人工外部向导**：列出新增、修改或废弃的环境变量、配置文件项、Secret/证书与 Feature Flag 默认值，禁止把代码默认值兜底当作生产配置已配好。若涉及必须由人在第三方网页控制台手工获取的密钥或开通动作（如支付、OAuth、云存储及同步写入 `.env` 与 GitHub Actions `secrets.*`），可衔接 `$x-dev` 的交互式向导协议（`<x-dev>/references/wizard-setup.md` 与 `<x-dev>/scripts/wizard-template.sh`）生成一次性配置向导辅助完成。
 - **数据库与数据迁移顺序**：存在 DDL、索引、回填或数据修复时，联动 `x-db` 明确严格执行顺序：
   - *向后兼容扩展（Expand）*：先执行无损/在线迁移，再发布新代码；
   - *读写切换与回填*：确认新旧服务实例在滚动窗口内共存无错，分批幂等回填；

@@ -5,6 +5,8 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
+import stat
 import subprocess
 import sys
 import tempfile
@@ -114,6 +116,118 @@ class DistributionTests(unittest.TestCase):
                 self.assertFalse((target / retired_or_protocol).exists(), retired_or_protocol)
                 self.assertFalse((target / retired_or_protocol).is_symlink(), retired_or_protocol)
             evidence("publication-resources.json", {"checked": results, "count": len(results)})
+
+    def test_installed_skill_references_resolve_from_published_entrypoints(self):
+        with tempfile.TemporaryDirectory(prefix="workflow-refcheck-") as temp:
+            target = Path(temp) / "skills"
+            run = subprocess.run([str(ROOT / "scripts/publish-skills.sh"), "global", "--target", str(target),
+                                  "--bundles", "all"], capture_output=True, text=True, timeout=10)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            checked_docs = 0
+            for line in (ROOT / "config/skills.tsv").read_text().splitlines():
+                columns = line.split("|")
+                if len(columns) != 6 or columns[1] != "global" or columns[4] != "active":
+                    continue
+                name, _, source = columns[:3]
+                if not source.startswith("global/"):
+                    continue
+                skill_dir = target / name
+                docs = [skill_dir / "SKILL.md"]
+                refs_dir = skill_dir / "references"
+                if refs_dir.exists():
+                    docs.extend(p for p in sorted(refs_dir.glob("*.md")) if p.name != "upstream.md")
+                for doc in docs:
+                    checked_docs += 1
+                    stripped = re.sub(r"```.*?```", "", doc.read_text(), flags=re.S)
+                    for match in re.finditer(r"\[[^\]]+\]\(([^)#]+)(?:#[^)]*)?\)", stripped):
+                        rel = match.group(1).strip()
+                        if rel.startswith(("http://", "https://", "mailto:")):
+                            continue
+                        self.assertTrue((doc.parent / rel).exists(), f"{name}/{doc.name} -> {rel}")
+                    for match in re.finditer(r"同目录\s*`?([A-Za-z0-9_.-]+\.(?:md|sh|py))`?", stripped):
+                        rel = match.group(1)
+                        self.assertTrue((doc.parent / rel).exists(), f"{name}/{doc.name} same-dir -> {rel}")
+                    for match in re.finditer(r"<本入口>/([A-Za-z0-9_./-]+)", stripped):
+                        subpath = match.group(1)
+                        if "<" in subpath:
+                            continue
+                        self.assertTrue((skill_dir / subpath).exists(), f"{name}/{doc.name} self -> {subpath}")
+                    for match in re.finditer(r"<(x-[a-z0-9-]+)>/([A-Za-z0-9_./-]+)", stripped):
+                        peer_skill, subpath = match.group(1), match.group(2)
+                        self.assertTrue((target / peer_skill / subpath).exists(),
+                                        f"{name}/{doc.name} peer -> {peer_skill}/{subpath}")
+                    self.assertNotIn("docs/workflow-protocols/", stripped, f"{name}/{doc.name}")
+                    self.assertNotIn("docs/delivery-artifacts-spec.md", stripped, f"{name}/{doc.name}")
+            self.assertGreater(checked_docs, 10)
+
+
+class WizardTemplateTests(unittest.TestCase):
+    def _build_wizard(self, directory: Path, body: str) -> Path:
+        template = (ROOT / "scripts/wizard-template.sh").read_text()
+        marker = "# STAGES:"
+        self.assertIn(marker, template)
+        header = template.split(marker, 1)[0]
+        script = directory / "wizard.sh"
+        script.write_text(header + "# STAGES\nrun_wizard() {\n" + body + "\n}\nrun_wizard \"$@\"; exit\n")
+        script.chmod(0o755)
+        return script
+
+    def test_write_env_tightens_existing_0644_env_and_symlink_target_to_0600(self):
+        with tempfile.TemporaryDirectory(prefix="wizard-sec-") as temp:
+            root = Path(temp)
+            env_file = root / ".env"
+            env_file.write_text("PUBLIC_PORT=3000\n")
+            env_file.chmod(0o644)
+            self.assertEqual(stat.S_IMODE(env_file.stat().st_mode), 0o644)
+
+            wizard = self._build_wizard(root, 'write_env STRIPE_SECRET_KEY "sk_test_alpha"')
+            res = subprocess.run(["bash", str(wizard)], cwd=root, env={**os.environ, "ENV_FILE": str(env_file)},
+                                 capture_output=True, text=True, timeout=5)
+            self.assertEqual(res.returncode, 0, res.stderr + res.stdout)
+            self.assertEqual(stat.S_IMODE(env_file.stat().st_mode), 0o600)
+            content = env_file.read_text()
+            self.assertIn("PUBLIC_PORT=3000", content)
+            self.assertIn("STRIPE_SECRET_KEY='sk_test_alpha'", content)
+
+            real_target = root / "shared.env"
+            real_target.write_text("KEEP=1\n")
+            real_target.chmod(0o644)
+            symlink_env = root / ".env.symlink"
+            symlink_env.symlink_to(real_target)
+            res_link = subprocess.run(["bash", str(wizard)], cwd=root,
+                                      env={**os.environ, "ENV_FILE": str(symlink_env)},
+                                      capture_output=True, text=True, timeout=5)
+            self.assertEqual(res_link.returncode, 0, res_link.stderr + res_link.stdout)
+            self.assertTrue(symlink_env.is_symlink())
+            self.assertEqual(stat.S_IMODE(real_target.stat().st_mode), 0o600)
+            self.assertIn("STRIPE_SECRET_KEY='sk_test_alpha'", real_target.read_text())
+
+    def test_write_env_refuses_without_leaking_when_0600_cannot_be_enforced(self):
+        with tempfile.TemporaryDirectory(prefix="wizard-deny-") as temp:
+            root = Path(temp)
+            env_file = root / ".env"
+            env_file.write_text("PUBLIC_PORT=3000\n")
+            env_file.chmod(0o644)
+
+            fake_bin = root / "bin"
+            fake_bin.mkdir()
+            fake_chmod = fake_bin / "chmod"
+            fake_chmod.write_text("#!/usr/bin/env bash\nexit 1\n")
+            fake_chmod.chmod(0o755)
+
+            wizard = self._build_wizard(root, 'write_env STRIPE_SECRET_KEY "sk_live_do_not_leak"')
+            blocked_env = {**os.environ, "ENV_FILE": str(env_file), "PATH": f"{fake_bin}:{os.environ['PATH']}"}
+            res = subprocess.run(["bash", str(wizard)], cwd=root, env=blocked_env,
+                                 capture_output=True, text=True, timeout=5)
+            self.assertNotEqual(res.returncode, 0)
+            self.assertNotIn("sk_live_do_not_leak", env_file.read_text())
+
+            dir_target = root / "not-a-file"
+            dir_target.mkdir()
+            res_dir = subprocess.run(["bash", str(wizard)], cwd=root,
+                                     env={**os.environ, "ENV_FILE": str(dir_target)},
+                                     capture_output=True, text=True, timeout=5)
+            self.assertNotEqual(res_dir.returncode, 0)
 
 
 class WorktreeIntegrationTests(unittest.TestCase):

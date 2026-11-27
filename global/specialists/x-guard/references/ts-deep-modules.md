@@ -84,11 +84,15 @@ module.exports = {
 
 > 若仓库已有 `.dependency-cruiser.*`，合并上述规则而非粗暴覆盖；不修改 `tsconfig.json` 路径别名。
 
-## 3. 接线、咬合实证与指针登记
+## 3. 接线、双越界咬合实证与指针登记
 
-1. **统一入口接线**：用仓库检测到的包管理器安装 `dependency-cruiser`（`devDependencies`），新增 `lint:boundaries`（`depcruise <PACKAGES_ROOT>`）并挂入与 `typecheck` 同级的统一检查脚本（如 `check` / `ci` / `validate`）。
-2. **三步咬合实证（未见红灯不算完成）**：
-   - 在干净状态实跑 `lint:boundaries` 确认 **PASS**；
-   - 在隔离测试文件临时加一行越界深导入（如 `import ... from "../lib/..."`），再次运行必须以 `tests-through-entrypoints`（或对应边界规则）**FAIL**；
-   - 撤销临时越界导入，复跑确认恢复 **PASS**。
+1. **统一入口接线（扫描范围必须覆盖调用方与业务包）**：
+   - 用仓库检测到的包管理器安装 `dependency-cruiser`（`devDependencies`）；
+   - 新增 `lint:boundaries` 脚本：**命令行扫描目标必须同时包含包外应用入口与 `<PACKAGES_ROOT>`**（例如单仓 `src/` 结构用 `depcruise src`，Monorepo 多顶层目录用 `depcruise apps packages`），**严禁只扫 `depcruise <PACKAGES_ROOT>`**——否则包外应用代码（如 `src/app/page.ts`）根本不会进入依赖图起点，导致第 1 条规则 `entrypoint-boundary-from-app` 静默漏检；
+   - 将 `lint:boundaries` 挂入与 `typecheck` 同级的统一检查脚本（如 `check` / `ci` / `validate`）。
+2. **双越界咬合实证（两条核心防线均见红灯才算完成）**：
+   - **干净基线**：实跑 `lint:boundaries` 确认返回 `0`（**PASS**）；
+   - **包内测试越界验证**：在 `<pkg>/tests/*.test.ts` 临时加一行深导入（如 `import ... from "../lib/..."`），运行 `lint:boundaries` 必须命中 `tests-through-entrypoints` 返回非 `0`（**FAIL**），随后还原；
+   - **包外应用越界验证**：在 `<PACKAGES_ROOT>` 之外的真实应用/调用方文件（如 `src/app/...` 或 `apps/...`）临时加一行越界导入 `<pkg>/lib/...`，运行 `lint:boundaries` 必须命中 `entrypoint-boundary-from-app` 返回非 `0`（**FAIL**），随后还原；
+   - **恢复复核**：再次运行 `lint:boundaries` 确认恢复 **PASS**。
 3. **就近文档与单行指针**：在 `<PACKAGES_ROOT>/README.md` 用简短示例写明包根入口约定与反 Barrel 原则，并在仓库根 `AGENTS.md` / `CLAUDE.md` 留一行条件指针（如 `新增或跨包引用模块前先读 <PACKAGES_ROOT>/README.md`），让后续 Agent 提前发现边界而非撞墙。
