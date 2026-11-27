@@ -71,6 +71,15 @@ class TaskGraphTests(unittest.TestCase):
 
 
 class DistributionTests(unittest.TestCase):
+    def test_source_protocols_link_to_canonical_artifacts(self):
+        directory = ROOT / "docs/workflow-protocols"
+        canonical = ROOT / "docs/delivery-artifacts-spec.md"
+        for name in ("spec.md", "verification.md"):
+            with self.subTest(name=name):
+                target = re.search(r"\[交付产物契约\]\(([^)#]+)", (directory / name).read_text())
+                self.assertIsNotNone(target)
+                self.assertEqual((directory / target[1]).resolve(strict=True), canonical)
+
     def test_reference_snapshot_preserves_all_original_files(self):
         record = json.loads((ROOT / "vendor/mattpocock.snapshot.json").read_text())
         snapshot = ROOT / "vendor/mattpocock"
@@ -222,12 +231,57 @@ class WizardTemplateTests(unittest.TestCase):
             self.assertNotEqual(res.returncode, 0)
             self.assertNotIn("sk_live_do_not_leak", env_file.read_text())
 
+            # 调用方用 if 处理失败时，Bash 会在整个函数体里抑制 errexit。
+            original = b"# keep CRLF\r\nPUBLIC_PORT=3000"
+            env_file.write_bytes(original)
+            conditional = self._build_wizard(root, 'if write_env TEST_KEY "dummy"; then exit 9; else exit 7; fi')
+            res_cond = subprocess.run(["bash", str(conditional)], cwd=root, env=blocked_env,
+                                      capture_output=True, timeout=5)
+            self.assertEqual(res_cond.returncode, 7)
+            self.assertEqual(env_file.read_bytes(), original)
+
             dir_target = root / "not-a-file"
             dir_target.mkdir()
             res_dir = subprocess.run(["bash", str(wizard)], cwd=root,
                                      env={**os.environ, "ENV_FILE": str(dir_target)},
                                      capture_output=True, text=True, timeout=5)
             self.assertNotEqual(res_dir.returncode, 0)
+
+    @unittest.skipUnless(sys.platform == "darwin", "需要 macOS 文件 ACL")
+    def test_write_env_refuses_read_acl_before_updating_real_target(self):
+        with tempfile.TemporaryDirectory(prefix="wizard-acl-") as temp:
+            root = Path(temp)
+            target = root / "shared.env"
+            original = b"EXISTING=value\r\n# keep last line"
+            target.write_bytes(original)
+            target.chmod(0o600)
+            subprocess.run(["chmod", "+a", "everyone allow read", str(target)], check=True)
+            link = root / ".env"
+            link.symlink_to(target)
+            wizard = self._build_wizard(root, 'if write_env TEST_KEY dummy; then exit 9; else exit 7; fi')
+            for path in (target, link):
+                with self.subTest(path=path.name):
+                    result = subprocess.run(["bash", str(wizard)], cwd=root,
+                                            env={**os.environ, "ENV_FILE": str(path)},
+                                            capture_output=True, timeout=5)
+                    self.assertEqual(result.returncode, 7)
+                    self.assertEqual(target.read_bytes(), original)
+            self.assertTrue(link.is_symlink())
+
+    @unittest.skipUnless(sys.platform == "darwin", "需要 macOS ACL 检查路径")
+    def test_write_env_refuses_when_acl_inspection_fails(self):
+        with tempfile.TemporaryDirectory(prefix="wizard-acl-check-") as temp:
+            root = Path(temp)
+            env_file = root / ".env"
+            original = b"# original\r\n"
+            env_file.write_bytes(original)
+            env_file.chmod(0o600)
+            wizard = self._build_wizard(root, 'ls() { return 1; }\n'
+                                        'if write_env TEST_KEY dummy; then exit 9; else exit 7; fi')
+            result = subprocess.run(["bash", str(wizard)], cwd=root,
+                                    env={**os.environ, "ENV_FILE": str(env_file)}, capture_output=True, timeout=5)
+            self.assertEqual(result.returncode, 7)
+            self.assertEqual(env_file.read_bytes(), original)
 
 
 class WorktreeIntegrationTests(unittest.TestCase):

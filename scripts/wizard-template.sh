@@ -122,13 +122,13 @@ _file_mode() {
 }
 
 _ensure_private_env_file() {
-  local path="$1" mode=""
+  local path="$1" mode="" platform resolved acl_listing
   if [[ -e "$path" && ! -f "$path" ]]; then
     warn "拒绝写入 ${path}：目标不是普通文件"
     return 1
   fi
   if [[ ! -e "$path" ]]; then
-    (umask 077 && : > "$path") || {
+    (set -C; umask 077 && : > "$path") || {
       warn "无法创建私有配置文件 ${path}"
       return 1
     }
@@ -143,11 +143,24 @@ _ensure_private_env_file() {
     warn "拒绝写入 ${path}：当前权限为 ${mode:-unknown}，无法收紧为 0600（仅所有者可读写）"
     return 1
   fi
+  platform=$(uname -s) || return 1
+  if [[ "$platform" == Darwin ]]; then
+    # macOS 的 ls -Le 可能漏列链接目标的 ACL，先解析实际路径。
+    # 末尾标记保留文件名中可能存在的换行，只剥去 realpath 输出的行结束符。
+    resolved=$(realpath -- "$path" && printf '.') || return 1
+    resolved=${resolved%$'\n.'}
+    # -e 逐行列出 ACL，-q 避免文件名换行混入条目。保留已有 ACL，改由用户处理。
+    if ! acl_listing=$(LC_ALL=C ls -denq -- "$resolved" 2>&1) ||
+       [[ "$acl_listing" != -* || "$acl_listing" == *$'\n'* || "${acl_listing:10:1}" == "+" ]]; then
+      warn "拒绝写入 ${path}：目标存在扩展 ACL 或无法核实其私有访问权限"
+      return 1
+    fi
+  fi
 }
 
 write_env() {
   local key="$1" value="$2" tmp="" sq="'\\''"
-  _ensure_private_env_file "$ENV_FILE"
+  _ensure_private_env_file "$ENV_FILE" || return 1
   tmp=$(umask 077 && mktemp)
   trap 'rm -f -- "${tmp:-}"' RETURN
   grep -vE "^${key}=" "$ENV_FILE" > "$tmp" || true
