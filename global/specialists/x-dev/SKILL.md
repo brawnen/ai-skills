@@ -9,15 +9,16 @@ description: 仅在用户显式选择多阶段研发交付、恢复任务，或�
 
 请求带有任务编号、链接或任务文件时，开工或恢复前先[核对任务归属与标题](references/tickets.md#核对任务归属与标题)，在首条实质进展中报出仓库、编号和原始标题。指向唯一且符合请求时直接继续。
 
-按实际缺口读取阶段协议：
+按实际缺口读取阶段协议并串联专项能力：
 
-- **需求与概念**：需求不清读 [需求澄清](references/requirements.md)；业务术语/状态冲突时选用可用的 `x-domain`；前后端接口约定选用 `x-api`。
-- **技术规格与 UI 就绪**：需技术与验收契约时读 [规格](references/spec.md)；初版规格形成或恢复任务时按 [界面设计就绪检查](references/spec.md#界面设计就绪检查) 衔接页面/交互方案（项目已装 `x-ui` 时复用其约束，交互不确定时读 [原型实验](references/prototype.md)），决定回写规格后再实施。无需独立交接且设计已就绪时可附简短实施顺序直接实施。
-- **任务与编码实施**：跨人/会话领取、依赖管理或并行时读 [任务](references/tickets.md)；进入代码读 [单任务实施](references/implementation.md)，明确授权并行且宿主支持时读 [并行集成](references/parallel-implementation.md)。
-- **验证与双轴审查**：运行验收读 [验证方法](references/verification.md) 并复用项目 `verify-<app>` 或可靠脚本（缺失底座时按需用 `x-verify`）；代码与需求审查读 [双轴审查](references/review.md)，交接说明读 [PR 协议](references/pr.md) 与 [产物契约](references/artifacts.md)。
-- **CI、测试部署与生产发布**：代码合入、测试环境自动部署与 smoke、迁移先后顺序及人工生产发布 Runbook 准备，读取 [测试部署与生产发布](references/release.md)。重要构建结束后按需读 [复盘](references/retro.md)。
+1. **需求与领域概念**：需求不清读 [需求澄清](references/requirements.md)（`x-req`）；业务术语/状态生命周期存在歧义时选用 `x-domain`。
+2. **产品界面与看样定调（涉及 Web App / 手机 App / 后台页面时）**：凡涉及 0→1 新应用、新核心页面或界面改版且视觉方向未定，**在冻结技术规格与写前端业务代码前先进入 `x-ui`**——用非术语通俗问答与 2~3 套可视化首屏小样引导用户选定顺眼的方向，并将确认的页面结构、交互状态与设计系统（`DESIGN.md`）作为后续规格与接口设计的输入。纯后端/CLI 任务、已有明确设计稿或已有成熟规范内的简单微调直接跳过。
+3. **接口契约与技术规格**：前后端接口约定选用 `x-api`；技术与验收契约读 [规格](references/spec.md)（`x-spec`），将已敲定的页面字段、空/加载/错误/权限状态及跨端约束写入规格（局部交互技术可行性存疑时按需读 [原型实验](references/prototype.md)）。同会话无需独立交接时可附简短实施顺序直接实施。
+4. **任务与编码实施**：跨人/会话领取、依赖管理或并行时读 [任务](references/tickets.md)（`x-tasks`）；进入代码读 [单任务实施](references/implementation.md)，前端/客户端实现严格遵循 `x-ui` 已确认的视觉小样、`DESIGN.md` 与反 AI 塑料感底线，并在真实目标视口核对渲染效果；明确授权并行且宿主支持时读 [并行集成](references/parallel-implementation.md)。
+5. **运行验证与双轴审查**：运行验收读 [验证方法](references/verification.md) 并复用项目 `verify-<app>` 或可靠脚本（缺失底座时按需用 `x-verify`）；代码、需求与界面视觉还原审查读 [双轴审查](references/review.md)（`x-review`），交接说明读 [PR 协议](references/pr.md) 与 [产物契约](references/artifacts.md)。
+6. **CI、测试部署与生产发布**：代码合入、测试环境自动部署与 smoke、迁移先后顺序及人工生产发布 Runbook 准备，读取 [测试部署与生产发布](references/release.md)。重要构建结束后按需读 [复盘](references/retro.md)（`x-retro` → `x-guard`）。
 
-只加载当前所需阶段；不自动启用 TDD、多代理、完整 UI 或全量测试。跨边界风险、真实数据库变更、疑难故障分别选择相关参考、`x-db` 和 `x-debug`。
+只加载当前所需阶段；不自动启用 TDD、多代理或全量测试。跨边界风险、真实数据库变更、疑难故障分别选择相关参考、`x-db` 和 `x-debug`。
 
 代码合并遵循用户授权、项目分支策略和门禁；测试环境部署沿用既有权限并核对实际制品与 smoke，未运行项明确标注。生产部署、回滚和生产写入始终由人执行，agent 准备可执行发布包并做允许的只读观察。
 

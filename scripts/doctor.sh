@@ -76,21 +76,22 @@ required_paths=(
   "global/helpers/x-html/assets/formal-document-shell.html"
   "global/helpers/x-html/assets/templates/decision-brief.html"
   "global/helpers/x-html/assets/templates/engineering-review.html"
-  "project/specialists/x-ui/SKILL.md"
-  "project/specialists/x-ui/agents/openai.yaml"
-  "project/specialists/x-ui/references/capability-routing.md"
-  "project/specialists/x-ui/references/craft-principles.md"
-  "project/specialists/x-ui/references/platform-checks.md"
-  "project/specialists/x-ui/references/review-rubric.md"
-  "project/specialists/x-ui/assets/DESIGN.template.md"
-  "vendor/project-skills/ui-ux-pro-max/SKILL.md"
-  "vendor/project-skills/ui-ux-pro-max/agents/openai.yaml"
-  "vendor/project-skills/ui-ux-pro-max/UPSTREAM.md"
-  "vendor/project-skills/ui-ux-pro-max/LICENSE"
-  "vendor/project-skills/impeccable/SKILL.md"
-  "vendor/project-skills/impeccable/agents/openai.yaml"
-  "vendor/project-skills/impeccable/UPSTREAM.md"
-  "vendor/project-skills/impeccable/LICENSE"
+  "global/specialists/x-ui/SKILL.md"
+  "global/specialists/x-ui/agents/openai.yaml"
+  "global/specialists/x-ui/references/discovery-and-prototyping.md"
+  "global/specialists/x-ui/references/capability-routing.md"
+  "global/specialists/x-ui/references/craft-principles.md"
+  "global/specialists/x-ui/references/platform-checks.md"
+  "global/specialists/x-ui/references/review-rubric.md"
+  "global/specialists/x-ui/assets/DESIGN.template.md"
+  "vendor/global-skills/ui-ux-pro-max/SKILL.md"
+  "vendor/global-skills/ui-ux-pro-max/agents/openai.yaml"
+  "vendor/global-skills/ui-ux-pro-max/UPSTREAM.md"
+  "vendor/global-skills/ui-ux-pro-max/LICENSE"
+  "vendor/global-skills/impeccable/SKILL.md"
+  "vendor/global-skills/impeccable/agents/openai.yaml"
+  "vendor/global-skills/impeccable/UPSTREAM.md"
+  "vendor/global-skills/impeccable/LICENSE"
   "vendor/superpowers/README.md"
   "vendor/gstack/README.md"
   "scripts/install-links.sh"
@@ -270,12 +271,15 @@ while IFS= read -r skill_file; do
   fi
 
   echo "OK   ${metadata_file#${ROOT_DIR}/}"
-done < <(find \
-  "${ROOT_DIR}/global" \
-  "${ROOT_DIR}/project" \
-  "${ROOT_DIR}/vendor/project-skills" \
-  "${ROOT_DIR}/vendor/global-skills" \
-  -name SKILL.md -type f | sort)
+done < <(
+  for scan_root in \
+    "${ROOT_DIR}/global" \
+    "${ROOT_DIR}/project" \
+    "${ROOT_DIR}/vendor/project-skills" \
+    "${ROOT_DIR}/vendor/global-skills"; do
+    [[ -d "${scan_root}" ]] && find "${scan_root}" -name SKILL.md -type f
+  done | sort
+)
 
 if [[ "${missing}" -ne 0 ]]; then
   echo "结构检查失败：存在缺失或不一致文件。" >&2
